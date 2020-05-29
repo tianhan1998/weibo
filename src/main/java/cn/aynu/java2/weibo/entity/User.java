@@ -1,0 +1,91 @@
+package cn.aynu.java2.weibo.entity;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import java.util.Date;
+
+public class User {
+    private String id;
+    private String avatar;
+    private String nickName;
+    private Integer sex;
+    @Email(message = "email格式错误")
+    @NotEmpty(message = "email不能为空")
+    private String email;
+    @NotEmpty(message = "生日不能为空")
+    @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
+    private Date birthday;
+    @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
+    private Date registerDay;
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", avater='" + avatar + '\'' +
+                ", nickName='" + nickName + '\'' +
+                ", sex=" + sex +
+                ", email='" + email + '\'' +
+                ", birthday=" + birthday +
+                ", registerDay=" + registerDay +
+                '}';
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public Integer getSex() {
+        return sex;
+    }
+
+    public void setSex(Integer sex) {
+        this.sex = sex;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
+
+    public Date getRegisterDay() {
+        return registerDay;
+    }
+
+    public void setRegisterDay(Date registerDay) {
+        this.registerDay = registerDay;
+    }
+}
