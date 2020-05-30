@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.aynu.java2.weibo.admin.mapper.IAdminUserMapper">
+    <select id="selectUserByCondition" resultType="User">
+        select * from user
+        <where>
+            <if test="id != null">
+                id = #{id}
+            </if>
+            <if test="email != null and email ''">
+                and email = #{email}
+            </if>
+            <if test="nickname != null and nickname != ''">
+                and nickname like '%' #{nickname} '%'
+            </if>
+            <if test="sex != null">
+                and sex = #{sex}
+            </if>
+            <if test="beginTime != null and beginTime != ''">
+                and birthday <![CDATA[>=]]> #{bgeinTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                and birthday <![CDATA[<=]]> #{endTime}
+            </if>
+            <if test="beginDay != null and beginDay != ''">
+                and register_day <![CDATA[>=]]> #{beginDay}
+            </if>
+            <if test="endDay != null and endDay != ''">
+                and register_day <![CDATA[<=]]> #{endDay}
+            </if>
+        </where>
+    </select>
+
+    <delete id="deleteUserById">
+        delete from user where id = #{id}
+    </delete>
+
+    <insert id="insertUser">
+        insert into user (avatar, password, nick_name, sex, email, birthday)
+        values (#{avatar},#{password},#{nickname},#{sex},#{email},#{birthday})
+    </insert>
+</mapper>
