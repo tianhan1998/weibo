@@ -11,27 +11,15 @@ public class User {
     private String avatar;
     private String nickName;
     private Integer sex;
+    private String password;
     @Email(message = "email格式错误")
     @NotEmpty(message = "email不能为空")
     private String email;
     @NotEmpty(message = "生日不能为空")
-    @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
+    @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd ")
     private Date birthday;
     @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
     private Date registerDay;
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id='" + id + '\'' +
-                ", avater='" + avatar + '\'' +
-                ", nickName='" + nickName + '\'' +
-                ", sex=" + sex +
-                ", email='" + email + '\'' +
-                ", birthday=" + birthday +
-                ", registerDay=" + registerDay +
-                '}';
-    }
 
     public String getId() {
         return id;
@@ -65,6 +53,14 @@ public class User {
         this.sex = sex;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -87,5 +83,19 @@ public class User {
 
     public void setRegisterDay(Date registerDay) {
         this.registerDay = registerDay;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", nickName='" + nickName + '\'' +
+                ", sex=" + sex +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", birthday=" + birthday +
+                ", registerDay=" + registerDay +
+                '}';
     }
 }

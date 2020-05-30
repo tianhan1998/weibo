@@ -28,11 +28,23 @@ spring:
     listener:
       direct:
         default-requeue-rejected: false
+  mvc:
+    format:
+      date: yyyy-MM-dd
 
   mvc:
     format:
       date: yyyy-MM-dd
 
 mybatis:
-  mapper-locations: classpath:mappers/*Mapper.xml
+  mapper-locations: classpath:mapper/*Mapper.xml
   type-aliases-package: cn.aynu.java2.weibo.entity
+  configuration:
+    map-underscore-to-camel-case: true
+
+logging:
+  pattern:
+    console: logs-%level %msg%n #制定日志显示位置即格式
+  level:
+    root: info #减少工程入职输出
+    cn.aynu.java2.weibo.Dao: debug
