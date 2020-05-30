@@ -1,7 +1,7 @@
 server:
   port: 8080
   servlet:
-    context-path: /
+    context-path: /weibo
 spring:
   datasource:
     url: jdbc:mysql://47.94.94.87:3306/weibo?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&serverTimezone=Asia/Shanghai
@@ -14,6 +14,7 @@ spring:
       filters: stat,wall,slf4j
     username: root
     password: root
+
 
   redis:
     host: 47.94.94.87
@@ -35,3 +36,10 @@ spring:
 mybatis:
   mapper-locations: classpath:mapper/*Mapper.xml
   type-aliases-package: cn.aynu.java2.weibo.entity
+
+logging:
+  pattern:
+    console: logs-%level %msg%n #制定日志显示位置即格式
+  level:
+    root: info #减少工程入职输出
+    cn.aynu.java2.weibo.Dao: debug
