@@ -1,9 +1,3 @@
 spring:
   profiles:
     active: dev
-logging:
-  pattern:
-    console: logs-%level %msg%n #制定日志显示位置即格式
-  level:
-    root: warn #减少工程入职输出
-    cn.aynu.java2.weibo.Dao: debug
