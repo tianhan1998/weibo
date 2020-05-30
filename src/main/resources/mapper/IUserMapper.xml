@@ -11,8 +11,6 @@
     </select>
     
     <insert id="insertUser">
-        insert into weibo (email,nick_name,sex,birthday,password) values (#{email},#{nick_name},#{sex},#{birthday},#{password})
-    </insert>
-    <insert id="11">
+        insert into user (avatar,email,nick_name,sex,birthday,password) values (#{avatar},#{email},#{nickName},#{sex},#{birthday},#{password})
     </insert>
 </mapper>

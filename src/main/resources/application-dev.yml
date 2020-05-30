@@ -35,3 +35,5 @@ spring:
 mybatis:
   mapper-locations: classpath:mapper/*Mapper.xml
   type-aliases-package: cn.aynu.java2.weibo.entity
+  configuration:
+    map-underscore-to-camel-case: true

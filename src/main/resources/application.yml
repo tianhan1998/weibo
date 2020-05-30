@@ -7,4 +7,3 @@ logging:
   level:
     root: warn #减少工程入职输出
     cn.aynu.java2.weibo.Dao: debug
-spring.mvc.date

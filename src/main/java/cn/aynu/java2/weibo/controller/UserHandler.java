@@ -36,8 +36,9 @@ public class UserHandler {
     @RequestMapping("/register")
     @ResponseBody
     public JSONObject register(User user){
+        user.setAvatar("/avater/test/1.jpg");
         System.out.println(user);
-        //userService.addUser(user);
+        userService.addUser(user);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("result", Result.successResult("注册成功"));
         return jsonObject;
