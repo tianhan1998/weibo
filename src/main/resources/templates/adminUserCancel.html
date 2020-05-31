@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>围脖注册</title>
+    <link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/font-awesome/css/font-awesome.css}" rel="stylesheet">
+
+    <link th:href="@{/assets/css/animate.css}" rel="stylesheet">
+    <link th:href="@{/assets/css/style.css}" rel="stylesheet">
+    <link th:href="@{/assets/css/custom.css}" rel="stylesheet">
+    <link rel="shortcut icon" href="#" />
+
+</head>
+
+<body class="gray-bg">
+<!-- FIXME 没加项目路径，找不到controller-->
+    <form action="/admin/user/cancelUser" type="post">
+        <input type="text" name="id">
+        <input type="submit" name="tijiao">
+    </form>
+</body>
+</html>

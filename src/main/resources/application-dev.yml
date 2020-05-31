@@ -19,6 +19,7 @@ spring:
     host: 47.94.94.87
     password: root
 
+
   rabbitmq:
     host: 47.94.94.87
     port: 5672
@@ -31,6 +32,9 @@ spring:
   mvc:
     format:
       date: yyyy-MM-dd
+  session:
+    store-type: redis
+
 
 mybatis:
   mapper-locations: classpath:mapper/*Mapper.xml

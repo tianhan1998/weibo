@@ -133,7 +133,6 @@
                 } );
 
                 // Determine which columns are already hidden, and should therefore
-                // remain hidden. TODO - should this be done? See thread 22677
                 //
                 // this.s.alwaysHidden = dt.columns(':hidden').indexes();
 
