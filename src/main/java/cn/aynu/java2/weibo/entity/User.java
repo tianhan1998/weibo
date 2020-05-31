@@ -4,14 +4,25 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import java.io.Serializable;
 import java.util.Date;
 
-public class User {
+public class User implements Serializable {
     private String id;
     private String avatar;
     private String nickName;
     private Integer sex;
     private String password;
+    private int role;
+
+    public int getRole() {
+        return role;
+    }
+
+    public void setRole(int role) {
+        this.role = role;
+    }
+
     @Email(message = "email格式错误")
     @NotEmpty(message = "email不能为空")
     private String email;
@@ -93,6 +104,7 @@ public class User {
                 ", nickName='" + nickName + '\'' +
                 ", sex=" + sex +
                 ", password='" + password + '\'' +
+                ", role='" + role + '\'' +
                 ", email='" + email + '\'' +
                 ", birthday=" + birthday +
                 ", registerDay=" + registerDay +

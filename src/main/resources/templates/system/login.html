@@ -61,17 +61,19 @@
 			console.log(password);
 			$.ajax({
 				type: "GET",
-				url: "../admin/login",
+				url:"/user/adminUser",
 				dataType:"json",
 				data: {
-					account:account,
+					email:account,
 					password:password
 				},
 				success: function(msg){
-					if(msg.code==200){
-						window.location.href='./List';
+					console.log(msg.result);
+					if(msg.result.code==200){
+						window.location.href="/test";
 					}else{
-						swal(msg.msg);
+						//alert(msg.result.msg);
+						swal(msg.result.msg[0]);
 					}
 
 					// swal( "Data Saved: " + msg ).then(function () {

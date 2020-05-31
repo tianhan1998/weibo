@@ -110,7 +110,7 @@
 					console.log(result);
 					if(result.result.code===200){//登录成功
 						swal(result.result.msg[0]).then(function () {
-							window.location.href=context+"main";
+							window.location.href="/main";
 						});
 					}else{//登录失败
 						$("#mem_log").show();

@@ -139,7 +139,7 @@
 				$("#mem-email-log").hide();
 				flagEmailPhone=1;
 				$.ajax({
-					url:context+"user/"+email,
+					url:context+"user/emailCheck?email="+email,
 					type:"GET",
 					success:function(Object){
 						if(Object.result.code==200) {
