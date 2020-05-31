@@ -4,9 +4,12 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import java.io.Serializable;
 import java.util.Date;
 
-public class User {
+public class User implements Serializable {
+
+    private static final long serialVersionUID = -5654418863461227475L;
     private String id;
     private String avatar;
     private String nickName;
