@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+   <meta name="description" content="">
+   <meta name="author" content="">
+   <link rel="icon" type="image/png" th:href="@{/img/fav.png}">
+   <title></title>
+   <!-- Slick Slider -->
+   <link rel="stylesheet" type="text/css" th:href="@{/assets/slick/slick.min.css}"/>
+   <link rel="stylesheet" type="text/css" th:href="@{/assets/slick/slick-theme.min.css}"/>
+   <!-- Feather Icon-->
+   <link th:href="@{/assets/icons/feather.css}" rel="stylesheet" type="text/css">
+   <!-- Bootstrap core CSS -->
+   <link th:href="@{/bootstrap/css/wbbootstrap.min.css}" rel="stylesheet">
+   <!-- Custom styles for this template -->
+   <link th:href="@{/assets/css/wbstyle.css}" rel="stylesheet">
+</head>
+   <body>
+      <!-- Navigation -->
+      <div th:replace="main :: #MainNav"></div>
+      <div class="py-4">
+         <div class="container">
+            <div class="row">
+               <!-- Main Content -->
+               <div th:replace="main :: #MySelf"></div>
+               <main class="col col-xl-6 order-xl-2 col-lg-12 order-lg-2 col-md-12 col-sm-12 col-12">
+                  <div class="box shadow-sm border rounded bg-white mb-3">
+                     <div class="box-title border-bottom p-3">
+                        <h6 class="m-0">About You</h6>
+                     </div>
+                     <div class="box-body p-3">
+                        <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
+                        </p>
+                        <p class="mb-0">Find the most qualified people in the most unexpected places. Information for applicants to consider when applying for local positions. The largest community on the web to find and list jobs that aren't restricted by commutes or a specific location.
+                        </p>
+                     </div>
+                  </div>
+                  <div class="box shadow-sm border rounded bg-white mb-3">
+                     <div class="box-title border-bottom p-3">
+                        <h6 class="m-0">Experience</h6>
+                     </div>
+                     <div class="box-body p-3 border-bottom">
+                        <div class="d-flex align-items-top job-item-header pb-2">
+                           <div class="mr-2">
+                              <h6 class="font-weight-bold text-dark mb-0">Web designer</h6>
+                              <div class="text-truncate text-primary">Spotify Inc.</div>
+                              <div class="small text-gray-500">Oct 2020 - Present (4 year 7 month) </div>
+                           </div>
+                           <img class="img-fluid ml-auto mb-auto" th:src="@{/img/l3.png}" alt="">
+                        </div>
+                        <p class="mb-0">Find the most qualified people in the most unexpected places. Information for applicants to consider when applying for local positions. </p>
+                     </div>
+                     <div class="box-body p-3 border-bottom">
+                        <div class="d-flex align-items-top job-item-header pb-2">
+                           <div class="mr-2">
+                              <h6 class="font-weight-bold text-dark mb-0">Cloud Software Engineer</h6>
+                              <div class="text-truncate text-primary">Spotify Inc.</div>
+                              <div class="small text-gray-500">Oct 2020 - Present (4 year 7 month) </div>
+                           </div>
+                           <img class="img-fluid ml-auto mb-auto" th:src="@{/img/l6.png}" alt="">
+                        </div>
+                        <p class="mb-0">Find the most qualified people in the most unexpected places. Information for.. </p>
+                     </div>
+                     <div class="box-body p-3">
+                        <div class="d-flex align-items-top job-item-header pb-2">
+                           <div class="mr-2">
+                              <h6 class="font-weight-bold text-dark mb-0">UI/UX designer</h6>
+                              <div class="text-truncate text-primary">Behance</div>
+                              <div class="small text-gray-500">Oct 2020 - Present (4 year 7 month) </div>
+                           </div>
+                           <img class="img-fluid ml-auto mb-auto" th:src="@{/img/l2.png}" alt="">
+                        </div>
+                        <p class="mb-0">Wualified people in the most unexpected places. Information for applicants to consider when applying for local positions. The largest community on the web to find and list jobs that aren't restricted by commutes or a specific location.
+                        </p>
+                     </div>
+                  </div>
+                  <div class="box shadow-sm border rounded bg-white mb-3">
+                     <div class="box-title border-bottom p-3">
+                        <h6 class="m-0">Education</h6>
+                     </div>
+                     <div class="box-body p-3 border-bottom">
+                        <div class="d-flex align-items-top job-item-header pb-2">
+                           <div class="mr-2">
+                              <h6 class="font-weight-bold text-dark mb-0">Stanford University</h6>
+                              <div class="text-truncate text-primary">Master’s programmes</div>
+                              <div class="small text-gray-500">Oct 2020 - Present (4 year 7 month) </div>
+                           </div>
+                           <img class="img-fluid ml-auto mb-auto" th:src="@{/img/e1.png}" alt="">
+                        </div>
+                        <p class="mb-0">Find the most qualified people in the most unexpected places. Information for applicants to consider when applying for local positions.</p>
+                     </div>
+                     <div class="box-body p-3">
+                        <div class="d-flex align-items-top job-item-header pb-2">
+                           <div class="mr-2">
+                              <h6 class="font-weight-bold text-dark mb-0">Harvard University</h6>
+                              <div class="text-truncate text-primary">Maths and science education</div>
+                              <div class="small text-gray-500">Oct 2020 - Present (4 year 7 month) </div>
+                           </div>
+                           <img class="img-fluid ml-auto mb-auto" th:src="@{/img/e2.png}" alt="">
+                        </div>
+                        <p class="mb-0">Wualified people in the most unexpected places. Information for applicants to consider when applying for local positions.</p>
+                     </div>
+                  </div>
+               </main>
+            </div>
+         </div>
+      </div>
+      <!-- Bootstrap core JavaScript -->
+      <script th:src="@{/js/jquery.min.js}"></script>
+      <script th:src="@{/bootstrap/js/bootstrap.bundle.min.js}"></script>
+      <!-- slick Slider JS-->
+      <script type="text/javascript" th:src="@{/assets/slick/slick.min.css}"></script>
+      <!-- Custom scripts for all pages-->
+      <script th:src="@{/js/osahan.js}"></script>
+   </body>
+</html>
