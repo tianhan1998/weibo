@@ -1,23 +1,35 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-   <head>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-      <meta name="description" content="">
-      <meta name="author" content="">
-      <link rel="icon" type="image/png" th:href="@{/img/fav.png}">
-      <title></title>
-      <!-- Slick Slider -->
-      <link rel="stylesheet" type="text/css" th:href="@{/assets/slick/slick.min.css}"/>
-      <link rel="stylesheet" type="text/css" th:href="@{/assets/slick/slick-theme.min.css}"/>
-      <!-- Feather Icon-->
-      <link th:href="@{/assets/icons/feather.css}" rel="stylesheet" type="text/css">
-      <!-- Bootstrap core CSS -->
-      <link th:href="@{/bootstrap/css/wbbootstrap.min.css}" rel="stylesheet">
-      <!-- Custom styles for this template -->
-      <link th:href="@{/assets/css/wbstyle.css}" rel="stylesheet">
-   </head>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="icon" type="image/png" th:href="@{/img/fav.png}">
+  <title></title>
+  <!-- Slick Slider -->
+  <link rel="stylesheet" type="text/css" th:href="@{/assets/slick/slick.min.css}"/>
+  <link rel="stylesheet" type="text/css" th:href="@{/assets/slick/slick-theme.min.css}"/>
+  <!-- Feather Icon-->
+  <link th:href="@{/assets/icons/feather.css}" rel="stylesheet" type="text/css">
+  <!-- Bootstrap core CSS -->
+  <link th:href="@{/bootstrap/css/wbbootstrap.min.css}" rel="stylesheet">
+  <!-- Custom styles for this template -->
+  <link th:href="@{/assets/css/wbstyle.css}" rel="stylesheet">
+  </head>
    <body>
+   <style>
+      [v-cloak]{
+         display: none;
+      }
+      .img-mini{
+         width:20%;
+         height:20%;
+      }
+      img{
+         cursor: pointer;
+      }
+   </style>
       <!-- Navigation -->
       <nav id="MainNav" class="navbar navbar-expand navbar-dark bg-dark osahan-nav-top p-0">
          <div class="container">
@@ -171,7 +183,7 @@
       </nav>
       <div class="py-4">
          <div class="container">
-            <div id="app" class="row">
+            <div id="app" v-cloak class="row">
                <!-- Main Content -->
                <main class="col col-xl-6 order-xl-2 col-lg-12 order-lg-1 col-md-12 col-sm-12 col-12">
                   <div class="box shadow-sm border rounded bg-white mb-3 osahan-share-post">
@@ -185,46 +197,57 @@
                         <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                            <div class="p-3 d-flex align-items-center w-100" href="#">
                               <div class="dropdown-list-image mr-3">
-                                 <img class="rounded-circle" src="img/user.png" alt="">
+                                 <img class="rounded-circle" th:src="${#servletContext.contextPath+session.login_user.avatar}" alt="">
                                  <div class="status-indicator bg-success"></div>
                               </div>
                               <div class="w-100">
-                                 <textarea placeholder="Write your thoughts..." class="form-control border-0 p-0 shadow-none" rows="1"></textarea>
+                                 <textarea placeholder="在此写下你的想法..." id="text" name="text" class="form-control border-0 p-0 shadow-none" rows="1"></textarea>
                               </div>
                            </div>
                         </div>
                             <input type="file" id="photo" name="photos" multiple="multiple" style="display: none" accept="image/*">
-                            <input type="file" id="video" name="videos" multiple="multiple" style="display: none" accept="video/*">
+                            <input type="file" id="video" name="video" style="display: none" accept="video/*">
                      <div class="border-top p-3 d-flex align-items-center">
                         <div class="mr-3"><a href="#" class="text-link small" onclick="uploadPhoto()"><i class="feather-image"></i></a></div>
-                        <div class="mr-auto"><a href="#" class="text-link small" onclick="uploadVideo()"><i class="feather-video"></i></a></div>
+                        <div class="mr-5"><a href="#" class="text-link small" onclick="uploadVideo()"><i class="feather-video"></i></a></div>
+                        <div class="mr-auto">
+                           <label class="mr-1">
+                              <input type="checkbox" name="onlyFriend" id="onlyFriend" value="1">
+                           </label>仅好友可见
+                        </div>
                         <div class="flex-shrink-1">
-                           <button type="button" class="btn btn-primary btn-sm">Post Status</button>
+                           <input @click="postMyPost()" type="button" value="提交"  class="btn btn-primary btn-sm">
                         </div>
                      </div>
                          </form>
+                     </div>
                   </div>
-                  </div>
-                  <div  class="box shadow-sm border rounded bg-white mb-3 osahan-post">
-                     <div class="p-3 d-flex align-items-center border-bottom osahan-post-header">
-                        <div class="dropdown-list-image mr-3">
-                           <img class="rounded-circle" src="img/p5.png" alt="">
-                           <div class="status-indicator bg-success"></div>
+                   <div v-for="item in vo">
+                     <div class="box shadow-sm border rounded bg-white mb-3 osahan-post">
+                        <div class="p-3 d-flex align-items-center border-bottom osahan-post-header">
+                           <div class="dropdown-list-image mr-3">
+                              <img class="rounded-circle"  :src="context+item.post.user.avatar" alt="">
+                              <div class="status-indicator bg-success"></div>
+                           </div>
+                           <div class="font-weight-bold">
+                              <div class="text-truncate" >{{item.post.user.nickName}}</div>
+                           </div>
+                           <span class="ml-auto small">{{item.post.postTime}}</span>
                         </div>
-                        <div class="font-weight-bold">
-                           <div class="text-truncate">Tobia Crivellari</div>
+                        <div class="p-3 border-bottom osahan-post-body">
+                           <p class="mb-0">{{item.post.text}}</p>
+                           <div v-if="item.photos!==null && item.photos.length>0">
+                              <div v-for="photo in item.photos">
+                                 <img :src="context+photo.url" @click="changePhotoSize($event)" class="img-mini img-fluid" alt="Responsive image">
+                              </div>
+                           </div>
                         </div>
-                        <span class="ml-auto small">3 hours</span>
+                        <div class="p-3 border-bottom osahan-post-footer">
+                           <a href="#" class="mr-3 text-secondary"><i class="feather-heart text-danger"></i> {{item.post.good}}</a>
+                           <a href="#" class="mr-3 text-secondary"><i class="feather-message-square"></i> 8</a>
+                        </div>
                      </div>
-                     <div class="p-3 border-bottom osahan-post-body">
-                        <p class="mb-0">Tmpo incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco <a href="#">laboris consequat.</a></p>
-                     </div>
-                     <div class="p-3 border-bottom osahan-post-footer">
-                        <a href="#" class="mr-3 text-secondary"><i class="feather-heart text-danger"></i> 16</a>
-                        <a href="#" class="mr-3 text-secondary"><i class="feather-message-square"></i> 8</a>
-                        <a href="#" class="mr-3 text-secondary"><i class="feather-share-2"></i> 2</a>
-                     </div>
-                  </div>
+                   </div>
                   <div class="box mb-3 shadow-sm border rounded bg-white osahan-post">
                      <div class="p-3 d-flex align-items-center border-bottom osahan-post-header">
                         <div class="dropdown-list-image mr-3">
@@ -317,6 +340,7 @@
       <script th:src="@{/js/axios.min.js}"></script>
       <script th:src="@{/js/vue.min.js}"></script>
    <script type="text/javascript">
+      const context = "[[@{/}]]";
       function uploadPhoto() {
          $("#photo").click();
       }
@@ -325,8 +349,78 @@
       }
       new Vue({
          el:'#app',
+         data:{
+            context:context,
+            vo: [
+               {
+                  post:{
+                    user:{
+
+                    }
+                  },
+                  video:{
+
+                  },
+                  photos:[],
+               },
+            ],
+         },
+         methods:{
+            postMyPost:function () {
+               let formData=new FormData();
+               let friend;
+               if($("#onlyFriend").prop('checked')){
+                  friend=1;
+               }else{
+                  friend=0;
+               }
+               formData.append("video",$("#video")[0].files[0]);
+               $.each($("#photo")[0].files, function(i, file) {
+                  formData.append('photos', file);
+               });
+               formData.append("onlyFriend",friend);
+               formData.append("text",$("#text").val());
+               $.ajax({
+                  url:context+"main/post",
+                  type:'post',
+                  processData: false,
+                  contentType: false,
+                  data:formData,
+                  success:result=>{
+                      if(result.result.code===200){
+                         swal("发表动态成功!",{icon:"success"}).then(function () {
+                           window.location.reload();
+                         });
+                      }else{
+                         swal(result.result.msg[0],{icon:"error"});
+                      }
+                  },
+                  error:result=>{
+                     console.log(result);
+                  }
+               });
+            },
+            changePhotoSize:function (event) {
+               const photo=$(event.target);//DOM对象转JQuery对象
+               if(photo.hasClass("img-mini")){
+                  photo.removeClass("img-mini");
+               }else{
+                  photo.addClass("img-mini");
+               }
+            }
+         },
          mounted:function () {
-            swal('vue is online!',{icon:'success'});
+            const self=this;
+            // swal('vue is online!',{icon:'success'});
+             axios({
+                url:context+"main/post",
+                method:'get',
+             }).then(response=>{
+                console.log(response);
+                this.vo=response.data.result.data;
+             }).catch(response=>{
+                console.log(response);
+             });
          }
       });
    </script>

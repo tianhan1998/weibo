@@ -1,7 +1,8 @@
-package cn.aynu.java2.weibo.service;
+package cn.aynu.java2.weibo.service.Impl;
 
 import cn.aynu.java2.weibo.entity.User;
 import cn.aynu.java2.weibo.mapper.IUserMapper;
+import cn.aynu.java2.weibo.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

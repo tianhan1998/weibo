@@ -7,6 +7,14 @@ public class Photo {
     private String url;
     private String photoName;
 
+    public Photo() {
+    }
+
+    public Photo(String url, String photoName) {
+        this.url = url;
+        this.photoName = photoName;
+    }
+
     @Override
     public String toString() {
         return "Photo{" +

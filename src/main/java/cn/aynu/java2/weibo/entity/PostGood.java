@@ -9,7 +9,7 @@ public class PostGood {
     public String toString() {
         return "PostGood{" +
                 "id='" + id + '\'' +
-                ", userId='" + userId + '\'' +
+                ", user='" + userId + '\'' +
                 ", postId='" + postId + '\'' +
                 '}';
     }

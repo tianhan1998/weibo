@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.aynu.java2.weibo.mapper.PostMapper">
+    <resultMap id="postMapper" type="cn.aynu.java2.weibo.entity.Post">
+        <id column="id" property="id"/>
+        <association property="user" column="user_id"
+                     select="selectUserById" javaType="cn.aynu.java2.weibo.entity.User"/>
+    </resultMap>
+    <insert id="insertPost" parameterType="cn.aynu.java2.weibo.entity.Post" useGeneratedKeys="true" keyProperty="id">
+        insert into post(text, good, user_id,stage) values (#{text},0,#{user.id},#{stage})
+    </insert>
+    <insert id="insertPostPhoto">
+        insert into post_photo(post_id, photo_id) VALUES (#{post.id},#{photo.id})
+    </insert>
+    <insert id="insertPostVideo">
+        insert into post_video(post_id, video_id) VALUES (#{post.id},#{video.id})
+    </insert>
+    <insert id="insertPhoto" useGeneratedKeys="true" keyProperty="id">
+        insert into photo(url, photo_name) VALUES (#{url},#{photoName})
+    </insert>
+    <insert id="insertVideo" useGeneratedKeys="true" keyProperty="id">
+        insert into video(url, video_name) VALUES (#{url},#{videoName})
+    </insert>
+
+    <select id="selectUserById" resultType="cn.aynu.java2.weibo.entity.User">
+        select id, avatar, nick_name, sex
+        from user where id=#{id}
+    </select>
+    <select id="selectAllPost" resultMap="postMapper">
+        select id, post_time, text, good, user_id, stage from post order by post_time desc
+    </select>
+    <select id="selectPhotoIdsByPost" resultType="java.lang.Integer">
+        select photo_id from post_photo where post_id=#{id}
+    </select>
+    <select id="selectPhotosByIds" resultType="cn.aynu.java2.weibo.entity.Photo">
+        select id, url, photo_name from photo
+            <where>
+                id in
+                <foreach collection="ids" open="(" close=")" separator="," item="id">
+                    #{id}
+                </foreach>
+            </where>
+    </select>
+    <select id="selectVideoIdByPost" resultType="java.lang.Integer">
+        select video_id from post_video where post_id=#{id}
+    </select>
+    <select id="selectVideoById" resultType="cn.aynu.java2.weibo.entity.Video">
+        select id, url, video_name from video where id=#{id}
+    </select>
+</mapper>
