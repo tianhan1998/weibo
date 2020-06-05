@@ -2,10 +2,13 @@ package cn.aynu.java2.weibo.admin.service;
 
 import cn.aynu.java2.weibo.entity.User;
 
+import java.util.Date;
 import java.util.List;
 
 public interface IAdminUserService {
-    List<User> findUserByCondition(User user);
+    User findUserByInfo(User user);
+
+    List<User> findUserByCondition(User user, Date beginTime, Date endTime, Date beginDay, Date endDay);
 
     int addUser(User user);
 

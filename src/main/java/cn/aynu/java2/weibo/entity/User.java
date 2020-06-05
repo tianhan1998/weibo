@@ -19,10 +19,20 @@ public class User implements Serializable {
     @NotEmpty(message = "email不能为空")
     private String email;
     @NotEmpty(message = "生日不能为空")
-    @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd ")
+    @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
     private Date birthday;
     @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
     private Date registerDay;
+    private Integer role;
+
+
+    public Integer getRole() {
+        return role;
+    }
+
+    public void setRole(Integer role) {
+        this.role = role;
+    }
 
     public String getId() {
         return id;
@@ -99,6 +109,7 @@ public class User implements Serializable {
                 ", email='" + email + '\'' +
                 ", birthday=" + birthday +
                 ", registerDay=" + registerDay +
+                ", role=" + role +
                 '}';
     }
 }

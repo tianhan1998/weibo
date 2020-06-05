@@ -6,7 +6,10 @@ import cn.aynu.java2.weibo.entity.User;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class AdminUserServiceImpl implements IAdminUserService {
@@ -14,8 +17,19 @@ public class AdminUserServiceImpl implements IAdminUserService {
     private IAdminUserMapper iAdminUserMapper;
 
     @Override
-    public List<User> findUserByCondition(User user) {
-        return iAdminUserMapper.selectUserByCondition(user);
+    public User findUserByInfo(User user) {
+        return iAdminUserMapper.selectUserByInfo(user);
+    }
+
+    @Override
+    public List<User> findUserByCondition(User user, Date beginTime, Date endTime, Date beginDay, Date endDay) {
+        Map map = new HashMap();
+        map.put("user",user);
+        map.put("beginTime",beginTime);
+        map.put("endTime",endTime);
+        map.put("beginDay",beginDay);
+        map.put("endDay",endDay);
+        return iAdminUserMapper.selectUserByCondition(map);
     }
 
     @Override
