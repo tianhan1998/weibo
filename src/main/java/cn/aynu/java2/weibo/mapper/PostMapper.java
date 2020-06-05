@@ -17,7 +17,7 @@ public interface PostMapper {
 
     /**
      * 根据id找到视频实体类
-     * @param id
+     * @param id id
      * @return 视频实体类
      */
     Video selectVideoById(Integer id);
@@ -44,6 +44,13 @@ public interface PostMapper {
      * @return Post
      */
     List<Post> selectAllPost();
+
+    /**
+     * 根据用户id搜索所有动态
+     * @param id 用户id
+     * @return post实体类list
+     */
+    List<Post> selectAllPostByUserId(String id);
 
     /**
      * 插入动态
@@ -81,4 +88,46 @@ public interface PostMapper {
      * @return 行数
      */
     int insertVideo(Video video);
+
+    /**
+     * 根据id删除动态
+     * @param id id
+     * @return 行数
+     */
+    int deletePost(String id);
+
+    /**
+     * 根据id选择post实体类
+     * @param id id
+     * @return post实体类
+     */
+    Post selectPostById(String id);
+
+    /**
+     * 根据id删除视频
+     * @param id id
+     * @return 行数
+     */
+    int deleteVideoById(String id);
+
+    /**
+     * 根据id删除图片
+     * @param id id
+     * @return 行数
+     */
+    int deletePhotoById(String id);
+
+    /**
+     * 根据id删除图片动态关联表
+     * @param id id
+     * @return 行数
+     */
+    int deletePostPhotoByPostId(String id);
+
+    /**
+     * 根据id删除视频动态关联表
+     * @param id id
+     * @return 行数
+     */
+    int deletePostVideoByPostId(String id);
 }

@@ -23,7 +23,21 @@
     <insert id="insertVideo" useGeneratedKeys="true" keyProperty="id">
         insert into video(url, video_name) VALUES (#{url},#{videoName})
     </insert>
-
+    <delete id="deletePost">
+        delete from post where id=#{id}
+    </delete>
+    <delete id="deleteVideoById">
+        delete from video where id=#{id}
+    </delete>
+    <delete id="deletePhotoById">
+        delete from photo where id=#{id}
+    </delete>
+    <delete id="deletePostPhotoByPostId">
+        delete from post_photo where post_id=#{id}
+    </delete>
+    <delete id="deletePostVideoByPostId">
+        delete from post_video where post_id=#{id}
+    </delete>
     <select id="selectUserById" resultType="cn.aynu.java2.weibo.entity.User">
         select id, avatar, nick_name, sex
         from user where id=#{id}
@@ -48,5 +62,11 @@
     </select>
     <select id="selectVideoById" resultType="cn.aynu.java2.weibo.entity.Video">
         select id, url, video_name from video where id=#{id}
+    </select>
+    <select id="selectPostById" resultMap="postMapper">
+        select id, post_time, text, good, user_id, stage from post where id=#{id}
+    </select>
+    <select id="selectAllPostByUserId" resultMap="postMapper">
+        select id, post_time, text, good, user_id, stage from post where user_id=#{id}
     </select>
 </mapper>

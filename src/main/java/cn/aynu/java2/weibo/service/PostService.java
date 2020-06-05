@@ -55,5 +55,55 @@ public interface PostService {
      */
     Boolean insertPost(Post post, MultipartFile[] photos, MultipartFile video, HttpServletRequest request) throws IOException, UploadFailException;
 
+    /**
+     * 根据用户id搜索所有动态
+     * @param id 用户id
+     * @return post实体类list
+     */
+    List<Post> selectAllPostByUserId(String id);
+
+
+    /**
+     * 删除动态
+     * @param post post对象
+     * @return 行数
+     */
+    boolean deletePost(Post post);
+
+    /**
+     * 根据id选择post实体类
+     * @param id id
+     * @return post实体类
+     */
+    Post selectPostById(String id);
+
+    /**
+     * 根据id删除视频
+     * @param id id
+     * @return 行数
+     */
+    int deleteVideoById(String id);
+
+    /**
+     * 根据id删除图片
+     * @param id id
+     * @return 行数
+     */
+    int deletePhotoById(String id);
+
+    /**
+     * 根据id删除图片动态关联表
+     * @param id id
+     * @return 行数
+     */
+    int deletePostPhotoByPostId(String id);
+
+    /**
+     * 根据id删除视频动态关联表
+     * @param id id
+     * @return 行数
+     */
+    int deletePostVideoByPostId(String id);
+
 
 }
