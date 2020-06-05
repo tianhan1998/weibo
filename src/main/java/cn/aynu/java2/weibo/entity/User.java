@@ -14,15 +14,6 @@ public class User implements Serializable {
     private Integer sex;
     private String password;
     private int role;
-
-    public int getRole() {
-        return role;
-    }
-
-    public void setRole(int role) {
-        this.role = role;
-    }
-
     @Email(message = "email格式错误")
     @NotEmpty(message = "email不能为空")
     private String email;
@@ -31,6 +22,13 @@ public class User implements Serializable {
     private Date birthday;
     @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
     private Date registerDay;
+    public int getRole() {
+        return role;
+    }
+
+    public void setRole(int role) {
+        this.role = role;
+    }
 
     public String getId() {
         return id;
