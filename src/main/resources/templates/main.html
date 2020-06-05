@@ -1,10 +1,506 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" type="image/png" th:href="@{/img/fav.png}">
+    <title></title>
+    <!-- Slick Slider -->
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/slick/slick.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/slick/slick-theme.min.css}"/>
+    <!-- Feather Icon-->
+    <link th:href="@{/assets/icons/feather.css}" rel="stylesheet" type="text/css">
+    <!-- Bootstrap core CSS -->
+    <link th:href="@{/bootstrap/css/wbbootstrap.min.css}" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link th:href="@{/assets/css/wbstyle.css}" rel="stylesheet">
 </head>
 <body>
-    <h1 th:text="${#session.id}"></h1>
+<style>
+    [v-cloak] {
+        display: none;
+    }
+
+    .img-mini {
+        width: 20%;
+        height: 20%;
+    }
+
+    img {
+        cursor: pointer;
+    }
+</style>
+<!-- Navigation -->
+<div id="app" v-cloak>
+    <nav id="MainNav" class="navbar navbar-expand navbar-dark bg-dark osahan-nav-top p-0">
+        <div class="container">
+            <a class="navbar-brand mr-2" th:href="@{/main}"><img th:src="@{/img/logo.png}" alt="">
+            </a>
+            <ul class="navbar-nav ml-auto d-flex align-items-center">
+                <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+                <li class="nav-item dropdown no-arrow d-sm-none">
+                    <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="feather-search mr-2"></i>
+                    </a>
+                    <!-- Dropdown - Messages -->
+                    <div class="dropdown-menu dropdown-menu-right p-3 shadow-sm animated--grow-in"
+                         aria-labelledby="searchDropdown">
+                        <form class="form-inline mr-auto w-100 navbar-search">
+                            <div class="input-group">
+                                <input type="text" class="form-control border-0 shadow-none"
+                                       placeholder="Search people, jobs and more..." aria-label="Search"
+                                       aria-describedby="basic-addon2">
+                                <div class="input-group-append">
+                                    <button class="btn" type="button">
+                                        <i class="feather-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </li>
+                <li class="nav-item dropdown no-arrow mx-1 osahan-list-dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        <i class="feather-message-square"></i>
+                        <!-- Counter - Alerts -->
+                        <span class="badge badge-danger badge-counter">8</span>
+                    </a>
+                    <!-- Dropdown - Alerts -->
+                    <div class="dropdown-list dropdown-menu dropdown-menu-right shadow-sm">
+                        <h6 class="dropdown-header">
+                            Message Center
+                        </h6>
+                        <a class="dropdown-item d-flex align-items-center" href="#">
+                            <div class="dropdown-list-image mr-3">
+                                <img class="rounded-circle" th:src="@{/img/p1.png}" alt="">
+                                <div class="status-indicator bg-success"></div>
+                            </div>
+                            <div class="font-weight-bold overflow-hidden">
+                                <div class="text-truncate">Hi there! I am wondering if you can help me with a problem
+                                    I've been having.
+                                </div>
+                                <div class="small text-gray-500">Emily Fowler · 58m</div>
+                            </div>
+                        </a>
+                        <a class="dropdown-item d-flex align-items-center" href="#">
+                            <div class="dropdown-list-image mr-3">
+                                <img class="rounded-circle" th:src="@{/img/p2.png}" alt="">
+                                <div class="status-indicator"></div>
+                            </div>
+                            <div class="overflow-hidden">
+                                <div class="text-truncate">I have the photos that you ordered last month, how would you
+                                    like them sent to you?
+                                </div>
+                                <div class="small text-gray-500">Jae Chun · 1d</div>
+                            </div>
+                        </a>
+                        <a class="dropdown-item d-flex align-items-center" href="#">
+                            <div class="dropdown-list-image mr-3">
+                                <img class="rounded-circle" th:src="@{/img/p3.png}" alt="">
+                                <div class="status-indicator bg-warning"></div>
+                            </div>
+                            <div class="overflow-hidden">
+                                <div class="text-truncate">Last month's report looks great, I am very happy with the
+                                    progress so far, keep up the good work!
+                                </div>
+                                <div class="small text-gray-500">Morgan Alvarez · 2d</div>
+                            </div>
+                        </a>
+                        <a class="dropdown-item d-flex align-items-center" href="#">
+                            <div class="dropdown-list-image mr-3">
+                                <img class="rounded-circle" th:src="@{/img/p4.png}" alt="">
+                                <div class="status-indicator bg-success"></div>
+                            </div>
+                            <div class="overflow-hidden">
+                                <div class="text-truncate">Am I a good boy? The reason I ask is because someone told me
+                                    that people say this to all dogs, even if they aren't good...
+                                </div>
+                                <div class="small text-gray-500">Chicken the Dog · 2w</div>
+                            </div>
+                        </a>
+                        <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown no-arrow mx-1 osahan-list-dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        <i class="feather-bell"></i>
+                        <!-- Counter - Alerts -->
+                        <span class="badge badge-info badge-counter">6</span>
+                    </a>
+                    <!-- Dropdown - Alerts -->
+                    <div class="dropdown-list dropdown-menu dropdown-menu-right shadow-sm">
+                        <h6 class="dropdown-header">
+                            Alerts Center
+                        </h6>
+                        <a class="dropdown-item d-flex align-items-center" href="#">
+                            <div class="mr-3">
+                                <div class="icon-circle bg-primary">
+                                    <i class="feather-download-cloud text-white"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="small text-gray-500">December 12, 2019</div>
+                                <span class="font-weight-bold">A new monthly report is ready to download!</span>
+                            </div>
+                        </a>
+                        <a class="dropdown-item d-flex align-items-center" href="#">
+                            <div class="mr-3">
+                                <div class="icon-circle bg-success">
+                                    <i class="feather-edit text-white"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="small text-gray-500">December 7, 2019</div>
+                                $290.29 has been deposited into your account!
+                            </div>
+                        </a>
+                        <a class="dropdown-item d-flex align-items-center" href="#">
+                            <div class="mr-3">
+                                <div class="icon-circle bg-warning">
+                                    <i class="feather-folder text-white"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="small text-gray-500">December 2, 2019</div>
+                                Spending Alert: We've noticed unusually high spending for your account.
+                            </div>
+                        </a>
+                        <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
+                    </div>
+                </li>
+                <!-- Nav Item - User Information -->
+                <li class="nav-item dropdown no-arrow ml-1 osahan-profile-dropdown">
+                    <a class="nav-link dropdown-toggle pr-0" href="#" role="button" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        <img class="img-profile rounded-circle" :src="context+user.avatar">
+                    </a>
+                    <!-- Dropdown - User Information -->
+                    <div class="dropdown-menu dropdown-menu-right shadow-sm">
+                        <div class="p-3 d-flex align-items-center">
+                            <div class="dropdown-list-image mr-3">
+                                <img class="rounded-circle" :src="context+user.avatar" alt="">
+                                <div class="status-indicator bg-success"></div>
+                            </div>
+                            <div class="font-weight-bold">
+                                <div class="text-truncate">Gurdeep Osahan</div>
+                                <div class="small text-gray-500">UI/UX Designer</div>
+                            </div>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" th:href="@{/main/profile}"><i class="feather-user mr-1"></i>个人主页</a>
+                        <a class="dropdown-item" href="sign-in.html"><i class="feather-log-out mr-1"></i> Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="py-4">
+        <div class="container">
+            <div class="row">
+                <!-- Main Content -->
+                <main class="col col-xl-6 order-xl-2 col-lg-12 order-lg-1 col-md-12 col-sm-12 col-12">
+                    <div class="box shadow-sm border rounded bg-white mb-3 osahan-share-post">
+                        <ul class="nav nav-justified border-bottom osahan-line-tab" id="myTab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
+                                   aria-controls="home" aria-selected="true"><i class="feather-edit"></i> 分享你的心情</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="myTabContent">
+                            <form id="postForm">
+                                <div class="tab-pane fade show active" id="home" role="tabpanel"
+                                     aria-labelledby="home-tab">
+                                    <div class="p-3 d-flex align-items-center w-100" href="#">
+                                        <div class="dropdown-list-image mr-3">
+                                            <img class="rounded-circle"
+                                                 th:src="${#servletContext.contextPath+session.login_user.avatar}"
+                                                 alt="">
+                                            <div class="status-indicator bg-success"></div>
+                                        </div>
+                                        <div class="w-100">
+                                            <textarea placeholder="在此写下你的想法..." id="text" name="text"
+                                                      class="form-control border-0 p-0 shadow-none" rows="1"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="file" id="photo" name="photos" multiple="multiple" style="display: none"
+                                       accept="image/*">
+                                <input type="file" id="video" name="video" style="display: none" accept="video/*">
+                                <div class="border-top p-3 d-flex align-items-center">
+                                    <div class="mr-3"><a href="#" class="text-link small" onclick="uploadPhoto()"><i
+                                            class="feather-image"></i></a></div>
+                                    <div class="mr-5"><a href="#" class="text-link small" onclick="uploadVideo()"><i
+                                            class="feather-video"></i></a></div>
+                                    <div class="mr-auto">
+                                        <label class="mr-1">
+                                            <input type="checkbox" name="onlyFriend" id="onlyFriend" value="1">
+                                        </label>仅好友可见
+                                    </div>
+                                    <div class="flex-shrink-1">
+                                        <input @click="postMyPost()" type="button" value="提交"
+                                               class="btn btn-primary btn-sm">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div v-for="item in vo">
+                        <div class="box shadow-sm border rounded bg-white mb-3 osahan-post">
+                            <div class="p-3 d-flex align-items-center border-bottom osahan-post-header">
+                                <div class="dropdown-list-image mr-3">
+                                    <img class="rounded-circle" :src="context+item.post.user.avatar" alt="">
+                                    <div class="status-indicator bg-success"></div>
+                                </div>
+                                <div class="font-weight-bold">
+                                    <div class="text-truncate">{{item.post.user.nickName}}</div>
+                                </div>
+                                <span class="ml-auto small">{{item.post.postTime}}</span>
+                            </div>
+                            <div class="p-3 border-bottom osahan-post-body">
+                                <p class="mb-0">{{item.post.text}}</p>
+                                <div v-if="item.photos!==null && item.photos.length>0">
+                                    <div v-for="photo in item.photos">
+                                        <img :src="context+photo.url" @click="changePhotoSize($event)"
+                                             class="img-mini img-fluid" alt="Responsive image">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-3 border-bottom osahan-post-footer">
+                                <a href="#" class="mr-3 text-secondary"><i class="feather-heart text-danger"></i>
+                                    {{item.post.good}}</a>
+                                <a href="#" style="margin-right: 24rem" class="text-secondary"><i
+                                        class="feather-message-square"></i> 0</a>
+                                <input v-if="item.post.user.nickName==sessionName" @click="deleteMyPost(item.post.id)"
+                                       type="button" value="删除" class="btn btn-danger btn-sm">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box mb-3 shadow-sm border rounded bg-white osahan-post">
+                        <div class="p-3 d-flex align-items-center border-bottom osahan-post-header">
+                            <div class="dropdown-list-image mr-3">
+                                <img class="rounded-circle" src="img/p6.png" alt="">
+                                <div class="status-indicator bg-success"></div>
+                            </div>
+                            <div class="font-weight-bold">
+                                <div class="text-truncate">Collin Weiland</div>
+                            </div>
+                            <span class="ml-auto small">3 hours</span>
+                        </div>
+                        <div class="p-3 border-bottom osahan-post-body">
+                            <p>Lorem ipsum dolor sit amet, consectetur 😍😎 adipisicing elit, sed do eiusmod tempo
+                                incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+                                exercitation ullamco <a href="#">laboris consequat.</a></p>
+                            <img src="img/post1.png" class="img-fluid" alt="Responsive image">
+                        </div>
+                        <div class="p-3 border-bottom osahan-post-footer">
+                            <a href="#" class="mr-3 text-secondary"><i class="feather-heart text-danger"></i> 16</a>
+                            <a href="#" class="mr-3 text-secondary"><i class="feather-message-square"></i> 8</a>
+                            <a href="#" class="mr-3 text-secondary"><i class="feather-share-2"></i> 2</a>
+                        </div>
+                        <div class="p-3 d-flex align-items-top border-bottom osahan-post-comment">
+                            <div class="dropdown-list-image mr-3">
+                                <img class="rounded-circle" src="img/p7.png" alt="">
+                                <div class="status-indicator bg-success"></div>
+                            </div>
+                            <div class="font-weight-bold">
+                                <div class="text-truncate"> James Spiegel <span class="float-right small">2 min</span>
+                                </div>
+                                <div class="small text-gray-500">Ratione voluptatem sequi en lod nesciunt. Neque porro
+                                    quisquam est, quinder dolorem ipsum quia dolor sit amet, consectetur
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-3 d-flex align-items-top border-bottom osahan-post-comment">
+                            <div class="dropdown-list-image mr-3">
+                                <img class="rounded-circle" src="img/p7.png" alt="">
+                                <div class="status-indicator bg-success"></div>
+                            </div>
+                            <div class="font-weight-bold">
+                                <div class="text-truncate"> James Spiegel <span class="float-right small">2 min</span>
+                                </div>
+                                <div class="small text-gray-500">Ratione voluptatem sequi en lod nesciunt. Neque porro
+                                    quisquam est, quinder dolorem ipsum quia dolor sit amet, consectetur
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-3">
+                            <textarea placeholder="Add Comment..." class="form-control border-0 p-0 shadow-none"
+                                      rows="1"></textarea>
+                        </div>
+                    </div>
+                </main>
+                <aside id="MySelf" class="col col-xl-3 order-xl-1 col-lg-6 order-lg-2 col-md-6 col-sm-6 col-12">
+                    <div class="box mb-3 shadow-sm border rounded bg-white profile-box text-center">
+                        <div class="py-4 px-3 border-bottom">
+                            <img :src="context+user.avatar" class="img-fluid mt-2 rounded-circle"
+                                 alt="Responsive image">
+                            <h5 class="font-weight-bold text-dark mb-1 mt-4">{{user.nickName}}</h5>
+                        </div>
+                        <div class="d-flex">
+                            <div class="col-6 border-right p-3">
+                                <h6 class="font-weight-bold text-dark mb-1">1</h6>
+                                <p class="mb-0 text-black-50 small">粉丝</p>
+                            </div>
+                            <div class="col-6 p-3">
+                                <h6 class="font-weight-bold text-dark mb-1">1</h6>
+                                <p class="mb-0 text-black-50 small">关注数</p>
+                            </div>
+                        </div>
+                        <div class="overflow-hidden border-top">
+                            <a class="font-weight-bold p-3 d-block" th:href="@{/main/profile}"> 个人主页</a>
+                        </div>
+                    </div>
+                    <div class="box shadow-sm mb-3 rounded bg-white ads-box text-center">
+                        <img th:src="@{/img/job1.png}" class="img-fluid" alt="Responsive image">
+                        <div class="p-3 border-bottom">
+                            <h6 class="font-weight-bold text-dark">Osahan Solutions</h6>
+                            <p class="mb-0 text-muted">Looking for talent?</p>
+                        </div>
+                        <div class="p-3">
+                            <button type="button" class="btn btn-outline-primary pl-4 pr-4"> POST A JOB</button>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Bootstrap core JavaScript -->
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<!-- slick Slider JS-->
+<script type="text/javascript" th:src="@{/assets/slick/slick.min.css}"></script>
+<!-- Custom scripts for all pages-->
+<script th:src="@{/js/osahan.js}"></script>
+<script th:src="@{/js/sweetalert.min.js}"></script>
+<!--vue-->
+<script th:src="@{/js/axios.min.js}"></script>
+<script th:src="@{/js/vue.min.js}"></script>
+<script type="text/javascript">
+    const context = "[[@{/}]]";
+    const sessionName = "[[${session.login_user.nickName}]]";
+
+    function uploadPhoto() {
+        $("#photo").click();
+    }
+
+    function uploadVideo() {
+        $("#video").click();
+    }
+
+    new Vue({
+        el: '#app',
+        data: {
+            context: context,
+            vo: [
+                {
+                    post: {
+                        user: {}
+                    },
+                    video: {},
+                    photos: [],
+                },
+            ],
+            user: {}
+        },
+        methods: {
+            postMyPost: function () {
+                let formData = new FormData();
+                if ($("#onlyFriend").prop('checked')) {
+                    formData.append("onlyFriend", "1");
+                }
+                formData.append("video", $("#video")[0].files[0]);
+                $.each($("#photo")[0].files, function (i, file) {
+                    formData.append('photos', file);
+                });
+                formData.append("text", $("#text").val());
+                $.ajax({
+                    url: context + "main/post",
+                    type: 'post',
+                    processData: false,
+                    contentType: false,
+                    data: formData,
+                    success: result => {
+                        if (result.result.code === 200) {
+                            swal("发表动态成功!", {icon: "success"}).then(function () {
+                                window.location.reload();
+                            });
+                        } else {
+                            swal(result.result.msg[0], {icon: "error"});
+                        }
+                    },
+                    error: result => {
+                        console.log(result);
+                    }
+                });
+            },
+            changePhotoSize: function (event) {
+                const photo = $(event.target);//DOM对象转JQuery对象
+                if (photo.hasClass("img-mini")) {
+                    photo.removeClass("img-mini");
+                } else {
+                    photo.addClass("img-mini");
+                }
+            },
+            deleteMyPost: function (id) {
+                swal({
+                    title: "是否确定删除动态？",
+                    text: "删除无法恢复您的动态信息，是否继续？",
+                    icon: "warning",
+                    dangerMode: true,
+                    buttons: ['取消', '删除'],
+                }).then(result => {
+                    if (result) {
+                        axios({
+                            url: context + "main/post",
+                            method: 'delete',
+                            params: {
+                                id: id
+                            }
+                        }).then(response => {
+                            if (response.data.result.code === 200) {
+                                swal("删除动态成功！", {icon: 'success'}).then(function () {
+                                    window.location.reload();
+                                });
+                            }
+                        }).catch(response => {
+                            console.log(response);
+                        });
+
+                    }
+                })
+            }
+        },
+        mounted: function () {
+            const self = this;
+            // swal('vue is online!',{icon:'success'});
+            axios({
+                url: context + "main/post",
+                method: 'get',
+            }).then(response => {
+                if (response.data.result.code === 200) {
+                    self.vo = response.data.result.data;
+                }
+            }).catch(response => {
+                console.log(response);
+            });
+            axios({
+                url: context + "main/api/LoginUser",
+                method: 'get',
+            }).then(response => {
+                if (response.data.result.code === 200) {
+                    this.user = response.data.result.data;
+                }
+            }).catch(response => {
+                console.log(response);
+            });
+        }
+    });
+</script>
 </body>
 </html>

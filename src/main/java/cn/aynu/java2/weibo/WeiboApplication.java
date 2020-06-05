@@ -8,6 +8,10 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
+/**
+ * @author tianh,lcy,wk
+ */
+@MapperScan(basePackages = {"cn.aynu.java2.weibo.mapper","cn.aynu.java2.weibo.admin.mapper"})
 @SpringBootApplication
 @EnableRedisHttpSession
 public class WeiboApplication {
