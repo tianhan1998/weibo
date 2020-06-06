@@ -249,7 +249,7 @@
                             </form>
                         </div>
                     </div>
-                    <div v-for="item in vo">
+                    <div v-for="item,index in vo">
                         <div class="box shadow-sm border rounded bg-white mb-3 osahan-post">
                             <div class="p-3 d-flex align-items-center border-bottom osahan-post-header">
                                 <div class="dropdown-list-image mr-3">
@@ -259,7 +259,16 @@
                                 <div class="font-weight-bold">
                                     <div class="text-truncate">{{item.post.user.nickName}}</div>
                                 </div>
-                                <span class="ml-auto small">{{item.post.postTime}}</span>
+                                <div class="dropdown ml-auto">
+                                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                        <li><a href="#">Action</a></li>
+                                        <li v-if="item.post.user.nickName==sessionName" role="separator" class="divider"></li>
+                                        <li v-if="item.post.user.nickName==sessionName" @click="deleteMyPost(item.post.id)"><a style="cursor: pointer">删除动态</a></li>
+                                    </ul>
+                                </div>
+
                             </div>
                             <div class="p-3 border-bottom osahan-post-body">
                                 <p class="mb-0">{{item.post.text}}</p>
@@ -271,12 +280,21 @@
                                 </div>
                             </div>
                             <div class="p-3 border-bottom osahan-post-footer">
-                                <a href="#" class="mr-3 text-secondary"><i class="feather-heart text-danger"></i>
-                                    {{item.post.good}}</a>
-                                <a href="#" style="margin-right: 24rem" class="text-secondary"><i
+                                <a v-if="item.good" @click="good(item.post.id,index,$event)"  class="mr-3 text-secondary" style="display: none;cursor: pointer">
+                                    <span class="mr-1 glyphicon glyphicon-heart-empty text-danger"></span>{{item.post.good}}
+                                </a>
+                                <a v-if="item.good" @click="cancelGood(item.post.id,index,$event)"  class="mr-3 text-secondary" style="cursor: pointer">
+                                    <span class="mr-1 glyphicon glyphicon-heart text-danger"></span>{{item.post.good}}
+                                </a>
+                                <a v-if="!item.good" @click="cancelGood(item.post.id,index,$event)" class="mr-3 text-secondary" style="display: none;cursor: pointer">
+                                    <span class="mr-1 glyphicon glyphicon-heart text-danger"></span>{{item.post.good}}
+                                </a>
+                                <a v-if="!item.good" @click="good(item.post.id,index,$event)" class="mr-3 text-secondary" style="cursor: pointer">
+                                    <span class="mr-1 glyphicon glyphicon-heart-empty text-danger"></span>{{item.post.good}}
+                                </a>
+                                <a href="#" style="margin-right: 20rem" class="text-secondary"><i
                                         class="feather-message-square"></i> 0</a>
-                                <input v-if="item.post.user.nickName==sessionName" @click="deleteMyPost(item.post.id)"
-                                       type="button" value="删除" class="btn btn-danger btn-sm">
+                                <span style="color: #888da8" class="small">{{item.post.postTime}}</span>
                             </div>
                         </div>
                     </div>
@@ -298,7 +316,7 @@
                             <img src="img/post1.png" class="img-fluid" alt="Responsive image">
                         </div>
                         <div class="p-3 border-bottom osahan-post-footer">
-                            <a href="#" class="mr-3 text-secondary"><i class="feather-heart text-danger"></i> 16</a>
+                            <a href="#" class="mr-3 text-secondary"><span class="mr-1 glyphicon glyphicon-heart-empty text-danger"></span>16 </a>
                             <a href="#" class="mr-3 text-secondary"><i class="feather-message-square"></i> 8</a>
                             <a href="#" class="mr-3 text-secondary"><i class="feather-share-2"></i> 2</a>
                         </div>
@@ -409,6 +427,48 @@
             user: {}
         },
         methods: {
+            cancelGood(id,index,event){
+                axios({
+                    url:this.context+"main/good/"+id,
+                    method:'delete',
+                }).then(response=>{
+                    if(response.data.result.code===200){
+                        swal("取消赞成功",{icon:"success",buttons:false,timer:1000});
+                        let dom=$(event.target);
+                        if(dom.is("span")){
+                            dom=dom.parent("a");
+                        }
+                        this.vo[index].post.good--;
+                        dom.hide();
+                        dom.next("a").show();
+                    }else{
+                        swal(response.data.result.msg[0],{icon:'error'});
+                    }
+                }).catch(response=>{
+                    console.log(response);
+                });
+            },
+            good:function(id,index,event){
+                axios({
+                    url:this.context+"main/good/"+id,
+                    method:'put',
+                }).then(response=>{
+                    if(response.data.result.code===200){
+                        swal("点赞成功",{icon:"success",buttons:false,timer:1000});
+                        let dom=$(event.target);
+                        if(dom.is("span")){
+                            dom=dom.parent("a");
+                        }
+                        this.vo[index].post.good++;
+                        dom.hide();
+                        dom.prev("a").show();
+                    }else{
+                        swal(response.data.result.msg[0],{icon:'error'});
+                    }
+                }).catch(response=>{
+                    console.log(response);
+                });
+            },
             postMyPost: function () {
                 let formData = new FormData();
                 if ($("#onlyFriend").prop('checked')) {
@@ -467,6 +527,8 @@
                                 swal("删除动态成功！", {icon: 'success'}).then(function () {
                                     window.location.reload();
                                 });
+                            }else{
+                                swal(response.data.result.msg[0],{icon:'error'});
                             }
                         }).catch(response => {
                             console.log(response);
@@ -484,7 +546,10 @@
                 method: 'get',
             }).then(response => {
                 if (response.data.result.code === 200) {
+                    console.log(response.data.result);
                     self.vo = response.data.result.data;
+                }else{
+                    swal(response.data.result.msg[0],{icon:'error'});
                 }
             }).catch(response => {
                 console.log(response);
@@ -495,6 +560,8 @@
             }).then(response => {
                 if (response.data.result.code === 200) {
                     this.user = response.data.result.data;
+                }else{
+                    swal(response.data.result.msg[0],{icon:'error'});
                 }
             }).catch(response => {
                 console.log(response);

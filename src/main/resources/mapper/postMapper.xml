@@ -23,6 +23,15 @@
     <insert id="insertVideo" useGeneratedKeys="true" keyProperty="id">
         insert into video(url, video_name) VALUES (#{url},#{videoName})
     </insert>
+    <insert id="insertPostGood">
+        insert into post_good(user_id, post_id) VALUES (#{userId},#{postId})
+    </insert>
+    <update id="incrGoodById">
+        update post set good=good+1 where id=#{id} and good>=0
+    </update>
+    <update id="decrGoodById">
+        update post set good=good-1 where id=#{id} and good>=0
+    </update>
     <delete id="deletePost">
         delete from post where id=#{id}
     </delete>
@@ -37,6 +46,12 @@
     </delete>
     <delete id="deletePostVideoByPostId">
         delete from post_video where post_id=#{id}
+    </delete>
+    <delete id="deletePostGood">
+        delete from post_good where user_id=#{userId} and post_id=#{postId}
+    </delete>
+    <delete id="deletePostGoodByPostId">
+        delete from post_good where post_id=#{id}
     </delete>
     <select id="selectUserById" resultType="cn.aynu.java2.weibo.entity.User">
         select id, avatar, nick_name, sex
@@ -68,5 +83,8 @@
     </select>
     <select id="selectAllPostByUserId" resultMap="postMapper">
         select id, post_time, text, good, user_id, stage from post where user_id=#{id}
+    </select>
+    <select id="selectIsGoodByUserIdAndPostId" resultType="java.lang.Integer">
+        select count(*) from post_good where user_id=#{userId} and post_id=#{postId}
     </select>
 </mapper>

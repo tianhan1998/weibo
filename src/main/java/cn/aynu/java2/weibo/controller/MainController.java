@@ -24,7 +24,7 @@ import static cn.aynu.java2.weibo.entity.Result.*;
  */
 @RestController
 @RequestMapping("/main")
-public class PostController {
+public class MainController {
 
     @Resource
     PostService postService;
@@ -32,14 +32,66 @@ public class PostController {
     @Resource
     VoUtils voUtils;
 
+    @DeleteMapping("/good/{id}")
+    public JSONObject cancelGood(@PathVariable String id,HttpSession session){
+        JSONObject json=new JSONObject();
+        try{
+            User loginUser = (User) session.getAttribute("login_user");
+            Post post=postService.selectPostById(id);
+            if(post!=null){
+                if(postService.selectIsGoodByUserIdAndPostId(post.getId().toString(),loginUser.getId())!=0){
+                    if(postService.decrGoodByPostId(id,new PostGood(loginUser.getId(),post.getId().toString()))){
+                        json.put("result",successResult("取消赞成功"));
+                    }else{
+                        json.put("result",failResult("取消赞错误"));
+                    }
+                }else{
+                    json.put("result",failResult("您还未点赞"));
+                }
+            }else{
+                json.put("result",failResult("未找到相关动态"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            json.put("result", exceptionResult(e.getMessage()));
+        }
+        return json;
+    }
+    @PutMapping("/good/{id}")
+    public JSONObject good(@PathVariable String id,HttpSession session){
+        JSONObject json=new JSONObject();
+        try{
+            User loginUser = (User) session.getAttribute("login_user");
+            Post post=postService.selectPostById(id);
+            if(post!=null){
+                if(postService.selectIsGoodByUserIdAndPostId(post.getId().toString(),loginUser.getId())==0){
+                    if(postService.incrGoodByPostId(post.getId().toString(),new PostGood(loginUser.getId(),post.getId().toString()))){
+                        json.put("result",successResult("点赞成功"));
+                    }else{
+                        json.put("result",failResult("点赞错误"));
+                    }
+                }else{
+                    json.put("result",failResult("您已点赞过"));
+                }
+            }else{
+                json.put("result",failResult("未找到相关动态"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            json.put("result", exceptionResult(e.getMessage()));
+        }
+        return json;
+    }
+
     @PostMapping("/post/{id}")
-    public JSONObject findPostByUser(@PathVariable String id){
+    public JSONObject findPostByUser(@PathVariable String id,HttpSession session){
         JSONObject json=new JSONObject();
         List<PostVo> postVoList;
         try{
             List<Post> postList=postService.selectAllPostByUserId(id);
             if(postList!=null&&postList.size()>0){
-                postVoList=voUtils.transferToPostVo(postList);
+                User loginUser = (User) session.getAttribute("login_user");
+                postVoList=voUtils.transferToPostVo(postList,loginUser);
                 json.put("result",successResult("查找成功",postVoList));
             }else{
                 json.put("result",failResult("查找失败",null));
@@ -52,14 +104,15 @@ public class PostController {
     }
 
     @GetMapping("/post")
-    public JSONObject getPost() {
+    public JSONObject getPost(HttpSession session) {
         JSONObject json = new JSONObject();
         List<Post> postList;
         List<PostVo> postVoList;
         try {
             postList=postService.selectAllPost();
             if(postList!=null&&postList.size()>0) {
-                postVoList=voUtils.transferToPostVo(postList);
+                User loginUser = (User) session.getAttribute("login_user");
+                postVoList=voUtils.transferToPostVo(postList,loginUser);
                 json.put("result",successResult("查找成功!",postVoList));
             }else{
                 json.put("result", failResult("查找失败", null));

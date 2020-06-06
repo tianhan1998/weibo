@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
 
+import static cn.aynu.java2.weibo.entity.Result.*;
+
 /**
  * @author tianh
  */
@@ -25,13 +27,13 @@ public class ApiController {
                 user.setBirthday(null);
                 user.setRegisterDay(null);
                 user.setEmail(null);
-                json.put("result", Result.successResult("获取登录态成功!",user));
+                json.put("result", successResult("获取登录态成功!",user));
             }else{
-                json.put("result",Result.failResult("获取登录态失败,请重新登陆"));
+                json.put("result", failResult("获取登录态失败,请重新登陆"));
             }
         } catch (Exception e) {
             e.printStackTrace();
-            json.put("result", Result.exceptionResult(e.getMessage()));
+            json.put("result", exceptionResult(e.getMessage()));
         }
         return json;
     }

@@ -1,9 +1,20 @@
 package cn.aynu.java2.weibo.entity;
 
+/**
+ * @author tianh
+ */
 public class PostGood {
     private String id;
     private String userId;
     private String postId;
+
+    public PostGood() {
+    }
+
+    public PostGood(String userId, String postId) {
+        this.userId = userId;
+        this.postId = postId;
+    }
 
     @Override
     public String toString() {

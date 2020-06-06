@@ -2,6 +2,7 @@ package cn.aynu.java2.weibo.utils;
 
 import cn.aynu.java2.weibo.entity.Photo;
 import cn.aynu.java2.weibo.entity.Post;
+import cn.aynu.java2.weibo.entity.User;
 import cn.aynu.java2.weibo.entity.Video;
 import cn.aynu.java2.weibo.service.PostService;
 import cn.aynu.java2.weibo.vo.PostVo;
@@ -22,12 +23,13 @@ public class VoUtils {
     @Resource
     PostService postService;
 
-    public List<PostVo> transferToPostVo(List<Post> postList){
+    public List<PostVo> transferToPostVo(List<Post> postList, User user){
         List<PostVo> postVoList=new ArrayList<>();
         if (postList != null && postList.size() > 0) {
             for (Post tempPost : postList) {
                 //TODO 加上好友判断
                 PostVo tempVo = new PostVo(tempPost);
+                tempVo.setGood(postService.selectIsGoodByUserIdAndPostId(tempPost.getId().toString(), user.getId()) != 0);
                 List<Integer> photoIds = postService.selectPhotoIdsByPost(tempPost);
                 if (photoIds != null && photoIds.size() > 0) {
                     List<Photo> photos = postService.selectPhotosByIds(photoIds);

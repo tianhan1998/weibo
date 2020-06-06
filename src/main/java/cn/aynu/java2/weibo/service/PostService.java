@@ -2,8 +2,11 @@ package cn.aynu.java2.weibo.service;
 
 import cn.aynu.java2.weibo.entity.Photo;
 import cn.aynu.java2.weibo.entity.Post;
+import cn.aynu.java2.weibo.entity.PostGood;
 import cn.aynu.java2.weibo.entity.Video;
+import cn.aynu.java2.weibo.exception.DaoAssociationFailException;
 import cn.aynu.java2.weibo.exception.UploadFailException;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,9 +18,32 @@ import java.util.List;
  */
 public interface PostService {
 
+
+    /**
+     * 取消点赞
+     * @param id 动态id
+     * @param postGood 关联实体类
+     * @return 成功失败
+     */
+    Boolean decrGoodByPostId(String id,PostGood postGood) throws DaoAssociationFailException;
+    /**
+     * 动态点赞
+     * @param id 动态id
+     * @param postGood 关联实体类
+     * @return 成功失败
+     */
+    Boolean incrGoodByPostId(String id,PostGood postGood) throws DaoAssociationFailException;
+
+    /**
+     * 查找对应用户id是否点赞对应动态
+     * @param postId 动态id
+     * @param userId 用户id
+     * @return 条数
+     */
+    int selectIsGoodByUserIdAndPostId(@Param("postId") String postId, @Param("userId") String userId);
     /**
      * 根据id找到视频实体类
-     * @param id
+     * @param id id
      * @return 视频实体类
      */
     Video selectVideoById(Integer id);
