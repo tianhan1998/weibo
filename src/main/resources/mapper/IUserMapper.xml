@@ -9,8 +9,11 @@
     <select id="selectUserByLogin" resultType="User">
         select * from user where email=#{email} and password=#{password}
     </select>
-    
-    <insert id="insertUser">
+    <select id="selectUserById" resultType="cn.aynu.java2.weibo.entity.User">
+        select id, nick_name, sex from user where id=#{id}
+    </select>
+
+    <insert id="insertUser" useGeneratedKeys="true" keyProperty="id">
         insert into user (avatar,email,nick_name,sex,birthday,password) values (#{avatar},#{email},#{nickName},#{sex},#{birthday},#{password})
     </insert>
 </mapper>

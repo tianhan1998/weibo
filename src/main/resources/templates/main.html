@@ -177,18 +177,17 @@
                 <li class="nav-item dropdown no-arrow ml-1 osahan-profile-dropdown">
                     <a class="nav-link dropdown-toggle pr-0" href="#" role="button" data-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false">
-                        <img class="img-profile rounded-circle" :src="context+user.avatar">
+                        <img class="img-profile rounded-circle" :src="context+userVo.user.avatar">
                     </a>
                     <!-- Dropdown - User Information -->
                     <div class="dropdown-menu dropdown-menu-right shadow-sm">
                         <div class="p-3 d-flex align-items-center">
                             <div class="dropdown-list-image mr-3">
-                                <img class="rounded-circle" :src="context+user.avatar" alt="">
+                                <img class="rounded-circle" :src="context+userVo.user.avatar" alt="">
                                 <div class="status-indicator bg-success"></div>
                             </div>
                             <div class="font-weight-bold">
-                                <div class="text-truncate">Gurdeep Osahan</div>
-                                <div class="small text-gray-500">UI/UX Designer</div>
+                                <div class="text-truncate">{{userVo.user.nickName}}</div>
                             </div>
                         </div>
                         <div class="dropdown-divider"></div>
@@ -263,7 +262,10 @@
                                     <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                        <li><a href="#">Action</a></li>
+                                        <li v-if="!item.friend" @click="sub(item.post.user.id,$event)"><a style="cursor: pointer">关注</a></li>
+                                        <li v-if="item.friend" @click="sub(item.post.user.id,$event)"><a style="cursor: pointer;display: none">关注</a></li>
+                                        <li v-if="item.friend" @click="unSub(item.post.user.id,$event)"><a style="cursor: pointer">取消关注</a></li>
+                                        <li v-if="!item.friend" @click="unSub(item.post.user.id,$event)"><a style="cursor: pointer;display: none" >取消关注</a></li>
                                         <li v-if="item.post.user.nickName==sessionName" role="separator" class="divider"></li>
                                         <li v-if="item.post.user.nickName==sessionName" @click="deleteMyPost(item.post.id)"><a style="cursor: pointer">删除动态</a></li>
                                     </ul>
@@ -355,17 +357,17 @@
                 <aside id="MySelf" class="col col-xl-3 order-xl-1 col-lg-6 order-lg-2 col-md-6 col-sm-6 col-12">
                     <div class="box mb-3 shadow-sm border rounded bg-white profile-box text-center">
                         <div class="py-4 px-3 border-bottom">
-                            <img :src="context+user.avatar" class="img-fluid mt-2 rounded-circle"
+                            <img :src="context+userVo.user.avatar" class="img-fluid mt-2 rounded-circle"
                                  alt="Responsive image">
-                            <h5 class="font-weight-bold text-dark mb-1 mt-4">{{user.nickName}}</h5>
+                            <h5 class="font-weight-bold text-dark mb-1 mt-4">{{userVo.user.nickName}}</h5>
                         </div>
                         <div class="d-flex">
                             <div class="col-6 border-right p-3">
-                                <h6 class="font-weight-bold text-dark mb-1">1</h6>
+                                <h6 class="font-weight-bold text-dark mb-1">{{userVo.fs}}</h6>
                                 <p class="mb-0 text-black-50 small">粉丝</p>
                             </div>
                             <div class="col-6 p-3">
-                                <h6 class="font-weight-bold text-dark mb-1">1</h6>
+                                <h6 class="font-weight-bold text-dark mb-1">{{userVo.gz}}</h6>
                                 <p class="mb-0 text-black-50 small">关注数</p>
                             </div>
                         </div>
@@ -424,9 +426,51 @@
                     photos: [],
                 },
             ],
-            user: {}
+            userVo: {
+                user:{
+
+                }
+            }
         },
         methods: {
+            unSub:function(id,event){
+                axios({
+                    url:this.context+"main/sub/"+id,
+                    method:'delete',
+                }).then(response=>{
+                    if(response.data.result.code===200){
+                        swal(response.data.result.msg[0],{icon:'success',buttons:false,timer:1000});
+                        const dom=$(event.target);
+                        dom.hide();
+                        dom.parent("li").prev("li").children("a").show();
+                    }else{
+                        swal(response.data.result.msg[0],{icon:'error'});
+                    }
+                }).catch(response=>{
+                    console.log(response);
+                });
+            },
+            sub:function(id,event){
+                if(id===this.userVo.user.id){
+                    swal("不能关注自己",{icon:"error",buttons:false,timer:1000});
+                }else{
+                    axios({
+                        url:this.context+"main/sub/"+id,
+                        method:'get',
+                    }).then(response=>{
+                        if(response.data.result.code===200){
+                            swal(response.data.result.msg[0],{icon:'success',buttons:false,timer:1000});
+                            const dom=$(event.target);
+                            dom.hide();
+                            dom.parent("li").next("li").children("a").show();
+                        }else{
+                            swal(response.data.result.msg[0],{icon:'error'});
+                        }
+                    }).catch(response=>{
+                        console.log(response);
+                    });
+                }
+            },
             cancelGood(id,index,event){
                 axios({
                     url:this.context+"main/good/"+id,
@@ -559,7 +603,7 @@
                 method: 'get',
             }).then(response => {
                 if (response.data.result.code === 200) {
-                    this.user = response.data.result.data;
+                    this.userVo = response.data.result.data;
                 }else{
                     swal(response.data.result.msg[0],{icon:'error'});
                 }

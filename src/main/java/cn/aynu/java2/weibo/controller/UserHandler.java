@@ -5,11 +5,13 @@ import cn.aynu.java2.weibo.entity.User;
 import cn.aynu.java2.weibo.service.IUserService;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
 @Controller
@@ -17,6 +19,8 @@ import javax.servlet.http.HttpSession;
 public class UserHandler {
     @Autowired
     IUserService userService;
+    @Resource(name = "redisTemplate")
+    RedisTemplate<Object,Object> redisTemplate;
     //用户登陆
     @RequestMapping("/login")
     @ResponseBody
@@ -40,6 +44,8 @@ public class UserHandler {
         user.setAvatar("/avater/test/1.jpg");
         System.out.println(user);
         userService.addUser(user);
+        redisTemplate.opsForSet().add("gz:userId:"+user.getId(),Integer.parseInt(user.getId()));
+        redisTemplate.opsForSet().add("fs:userId:"+user.getId(),Integer.parseInt(user.getId()));
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("result", Result.successResult("注册成功"));
         return jsonObject;

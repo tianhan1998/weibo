@@ -9,4 +9,6 @@ public interface IUserMapper {
     User selectUserByLogin(User user);
 
     void insertUser(User user);
+
+    User selectUserById(String id);
 }

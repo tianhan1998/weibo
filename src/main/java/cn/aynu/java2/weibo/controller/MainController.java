@@ -1,7 +1,9 @@
 package cn.aynu.java2.weibo.controller;
 
 import cn.aynu.java2.weibo.entity.*;
+import cn.aynu.java2.weibo.service.IUserService;
 import cn.aynu.java2.weibo.service.PostService;
+import cn.aynu.java2.weibo.service.SubService;
 import cn.aynu.java2.weibo.utils.VoUtils;
 import cn.aynu.java2.weibo.vo.PostVo;
 import com.alibaba.fastjson.JSONObject;
@@ -14,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static cn.aynu.java2.weibo.entity.Result.*;
@@ -28,6 +31,12 @@ public class MainController {
 
     @Resource
     PostService postService;
+
+    @Resource
+    IUserService userService;
+
+    @Resource
+    SubService subService;
 
     @Resource
     VoUtils voUtils;
@@ -165,6 +174,58 @@ public class MainController {
                 }else{
                     json.put("result",failResult("权限错误"));
                 }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            json.put("result", exceptionResult(e.getMessage()));
+        }
+        return json;
+    }
+    @GetMapping("/sub/{id}")
+    public JSONObject subscribe(@PathVariable String id,HttpSession s){
+        JSONObject json=new JSONObject();
+        try{
+            User user= (User) s.getAttribute("login_user");
+            User targetUser=userService.selectUserById(id);
+            if(targetUser!=null){
+                if(!(targetUser.getId().equals(user.getId()))){
+                    StringBuilder msg= new StringBuilder();
+                    if(subService.subById(user,targetUser,msg)) {
+                        json.put("result", successResult(msg.toString()));
+                    }else{
+                        json.put("result",failResult(msg.toString()));
+                    }
+                }else{
+                    json.put("result",failResult("你不能关注自己"));
+                }
+            }else{
+                json.put("result",failResult("未找到用户"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            json.put("result", exceptionResult(e.getMessage()));
+        }
+        return json;
+    }
+    @DeleteMapping("/sub/{id}")
+    public JSONObject unSubscribe(@PathVariable String id,HttpSession s){
+        JSONObject json=new JSONObject();
+        try{
+            User user= (User) s.getAttribute("login_user");
+            User targetUser=userService.selectUserById(id);
+            if(targetUser!=null){
+                if(!(targetUser.getId().equals(user.getId()))){
+                    StringBuilder msg= new StringBuilder();
+                    if(subService.unSubById(user,targetUser,msg)) {
+                        json.put("result", successResult(msg.toString()));
+                    }else{
+                        json.put("result",failResult(msg.toString()));
+                    }
+                }else{
+                    json.put("result",failResult("你不能取消关注自己"));
+                }
+            }else{
+                json.put("result",failResult("未找到用户"));
             }
         } catch (Exception e) {
             e.printStackTrace();

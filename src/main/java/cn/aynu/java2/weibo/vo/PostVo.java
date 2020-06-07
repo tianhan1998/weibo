@@ -14,6 +14,7 @@ public class PostVo {
     private List<Photo> photos;
     private Video video;
     private Boolean good;
+    private Boolean friend;
 
     @Override
     public String toString() {
@@ -21,7 +22,8 @@ public class PostVo {
                 "post=" + post +
                 ", photos=" + photos +
                 ", video=" + video +
-                ", isGood=" + good +
+                ", good=" + good +
+                ", friend=" + friend +
                 '}';
     }
 
@@ -68,5 +70,13 @@ public class PostVo {
 
     public void setVideo(Video video) {
         this.video = video;
+    }
+
+    public Boolean getFriend() {
+        return friend;
+    }
+
+    public void setFriend(Boolean friend) {
+        this.friend = friend;
     }
 }

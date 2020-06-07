@@ -2,11 +2,13 @@ package cn.aynu.java2.weibo.controller;
 
 import cn.aynu.java2.weibo.entity.Result;
 import cn.aynu.java2.weibo.entity.User;
+import cn.aynu.java2.weibo.utils.VoUtils;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
 import static cn.aynu.java2.weibo.entity.Result.*;
@@ -17,6 +19,8 @@ import static cn.aynu.java2.weibo.entity.Result.*;
 @RestController
 @RequestMapping("/main/api")
 public class ApiController {
+    @Resource
+    VoUtils voUtils;
     @GetMapping("/LoginUser")
     public JSONObject getUser(HttpSession s){
         JSONObject json=new JSONObject();
@@ -27,7 +31,7 @@ public class ApiController {
                 user.setBirthday(null);
                 user.setRegisterDay(null);
                 user.setEmail(null);
-                json.put("result", successResult("获取登录态成功!",user));
+                json.put("result", successResult("获取登录态成功!",voUtils.transferToUserVo(user)));
             }else{
                 json.put("result", failResult("获取登录态失败,请重新登陆"));
             }

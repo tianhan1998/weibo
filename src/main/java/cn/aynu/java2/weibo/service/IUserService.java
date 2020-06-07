@@ -6,4 +6,7 @@ public interface IUserService {
     User findUserByLogin(User user);
 
     void addUser(User user);
+
+    User selectUserById(String id);
+
 }
