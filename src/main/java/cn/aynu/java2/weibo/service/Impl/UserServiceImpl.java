@@ -26,7 +26,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public void addUser(User user)  {
-        String eamilMsg="欢迎注册微博,"+"<a href='http://localhost:8080/user/activeUser?activeCode="+user.getActiveCode()+"'>点此激活</a>"+"到登陆页面";
+        String eamilMsg="欢迎注册微博,"+"<a href='http://localhost:8080/weibo/user/activeUser?activeCode="+user.getActiveCode()+"'>点此激活</a>"+"到登陆页面";
         try {
             MailUtil.sendMail(user.getEmail(),eamilMsg);
         } catch (MessagingException e) {
