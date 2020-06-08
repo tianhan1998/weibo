@@ -143,11 +143,11 @@
 					type:"GET",
 					success:function(Object){
 						if(Object.result.code==200) {
-							var log = $("#mem-phone-log").show().removeClass().addClass("badge badge-primary");
+							var log = $("#mem-email-log").show().removeClass().addClass("badge badge-primary");
 							log.empty().append("通过验证,该邮箱可以注册");
 							flagEmailPhone=1;
 						}else{
-							var log=$("#mem-phone-log").show().removeClass().addClass("badge label label-danger");
+							var log=$("#mem-email-log").show().removeClass().addClass("badge label label-danger");
 							log.empty().append("该邮箱已被注册");
 							flagEmailPhone=0;
 						}

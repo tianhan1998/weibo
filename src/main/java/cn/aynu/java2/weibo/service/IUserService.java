@@ -9,4 +9,7 @@ public interface IUserService {
 
     void addUser(User user) throws MessagingException;
 
+    void activeUser(User user);
+
+    User findUserByEmail(User user);
 }

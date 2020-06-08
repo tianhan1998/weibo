@@ -1,7 +1,7 @@
 server:
   port: 8080
   servlet:
-    context-path: /
+    context-path: /weibo
 
 spring:
   datasource:
@@ -52,4 +52,4 @@ logging:
     console: logs-%level %msg%n #制定日志显示位置即格式
   level:
     root: warn #减少工程入职输出
-    cn.aynu.java2.weibo.mapper: debug
+    cn.aynu.java2.weibo.mapper.IUserMapper: debug

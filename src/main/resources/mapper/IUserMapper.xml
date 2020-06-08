@@ -7,19 +7,19 @@
 <mapper namespace="cn.aynu.java2.weibo.mapper.IUserMapper">
 
     <select id="selectUserByLogin" resultType="User">
-        select * from user
-        <where>
-            <if test="email!=null and email!=''">
-                email=#{email}
-            </if>
-            <if test="password!=null and password!=''">
-                and password=#{password}
-            </if>
-        </where>
+        select * from user where email=#{email}  and password=#{password}
+    </select>
+
+    <select id="selectUserByEmail" resultType="User">
+         select * from user where email=#{email}
     </select>
     
     <insert id="insertUser">
-        insert into user (avatar,email,nick_name,sex,birthday,password) values (#{avatar},#{email},#{nickName},#{sex},#{birthday},#{password})
+        insert into user (avatar,email,nick_name,sex,birthday,password,activeCode) values (#{avatar},#{email},#{nickName},#{sex},#{birthday},#{password},#{activeCode})
     </insert>
+
+    <update id="activeUser">
+        update user set state=1  where activeCode=#{activeCode};
+    </update>
 
 </mapper>

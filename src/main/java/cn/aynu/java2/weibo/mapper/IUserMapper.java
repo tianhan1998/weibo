@@ -10,4 +10,7 @@ public interface IUserMapper {
 
     void insertUser(User user);
 
+    void activeUser(User user);
+
+    User selectUserByEmail(User user);
 }

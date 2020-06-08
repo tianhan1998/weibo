@@ -7,13 +7,15 @@ import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.Date;
 
-public class User implements Serializable {
+public class User implements Serializable{
     private String id;
     private String avatar;
     private String nickName;
     private Integer sex;
     private String password;
     private int role;
+    private  String activeCode;
+    private int state;
     @Email(message = "email格式错误")
     @NotEmpty(message = "email不能为空")
     private String email;
@@ -94,6 +96,22 @@ public class User implements Serializable {
         this.registerDay = registerDay;
     }
 
+    public String getActiveCode() {
+        return activeCode;
+    }
+
+    public void setActiveCode(String activeCode) {
+        this.activeCode = activeCode;
+    }
+
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -102,7 +120,9 @@ public class User implements Serializable {
                 ", nickName='" + nickName + '\'' +
                 ", sex=" + sex +
                 ", password='" + password + '\'' +
-                ", role='" + role + '\'' +
+                ", role=" + role +
+                ", activeCode='" + activeCode + '\'' +
+                ", state=" + state +
                 ", email='" + email + '\'' +
                 ", birthday=" + birthday +
                 ", registerDay=" + registerDay +
