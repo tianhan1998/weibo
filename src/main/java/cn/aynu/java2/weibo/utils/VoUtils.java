@@ -1,9 +1,6 @@
 package cn.aynu.java2.weibo.utils;
 
-import cn.aynu.java2.weibo.entity.Photo;
-import cn.aynu.java2.weibo.entity.Post;
-import cn.aynu.java2.weibo.entity.User;
-import cn.aynu.java2.weibo.entity.Video;
+import cn.aynu.java2.weibo.entity.*;
 import cn.aynu.java2.weibo.service.PostService;
 import cn.aynu.java2.weibo.vo.PostVo;
 import cn.aynu.java2.weibo.vo.UserVo;
@@ -54,6 +51,12 @@ public class VoUtils {
                     Video video = postService.selectVideoById(videoId);
                     tempVo.setVideo(video);
                 }
+                List<Common> commons=postService.selectCommonsByPostId(tempPost.getId().toString());
+                if(commons!=null&&commons.size()>0){
+                    tempVo.setCommons(commons);
+                }else{
+                    tempVo.setCommons(new ArrayList<>());
+                }
                 postVoList.add(tempVo);
             }
             return postVoList;
@@ -67,8 +70,8 @@ public class VoUtils {
             UserVo vo = new UserVo(user);
             Long fs = redisTemplate.opsForSet().size("fs:userId:" + user.getId());
             Long gz = redisTemplate.opsForSet().size("gz:userId:" + user.getId());
-            vo.setFs(fs);
-            vo.setGz(gz);
+            vo.setFs(fs-1);
+            vo.setGz(gz-1);
             return vo;
         }else{
             return null;

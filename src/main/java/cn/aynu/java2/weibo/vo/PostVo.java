@@ -1,5 +1,6 @@
 package cn.aynu.java2.weibo.vo;
 
+import cn.aynu.java2.weibo.entity.Common;
 import cn.aynu.java2.weibo.entity.Photo;
 import cn.aynu.java2.weibo.entity.Post;
 import cn.aynu.java2.weibo.entity.Video;
@@ -15,6 +16,7 @@ public class PostVo {
     private Video video;
     private Boolean good;
     private Boolean friend;
+    private List<Common> commons;
 
     @Override
     public String toString() {
@@ -24,7 +26,16 @@ public class PostVo {
                 ", video=" + video +
                 ", good=" + good +
                 ", friend=" + friend +
+                ", commons=" + commons +
                 '}';
+    }
+
+    public List<Common> getCommons() {
+        return commons;
+    }
+
+    public void setCommons(List<Common> commons) {
+        this.commons = commons;
     }
 
     public Boolean getGood() {

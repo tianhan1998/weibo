@@ -1,11 +1,9 @@
 package cn.aynu.java2.weibo.service.Impl;
 
-import cn.aynu.java2.weibo.entity.Photo;
-import cn.aynu.java2.weibo.entity.Post;
-import cn.aynu.java2.weibo.entity.PostGood;
-import cn.aynu.java2.weibo.entity.Video;
+import cn.aynu.java2.weibo.entity.*;
 import cn.aynu.java2.weibo.exception.DaoAssociationFailException;
 import cn.aynu.java2.weibo.exception.UploadFailException;
+import cn.aynu.java2.weibo.mapper.CommonMapper;
 import cn.aynu.java2.weibo.mapper.PostMapper;
 import cn.aynu.java2.weibo.service.PostService;
 import cn.aynu.java2.weibo.utils.UUIDUtils;
@@ -36,6 +34,25 @@ public class PostServiceImpl implements PostService {
     private final String targetVideoPath=s+File.separator+"target"+File.separator+"classes"+File.separator+"static"+File.separator+"videos";
     @Resource
     private PostMapper postMapper;
+
+    @Resource
+    private CommonMapper commonMapper;
+
+
+    @Override
+    public Common selectCommonById(String id) {
+        return commonMapper.selectCommonById(id);
+    }
+
+    @Override
+    public int insertCommon(Common common) {
+        return commonMapper.insertCommon(common);
+    }
+
+    @Override
+    public List<Common> selectCommonsByPostId(String id) {
+        return commonMapper.selectCommonsByPostId(id);
+    }
 
 
     @Override

@@ -259,15 +259,22 @@
                                     <div class="text-truncate">{{item.post.user.nickName}}</div>
                                 </div>
                                 <div class="dropdown ml-auto">
-                                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                        <li v-if="!item.friend" @click="sub(item.post.user.id,$event)"><a style="cursor: pointer">关注</a></li>
-                                        <li v-if="item.friend" @click="sub(item.post.user.id,$event)"><a style="cursor: pointer;display: none">关注</a></li>
-                                        <li v-if="item.friend" @click="unSub(item.post.user.id,$event)"><a style="cursor: pointer">取消关注</a></li>
-                                        <li v-if="!item.friend" @click="unSub(item.post.user.id,$event)"><a style="cursor: pointer;display: none" >取消关注</a></li>
-                                        <li v-if="item.post.user.nickName==sessionName" role="separator" class="divider"></li>
-                                        <li v-if="item.post.user.nickName==sessionName" @click="deleteMyPost(item.post.id)"><a style="cursor: pointer">删除动态</a></li>
+                                        <li v-if="!item.friend" @click="sub(item.post.user.id,$event)"><a
+                                                style="cursor: pointer">关注</a></li>
+                                        <li v-if="item.friend" @click="sub(item.post.user.id,$event)"><a
+                                                style="cursor: pointer;display: none">关注</a></li>
+                                        <li v-if="item.friend" @click="unSub(item.post.user.id,$event)"><a
+                                                style="cursor: pointer">取消关注</a></li>
+                                        <li v-if="!item.friend" @click="unSub(item.post.user.id,$event)"><a
+                                                style="cursor: pointer;display: none">取消关注</a></li>
+                                        <li v-if="item.post.user.nickName==sessionName" role="separator"
+                                            class="divider"></li>
+                                        <li v-if="item.post.user.nickName==sessionName"
+                                            @click="deleteMyPost(item.post.id)"><a style="cursor: pointer">删除动态</a></li>
                                     </ul>
                                 </div>
 
@@ -282,75 +289,55 @@
                                 </div>
                             </div>
                             <div class="p-3 border-bottom osahan-post-footer">
-                                <a v-if="item.good" @click="good(item.post.id,index,$event)"  class="mr-3 text-secondary" style="display: none;cursor: pointer">
+                                <a v-if="item.good" @click="good(item.post.id,index,$event)" class="mr-3 text-secondary"
+                                   style="display: none;cursor: pointer">
                                     <span class="mr-1 glyphicon glyphicon-heart-empty text-danger"></span>{{item.post.good}}
                                 </a>
-                                <a v-if="item.good" @click="cancelGood(item.post.id,index,$event)"  class="mr-3 text-secondary" style="cursor: pointer">
+                                <a v-if="item.good" @click="cancelGood(item.post.id,index,$event)"
+                                   class="mr-3 text-secondary" style="cursor: pointer">
                                     <span class="mr-1 glyphicon glyphicon-heart text-danger"></span>{{item.post.good}}
                                 </a>
-                                <a v-if="!item.good" @click="cancelGood(item.post.id,index,$event)" class="mr-3 text-secondary" style="display: none;cursor: pointer">
+                                <a v-if="!item.good" @click="cancelGood(item.post.id,index,$event)"
+                                   class="mr-3 text-secondary" style="display: none;cursor: pointer">
                                     <span class="mr-1 glyphicon glyphicon-heart text-danger"></span>{{item.post.good}}
                                 </a>
-                                <a v-if="!item.good" @click="good(item.post.id,index,$event)" class="mr-3 text-secondary" style="cursor: pointer">
+                                <a v-if="!item.good" @click="good(item.post.id,index,$event)"
+                                   class="mr-3 text-secondary" style="cursor: pointer">
                                     <span class="mr-1 glyphicon glyphicon-heart-empty text-danger"></span>{{item.post.good}}
                                 </a>
-                                <a href="#" style="margin-right: 20rem" class="text-secondary"><i
+                                <a @click="showCommons(item.post.id)" v-if="item.commons!=null" style="margin-right: 20rem;cursor: pointer"
+                                   class="text-secondary"><i
+                                        class="feather-message-square"></i> {{item.commons.length}}</a>
+                                <a v-else @click="showCommons(item.post.id)" style="margin-right: 20rem;cursor: pointer" class="text-secondary"><i
                                         class="feather-message-square"></i> 0</a>
                                 <span style="color: #888da8" class="small">{{item.post.postTime}}</span>
                             </div>
-                        </div>
-                    </div>
-                    <div class="box mb-3 shadow-sm border rounded bg-white osahan-post">
-                        <div class="p-3 d-flex align-items-center border-bottom osahan-post-header">
-                            <div class="dropdown-list-image mr-3">
-                                <img class="rounded-circle" src="img/p6.png" alt="">
-                                <div class="status-indicator bg-success"></div>
-                            </div>
-                            <div class="font-weight-bold">
-                                <div class="text-truncate">Collin Weiland</div>
-                            </div>
-                            <span class="ml-auto small">3 hours</span>
-                        </div>
-                        <div class="p-3 border-bottom osahan-post-body">
-                            <p>Lorem ipsum dolor sit amet, consectetur 😍😎 adipisicing elit, sed do eiusmod tempo
-                                incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                                exercitation ullamco <a href="#">laboris consequat.</a></p>
-                            <img src="img/post1.png" class="img-fluid" alt="Responsive image">
-                        </div>
-                        <div class="p-3 border-bottom osahan-post-footer">
-                            <a href="#" class="mr-3 text-secondary"><span class="mr-1 glyphicon glyphicon-heart-empty text-danger"></span>16 </a>
-                            <a href="#" class="mr-3 text-secondary"><i class="feather-message-square"></i> 8</a>
-                            <a href="#" class="mr-3 text-secondary"><i class="feather-share-2"></i> 2</a>
-                        </div>
-                        <div class="p-3 d-flex align-items-top border-bottom osahan-post-comment">
-                            <div class="dropdown-list-image mr-3">
-                                <img class="rounded-circle" src="img/p7.png" alt="">
-                                <div class="status-indicator bg-success"></div>
-                            </div>
-                            <div class="font-weight-bold">
-                                <div class="text-truncate"> James Spiegel <span class="float-right small">2 min</span>
+                            <div :id="'commons'+item.post.id" style="display: none">
+                                <div v-if="item.commons!==null&&item.commons.length>0" v-for="common in item.commons">
+                                    <div class="p-3 d-flex align-items-top border-bottom osahan-post-comment">
+                                        <div class="dropdown-list-image mr-3">
+                                            <img class="rounded-circle" :src="context+common.user.avatar" alt="">
+                                            <div class="status-indicator bg-success"></div>
+                                        </div>
+                                        <div class="font-weight-bold">
+                                            <div class="text-truncate">{{common.user.nickName}}
+                                            </div>
+                                            <div class="small text-gray-500">
+                                                {{common.text}}
+                                            </div>
+                                        </div>
+                                        <span class="ml-auto small">{{common.commonTime}}</span>
+                                    </div>
                                 </div>
-                                <div class="small text-gray-500">Ratione voluptatem sequi en lod nesciunt. Neque porro
-                                    quisquam est, quinder dolorem ipsum quia dolor sit amet, consectetur
+                                <div class="p-3">
+                                    <textarea :id="'comText'+item.post.id" name="text" placeholder="写下你的评论"
+                                              class="form-control border-0 p-0 shadow-none"
+                                              rows="1"></textarea>
+                                </div>
+                                <div>
+                                    <button @click="postCommon(item.post.id,index)" class="btn btn-outline-secondary btn-sm btn-block">提交</button>
                                 </div>
                             </div>
-                        </div>
-                        <div class="p-3 d-flex align-items-top border-bottom osahan-post-comment">
-                            <div class="dropdown-list-image mr-3">
-                                <img class="rounded-circle" src="img/p7.png" alt="">
-                                <div class="status-indicator bg-success"></div>
-                            </div>
-                            <div class="font-weight-bold">
-                                <div class="text-truncate"> James Spiegel <span class="float-right small">2 min</span>
-                                </div>
-                                <div class="small text-gray-500">Ratione voluptatem sequi en lod nesciunt. Neque porro
-                                    quisquam est, quinder dolorem ipsum quia dolor sit amet, consectetur
-                                </div>
-                            </div>
-                        </div>
-                        <div class="p-3">
-                            <textarea placeholder="Add Comment..." class="form-control border-0 p-0 shadow-none"
-                                      rows="1"></textarea>
                         </div>
                     </div>
                 </main>
@@ -424,25 +411,32 @@
                     },
                     video: {},
                     photos: [],
+                    commons: [
+                        {
+                            user: {},
+                            post: {},
+                        }
+                    ]
                 },
             ],
             userVo: {
-                user:{
-
-                }
+                user: {}
             }
         },
         methods: {
-            unSub:function(id,event){
+            postCommon:function(id,index){
                 axios({
-                    url:this.context+"main/sub/"+id,
-                    method:'delete',
+                    url:context+"main/common",
+                    method:'post',
+                    data:{text:$("#comText"+id).val(),post:{id:id}}
                 }).then(response=>{
                     if(response.data.result.code===200){
-                        swal(response.data.result.msg[0],{icon:'success',buttons:false,timer:1000});
-                        const dom=$(event.target);
-                        dom.hide();
-                        dom.parent("li").prev("li").children("a").show();
+                        swal("回复成功",{icon:'success',buttons:false,timer:1000}).then(()=>{
+                            let newCommon=response.data.result.data;
+                            console.log(newCommon);
+                            this.$set(this.vo[index].commons,this.vo[index].commons.length,newCommon);
+                            // this.vo[index].commons[this.vo[index].commons.length]=newCommon;
+                        });
                     }else{
                         swal(response.data.result.msg[0],{icon:'error'});
                     }
@@ -450,66 +444,91 @@
                     console.log(response);
                 });
             },
-            sub:function(id,event){
-                if(id===this.userVo.user.id){
-                    swal("不能关注自己",{icon:"error",buttons:false,timer:1000});
+            showCommons:function(id){
+                let dom=$("#commons"+id);
+                if(dom.is(':hidden')){
+                    dom.show();
                 }else{
+                    dom.hide();
+                }
+            },
+            unSub: function (id, event) {
+                axios({
+                    url: this.context + "main/sub/" + id,
+                    method: 'delete',
+                }).then(response => {
+                    if (response.data.result.code === 200) {
+                        swal(response.data.result.msg[0], {icon: 'success', buttons: false, timer: 1000});
+                        const dom = $(event.target);
+                        dom.hide();
+                        dom.parent("li").prev("li").children("a").show();
+                    } else {
+                        swal(response.data.result.msg[0], {icon: 'error'});
+                    }
+                }).catch(response => {
+                    console.log(response);
+                });
+            },
+            sub: function (id, event) {
+                if (id === this.userVo.user.id) {
+                    swal("不能关注自己", {icon: "error", buttons: false, timer: 1000});
+                } else {
                     axios({
-                        url:this.context+"main/sub/"+id,
-                        method:'get',
-                    }).then(response=>{
-                        if(response.data.result.code===200){
-                            swal(response.data.result.msg[0],{icon:'success',buttons:false,timer:1000});
-                            const dom=$(event.target);
+                        url: this.context + "main/sub/" + id,
+                        method: 'get',
+                    }).then(response => {
+                        if (response.data.result.code === 200) {
+                            swal(response.data.result.msg[0], {icon: 'success', buttons: false, timer: 1000});
+                            const dom = $(event.target);
                             dom.hide();
                             dom.parent("li").next("li").children("a").show();
-                        }else{
-                            swal(response.data.result.msg[0],{icon:'error'});
+                        } else {
+                            swal(response.data.result.msg[0], {icon: 'error'});
                         }
-                    }).catch(response=>{
+                    }).catch(response => {
                         console.log(response);
                     });
                 }
             },
-            cancelGood(id,index,event){
+            cancelGood(id, index, event) {
                 axios({
-                    url:this.context+"main/good/"+id,
-                    method:'delete',
-                }).then(response=>{
-                    if(response.data.result.code===200){
-                        swal("取消赞成功",{icon:"success",buttons:false,timer:1000});
-                        let dom=$(event.target);
-                        if(dom.is("span")){
-                            dom=dom.parent("a");
+                    url: this.context + "main/good/" + id,
+                    method: 'delete',
+                }).then(response => {
+                    if (response.data.result.code === 200) {
+                        swal("取消赞成功", {icon: "success", buttons: false, timer: 1000});
+                        let dom = $(event.target);
+                        if (dom.is("span")) {
+                            dom = dom.parent("a");
                         }
                         this.vo[index].post.good--;
                         dom.hide();
                         dom.next("a").show();
-                    }else{
-                        swal(response.data.result.msg[0],{icon:'error'});
+                    } else {
+                        swal(response.data.result.msg[0], {icon: 'error'});
                     }
-                }).catch(response=>{
+                }).catch(response => {
                     console.log(response);
                 });
             },
-            good:function(id,index,event){
+            good: function (id, index, event) {
                 axios({
-                    url:this.context+"main/good/"+id,
-                    method:'put',
-                }).then(response=>{
-                    if(response.data.result.code===200){
-                        swal("点赞成功",{icon:"success",buttons:false,timer:1000});
-                        let dom=$(event.target);
-                        if(dom.is("span")){
-                            dom=dom.parent("a");
+                    url: this.context + "main/good/" + id,
+                    method: 'put',
+                }).then(response => {
+                    if (response.data.result.code === 200) {
+                        swal("点赞成功", {icon: "success", buttons: false, timer: 1000});
+                        let dom = $(event.target);
+                        if (dom.is("span")) {
+                            dom = dom.parent("a");
                         }
                         this.vo[index].post.good++;
                         dom.hide();
                         dom.prev("a").show();
-                    }else{
-                        swal(response.data.result.msg[0],{icon:'error'});
+                    } else {
+                        swal(response.data.result.msg[0], {icon: 'error'});
                     }
-                }).catch(response=>{
+                }).catch(response => {
                     console.log(response);
                 });
             },
@@ -571,8 +590,8 @@
                                 swal("删除动态成功！", {icon: 'success'}).then(function () {
                                     window.location.reload();
                                 });
-                            }else{
-                                swal(response.data.result.msg[0],{icon:'error'});
+                            } else {
+                                swal(response.data.result.msg[0], {icon: 'error'});
                             }
                         }).catch(response => {
                             console.log(response);
@@ -592,8 +611,8 @@
                 if (response.data.result.code === 200) {
                     console.log(response.data.result);
                     self.vo = response.data.result.data;
-                }else{
-                    swal(response.data.result.msg[0],{icon:'error'});
+                } else {
+                    swal(response.data.result.msg[0], {icon: 'error'});
                 }
             }).catch(response => {
                 console.log(response);
@@ -604,8 +623,8 @@
             }).then(response => {
                 if (response.data.result.code === 200) {
                     this.userVo = response.data.result.data;
-                }else{
-                    swal(response.data.result.msg[0],{icon:'error'});
+                } else {
+                    swal(response.data.result.msg[0], {icon: 'error'});
                 }
             }).catch(response => {
                 console.log(response);

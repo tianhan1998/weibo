@@ -233,4 +233,26 @@ public class MainController {
         }
         return json;
     }
+    @PostMapping("common")
+    public JSONObject postCommon(@RequestBody @Valid Common common,BindingResult bindingResult,HttpSession session){
+        JSONObject json=new JSONObject();
+        User user= (User) session.getAttribute("login_user");
+        try{
+            if(bindingResult.hasErrors()){
+                json.put("result",exceptionResult(bindingResult.getAllErrors()));
+            }else {
+                common.setUser(user);
+                if(postService.insertCommon(common)>0){
+                    common=postService.selectCommonById(common.getId().toString());
+                    json.put("result",successResult("评论成功",common));
+                }else{
+                    json.put("result",failResult("评论失败"));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            json.put("result", exceptionResult(e.getMessage()));
+        }
+        return json;
+    }
 }

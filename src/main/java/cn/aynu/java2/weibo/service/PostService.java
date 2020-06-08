@@ -1,9 +1,6 @@
 package cn.aynu.java2.weibo.service;
 
-import cn.aynu.java2.weibo.entity.Photo;
-import cn.aynu.java2.weibo.entity.Post;
-import cn.aynu.java2.weibo.entity.PostGood;
-import cn.aynu.java2.weibo.entity.Video;
+import cn.aynu.java2.weibo.entity.*;
 import cn.aynu.java2.weibo.exception.DaoAssociationFailException;
 import cn.aynu.java2.weibo.exception.UploadFailException;
 import org.apache.ibatis.annotations.Param;
@@ -18,6 +15,25 @@ import java.util.List;
  */
 public interface PostService {
 
+
+    /**
+     * 根据id查common
+     * @param id commonId
+     * @return common实体类
+     */
+    Common selectCommonById(String id);
+    /**
+     * 插入评论
+     * @param common 评论实体列
+     * @return 行数
+     */
+    int insertCommon(Common common);
+    /**
+     * 通过动态id来查找所有评论
+     * @param id 动态id
+     * @return 评论list
+     */
+    List<Common> selectCommonsByPostId(String id);
 
     /**
      * 取消点赞

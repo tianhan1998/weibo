@@ -10,7 +10,7 @@
         select * from user where email=#{email} and password=#{password}
     </select>
     <select id="selectUserById" resultType="cn.aynu.java2.weibo.entity.User">
-        select id, nick_name, sex from user where id=#{id}
+        select id, nick_name,avatar, sex from user where id=#{id}
     </select>
 
     <insert id="insertUser" useGeneratedKeys="true" keyProperty="id">
