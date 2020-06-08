@@ -11,4 +11,8 @@ public interface IUserMapper {
     void insertUser(User user);
 
     User selectUserById(String id);
+
+    void activeUser(User user);
+
+    User selectUserByEmail(User user);
 }

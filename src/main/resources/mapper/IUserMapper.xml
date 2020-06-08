@@ -16,4 +16,11 @@
     <insert id="insertUser" useGeneratedKeys="true" keyProperty="id">
         insert into user (avatar,email,nick_name,sex,birthday,password) values (#{avatar},#{email},#{nickName},#{sex},#{birthday},#{password})
     </insert>
+    <select id="selectUserByEmail" resultType="User">
+        select * from user where email=#{email}
+    </select>
+
+    <update id="activeUser">
+        update user set state=1  where activeCode=#{activeCode};
+    </update>
 </mapper>

@@ -24,8 +24,41 @@ public class User implements Serializable {
     @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
     private Date registerDay;
     private Integer role;
+    private  String activeCode;
+    private int state;
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", nickName='" + nickName + '\'' +
+                ", sex=" + sex +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", birthday=" + birthday +
+                ", registerDay=" + registerDay +
+                ", role=" + role +
+                ", activeCode='" + activeCode + '\'' +
+                ", state=" + state +
+                '}';
+    }
 
+    public String getActiveCode() {
+        return activeCode;
+    }
+
+    public void setActiveCode(String activeCode) {
+        this.activeCode = activeCode;
+    }
+
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
+    }
     public Integer getRole() {
         return role;
     }
@@ -98,18 +131,4 @@ public class User implements Serializable {
         this.registerDay = registerDay;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id='" + id + '\'' +
-                ", avatar='" + avatar + '\'' +
-                ", nickName='" + nickName + '\'' +
-                ", sex=" + sex +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                ", birthday=" + birthday +
-                ", registerDay=" + registerDay +
-                ", role=" + role +
-                '}';
-    }
 }

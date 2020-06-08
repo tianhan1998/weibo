@@ -52,3 +52,4 @@ logging:
   level:
     root: info #减少工程入职输出
     cn.aynu.java2.weibo.Dao: debug
+    cn.aynu.java2.weibo.mapper.IUserMapper: debug
