@@ -1,9 +1,9 @@
 package cn.aynu.java2.weibo.service.Impl;
 
-import cn.aynu.java2.weibo.entity.Photo;
-import cn.aynu.java2.weibo.entity.Post;
-import cn.aynu.java2.weibo.entity.Video;
+import cn.aynu.java2.weibo.entity.*;
+import cn.aynu.java2.weibo.exception.DaoAssociationFailException;
 import cn.aynu.java2.weibo.exception.UploadFailException;
+import cn.aynu.java2.weibo.mapper.CommonMapper;
 import cn.aynu.java2.weibo.mapper.PostMapper;
 import cn.aynu.java2.weibo.service.PostService;
 import cn.aynu.java2.weibo.utils.UUIDUtils;
@@ -34,6 +34,59 @@ public class PostServiceImpl implements PostService {
     private final String targetVideoPath=s+File.separator+"target"+File.separator+"classes"+File.separator+"static"+File.separator+"videos";
     @Resource
     private PostMapper postMapper;
+
+    @Resource
+    private CommonMapper commonMapper;
+
+
+    @Override
+    public Common selectCommonById(String id) {
+        return commonMapper.selectCommonById(id);
+    }
+
+    @Override
+    public int insertCommon(Common common) {
+        return commonMapper.insertCommon(common);
+    }
+
+    @Override
+    public List<Common> selectCommonsByPostId(String id) {
+        return commonMapper.selectCommonsByPostId(id);
+    }
+
+
+    @Override
+    @Transactional(rollbackFor = DaoAssociationFailException.class)
+    public Boolean decrGoodByPostId(String id, PostGood postGood) throws DaoAssociationFailException {
+        if(postMapper.decrGoodById(id)>0){
+            if(postMapper.deletePostGood(postGood)>0){
+                return true;
+            }else{
+                throw new DaoAssociationFailException("删除动态点赞关联表失败");
+            }
+        }else{
+            throw new DaoAssociationFailException("减少动态点赞数失败");
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = DaoAssociationFailException.class)
+    public Boolean incrGoodByPostId(String id, PostGood postGood) throws DaoAssociationFailException {
+        if(postMapper.incrGoodById(id)>0){
+            if(postMapper.insertPostGood(postGood)>0){
+                return true;
+            }else{
+                throw new DaoAssociationFailException("插入点赞关联表失败");
+            }
+        }else{
+            throw new DaoAssociationFailException("动态点赞增加失败");
+        }
+    }
+
+    @Override
+    public int selectIsGoodByUserIdAndPostId(String postId, String userId) {
+        return postMapper.selectIsGoodByUserIdAndPostId(postId,userId);
+    }
 
     @Override
     public Video selectVideoById(Integer id) {
@@ -79,14 +132,14 @@ public class PostServiceImpl implements PostService {
                       photoTargetFile= new File(targetPhotoPath,fileName);
                      try {
                          photo.transferTo(photoFile);
+                         log.add(photoFile);
                          FileUtils.copyFile(photoFile,photoTargetFile);
+                         log.add(photoTargetFile);
                      } catch (IOException e) {
                          deletePhotos(log);
                          e.printStackTrace();
                          throw new UploadFailException("上传图片出错");
                      }
-                     log.add(photoTargetFile);
-                     log.add(photoFile);
                      Photo tempPhoto=new Photo("photos/"+fileName,fileName);
                      if(postMapper.insertPhoto(tempPhoto)<=0){
                          deletePhotos(log);
@@ -105,6 +158,12 @@ public class PostServiceImpl implements PostService {
                      video.transferTo(videoFile);
                      FileUtils.copyFile(videoFile,videoTargetFile);
                  }catch (IOException e){
+                     if(videoFile.exists()){
+                         videoFile.delete();
+                     }
+                     if(videoTargetFile.exists()){
+                         videoTargetFile.delete();
+                     }
                      if(photos!=null){
                          deletePhotos(log);
                      }
@@ -172,6 +231,7 @@ public class PostServiceImpl implements PostService {
             deleteVideoById(videoId.toString());
             deletePostVideoByPostId(post.getId().toString());
         }
+        postMapper.deletePostGoodByPostId(post.getId().toString());
         return postMapper.deletePost(post.getId().toString())>0;
     }
 

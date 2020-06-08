@@ -6,11 +6,13 @@ import cn.aynu.java2.weibo.service.IUserService;
 import cn.aynu.java2.weibo.utils.UUIDUtils;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.Resource;
 import javax.mail.MessagingException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -22,27 +24,29 @@ import javax.servlet.http.HttpSession;
 public class UserHandler {
     @Autowired
     IUserService userService;
+    @Resource(name = "redisTemplate")
+    RedisTemplate<Object,Object> redisTemplate;
     //用户登陆
     @RequestMapping("/login")
     @ResponseBody
     public JSONObject login(User user, HttpSession session,String autologin,String remember, HttpServletRequest request, HttpServletResponse response){
         JSONObject jsonObject = new JSONObject();
-            User login_user=userService.findUserByLogin(user);
-            System.out.println(user);
-            //如果用户名和密码正确
-            if(login_user!=null){
-                if("1".equals(remember)){//保存用户名
-                    addCookie(autologin,user,request,response);
-                }
-                else if("1".equals(autologin)){//保存用户名和密码
-                    addCookie(autologin,user,request,response);
-                }
-                session.setAttribute("login_user",login_user);
-                //addCookie(user,request,response);
-                jsonObject.put("result", Result.successResult("登陆成功", login_user));
-            } else{ //如果用户名和密码不正确
-                jsonObject.put("result", Result.failResult("用户名或密码错误", login_user));
+        User login_user=userService.findUserByLogin(user);
+        System.out.println(user);
+        //如果用户名和密码正确
+        if(login_user!=null){
+            if("1".equals(remember)){//保存用户名
+                addCookie(autologin,user,request,response);
             }
+            else if("1".equals(autologin)){//保存用户名和密码
+                addCookie(autologin,user,request,response);
+            }
+            session.setAttribute("login_user",login_user);
+            //addCookie(user,request,response);
+            jsonObject.put("result", Result.successResult("登陆成功", login_user));
+        } else{ //如果用户名和密码不正确
+            jsonObject.put("result", Result.failResult("用户名或密码错误", login_user));
+        }
 
         return jsonObject;
     }
@@ -77,7 +81,6 @@ public class UserHandler {
         user.setPassword(password);
         return userService.findUserByLogin(user);
     }
-
     //用户注册
     @RequestMapping("/register")
     @ResponseBody
@@ -87,6 +90,8 @@ public class UserHandler {
         System.out.println(user);
         JSONObject jsonObject = new JSONObject();
         userService.addUser(user);
+        redisTemplate.opsForSet().add("gz:userId:"+user.getId(),Integer.parseInt(user.getId()));
+        redisTemplate.opsForSet().add("fs:userId:"+user.getId(),Integer.parseInt(user.getId()));
         jsonObject.put("result", Result.successResult("注册成功"));
         return jsonObject;
     }
@@ -105,10 +110,10 @@ public class UserHandler {
     }
     //邮箱激活
     @RequestMapping("/activeUser")
-        public String activeUser(User user){
-            userService.activeUser(user);
-            return "login";
-        }
+    public String activeUser(User user){
+        userService.activeUser(user);
+        return "login";
+    }
     //管理员登陆
     @RequestMapping("/adminUser")
     @ResponseBody

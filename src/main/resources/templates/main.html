@@ -177,18 +177,17 @@
                 <li class="nav-item dropdown no-arrow ml-1 osahan-profile-dropdown">
                     <a class="nav-link dropdown-toggle pr-0" href="#" role="button" data-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false">
-                        <img class="img-profile rounded-circle" :src="context+user.avatar">
+                        <img class="img-profile rounded-circle" :src="context+userVo.user.avatar">
                     </a>
                     <!-- Dropdown - User Information -->
                     <div class="dropdown-menu dropdown-menu-right shadow-sm">
                         <div class="p-3 d-flex align-items-center">
                             <div class="dropdown-list-image mr-3">
-                                <img class="rounded-circle" :src="context+user.avatar" alt="">
+                                <img class="rounded-circle" :src="context+userVo.user.avatar" alt="">
                                 <div class="status-indicator bg-success"></div>
                             </div>
                             <div class="font-weight-bold">
-                                <div class="text-truncate">Gurdeep Osahan</div>
-                                <div class="small text-gray-500">UI/UX Designer</div>
+                                <div class="text-truncate">{{userVo.user.nickName}}</div>
                             </div>
                         </div>
                         <div class="dropdown-divider"></div>
@@ -249,7 +248,7 @@
                             </form>
                         </div>
                     </div>
-                    <div v-for="item in vo">
+                    <div v-for="item,index in vo">
                         <div class="box shadow-sm border rounded bg-white mb-3 osahan-post">
                             <div class="p-3 d-flex align-items-center border-bottom osahan-post-header">
                                 <div class="dropdown-list-image mr-3">
@@ -259,7 +258,26 @@
                                 <div class="font-weight-bold">
                                     <div class="text-truncate">{{item.post.user.nickName}}</div>
                                 </div>
-                                <span class="ml-auto small">{{item.post.postTime}}</span>
+                                <div class="dropdown ml-auto">
+                                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                        <li v-if="!item.friend" @click="sub(item.post.user.id,$event)"><a
+                                                style="cursor: pointer">关注</a></li>
+                                        <li v-if="item.friend" @click="sub(item.post.user.id,$event)"><a
+                                                style="cursor: pointer;display: none">关注</a></li>
+                                        <li v-if="item.friend" @click="unSub(item.post.user.id,$event)"><a
+                                                style="cursor: pointer">取消关注</a></li>
+                                        <li v-if="!item.friend" @click="unSub(item.post.user.id,$event)"><a
+                                                style="cursor: pointer;display: none">取消关注</a></li>
+                                        <li v-if="item.post.user.nickName==sessionName" role="separator"
+                                            class="divider"></li>
+                                        <li v-if="item.post.user.nickName==sessionName"
+                                            @click="deleteMyPost(item.post.id)"><a style="cursor: pointer">删除动态</a></li>
+                                    </ul>
+                                </div>
+
                             </div>
                             <div class="p-3 border-bottom osahan-post-body">
                                 <p class="mb-0">{{item.post.text}}</p>
@@ -271,83 +289,72 @@
                                 </div>
                             </div>
                             <div class="p-3 border-bottom osahan-post-footer">
-                                <a href="#" class="mr-3 text-secondary"><i class="feather-heart text-danger"></i>
-                                    {{item.post.good}}</a>
-                                <a href="#" style="margin-right: 24rem" class="text-secondary"><i
+                                <a v-if="item.good" @click="good(item.post.id,index,$event)" class="mr-3 text-secondary"
+                                   style="display: none;cursor: pointer">
+                                    <span class="mr-1 glyphicon glyphicon-heart-empty text-danger"></span>{{item.post.good}}
+                                </a>
+                                <a v-if="item.good" @click="cancelGood(item.post.id,index,$event)"
+                                   class="mr-3 text-secondary" style="cursor: pointer">
+                                    <span class="mr-1 glyphicon glyphicon-heart text-danger"></span>{{item.post.good}}
+                                </a>
+                                <a v-if="!item.good" @click="cancelGood(item.post.id,index,$event)"
+                                   class="mr-3 text-secondary" style="display: none;cursor: pointer">
+                                    <span class="mr-1 glyphicon glyphicon-heart text-danger"></span>{{item.post.good}}
+                                </a>
+                                <a v-if="!item.good" @click="good(item.post.id,index,$event)"
+                                   class="mr-3 text-secondary" style="cursor: pointer">
+                                    <span class="mr-1 glyphicon glyphicon-heart-empty text-danger"></span>{{item.post.good}}
+                                </a>
+                                <a @click="showCommons(item.post.id)" v-if="item.commons!=null" style="margin-right: 20rem;cursor: pointer"
+                                   class="text-secondary"><i
+                                        class="feather-message-square"></i> {{item.commons.length}}</a>
+                                <a v-else @click="showCommons(item.post.id)" style="margin-right: 20rem;cursor: pointer" class="text-secondary"><i
                                         class="feather-message-square"></i> 0</a>
-                                <input v-if="item.post.user.nickName==sessionName" @click="deleteMyPost(item.post.id)"
-                                       type="button" value="删除" class="btn btn-danger btn-sm">
+                                <span style="color: #888da8" class="small">{{item.post.postTime}}</span>
                             </div>
-                        </div>
-                    </div>
-                    <div class="box mb-3 shadow-sm border rounded bg-white osahan-post">
-                        <div class="p-3 d-flex align-items-center border-bottom osahan-post-header">
-                            <div class="dropdown-list-image mr-3">
-                                <img class="rounded-circle" src="img/p6.png" alt="">
-                                <div class="status-indicator bg-success"></div>
-                            </div>
-                            <div class="font-weight-bold">
-                                <div class="text-truncate">Collin Weiland</div>
-                            </div>
-                            <span class="ml-auto small">3 hours</span>
-                        </div>
-                        <div class="p-3 border-bottom osahan-post-body">
-                            <p>Lorem ipsum dolor sit amet, consectetur 😍😎 adipisicing elit, sed do eiusmod tempo
-                                incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                                exercitation ullamco <a href="#">laboris consequat.</a></p>
-                            <img src="img/post1.png" class="img-fluid" alt="Responsive image">
-                        </div>
-                        <div class="p-3 border-bottom osahan-post-footer">
-                            <a href="#" class="mr-3 text-secondary"><i class="feather-heart text-danger"></i> 16</a>
-                            <a href="#" class="mr-3 text-secondary"><i class="feather-message-square"></i> 8</a>
-                            <a href="#" class="mr-3 text-secondary"><i class="feather-share-2"></i> 2</a>
-                        </div>
-                        <div class="p-3 d-flex align-items-top border-bottom osahan-post-comment">
-                            <div class="dropdown-list-image mr-3">
-                                <img class="rounded-circle" src="img/p7.png" alt="">
-                                <div class="status-indicator bg-success"></div>
-                            </div>
-                            <div class="font-weight-bold">
-                                <div class="text-truncate"> James Spiegel <span class="float-right small">2 min</span>
+                            <div :id="'commons'+item.post.id" style="display: none">
+                                <div v-if="item.commons!==null&&item.commons.length>0" v-for="common in item.commons">
+                                    <div class="p-3 d-flex align-items-top border-bottom osahan-post-comment">
+                                        <div class="dropdown-list-image mr-3">
+                                            <img class="rounded-circle" :src="context+common.user.avatar" alt="">
+                                            <div class="status-indicator bg-success"></div>
+                                        </div>
+                                        <div class="font-weight-bold">
+                                            <div class="text-truncate">{{common.user.nickName}}
+                                            </div>
+                                            <div class="small text-gray-500">
+                                                {{common.text}}
+                                            </div>
+                                        </div>
+                                        <span class="ml-auto small">{{common.commonTime}}</span>
+                                    </div>
                                 </div>
-                                <div class="small text-gray-500">Ratione voluptatem sequi en lod nesciunt. Neque porro
-                                    quisquam est, quinder dolorem ipsum quia dolor sit amet, consectetur
+                                <div class="p-3">
+                                    <textarea :id="'comText'+item.post.id" name="text" placeholder="写下你的评论"
+                                              class="form-control border-0 p-0 shadow-none"
+                                              rows="1"></textarea>
+                                </div>
+                                <div>
+                                    <button @click="postCommon(item.post.id,index)" class="btn btn-outline-secondary btn-sm btn-block">提交</button>
                                 </div>
                             </div>
-                        </div>
-                        <div class="p-3 d-flex align-items-top border-bottom osahan-post-comment">
-                            <div class="dropdown-list-image mr-3">
-                                <img class="rounded-circle" src="img/p7.png" alt="">
-                                <div class="status-indicator bg-success"></div>
-                            </div>
-                            <div class="font-weight-bold">
-                                <div class="text-truncate"> James Spiegel <span class="float-right small">2 min</span>
-                                </div>
-                                <div class="small text-gray-500">Ratione voluptatem sequi en lod nesciunt. Neque porro
-                                    quisquam est, quinder dolorem ipsum quia dolor sit amet, consectetur
-                                </div>
-                            </div>
-                        </div>
-                        <div class="p-3">
-                            <textarea placeholder="Add Comment..." class="form-control border-0 p-0 shadow-none"
-                                      rows="1"></textarea>
                         </div>
                     </div>
                 </main>
                 <aside id="MySelf" class="col col-xl-3 order-xl-1 col-lg-6 order-lg-2 col-md-6 col-sm-6 col-12">
                     <div class="box mb-3 shadow-sm border rounded bg-white profile-box text-center">
                         <div class="py-4 px-3 border-bottom">
-                            <img :src="context+user.avatar" class="img-fluid mt-2 rounded-circle"
+                            <img :src="context+userVo.user.avatar" class="img-fluid mt-2 rounded-circle"
                                  alt="Responsive image">
-                            <h5 class="font-weight-bold text-dark mb-1 mt-4">{{user.nickName}}</h5>
+                            <h5 class="font-weight-bold text-dark mb-1 mt-4">{{userVo.user.nickName}}</h5>
                         </div>
                         <div class="d-flex">
                             <div class="col-6 border-right p-3">
-                                <h6 class="font-weight-bold text-dark mb-1">1</h6>
+                                <h6 class="font-weight-bold text-dark mb-1">{{userVo.fs}}</h6>
                                 <p class="mb-0 text-black-50 small">粉丝</p>
                             </div>
                             <div class="col-6 p-3">
-                                <h6 class="font-weight-bold text-dark mb-1">1</h6>
+                                <h6 class="font-weight-bold text-dark mb-1">{{userVo.gz}}</h6>
                                 <p class="mb-0 text-black-50 small">关注数</p>
                             </div>
                         </div>
@@ -404,11 +411,127 @@
                     },
                     video: {},
                     photos: [],
+                    commons: [
+                        {
+                            user: {},
+                            post: {},
+                        }
+                    ]
                 },
             ],
-            user: {}
+            userVo: {
+                user: {}
+            }
         },
         methods: {
+            postCommon:function(id,index){
+                axios({
+                    url:context+"main/common",
+                    method:'post',
+                    data:{text:$("#comText"+id).val(),post:{id:id}}
+                }).then(response=>{
+                    if(response.data.result.code===200){
+                        swal("回复成功",{icon:'success',buttons:false,timer:1000}).then(()=>{
+                            let newCommon=response.data.result.data;
+                            console.log(newCommon);
+                            this.$set(this.vo[index].commons,this.vo[index].commons.length,newCommon);
+                            // this.vo[index].commons[this.vo[index].commons.length]=newCommon;
+                        });
+                    }else{
+                        swal(response.data.result.msg[0],{icon:'error'});
+                    }
+                }).catch(response=>{
+                    console.log(response);
+                });
+            },
+            showCommons:function(id){
+                let dom=$("#commons"+id);
+                if(dom.is(':hidden')){
+                    dom.show();
+                }else{
+                    dom.hide();
+                }
+            },
+            unSub: function (id, event) {
+                axios({
+                    url: this.context + "main/sub/" + id,
+                    method: 'delete',
+                }).then(response => {
+                    if (response.data.result.code === 200) {
+                        swal(response.data.result.msg[0], {icon: 'success', buttons: false, timer: 1000});
+                        const dom = $(event.target);
+                        dom.hide();
+                        dom.parent("li").prev("li").children("a").show();
+                    } else {
+                        swal(response.data.result.msg[0], {icon: 'error'});
+                    }
+                }).catch(response => {
+                    console.log(response);
+                });
+            },
+            sub: function (id, event) {
+                if (id === this.userVo.user.id) {
+                    swal("不能关注自己", {icon: "error", buttons: false, timer: 1000});
+                } else {
+                    axios({
+                        url: this.context + "main/sub/" + id,
+                        method: 'get',
+                    }).then(response => {
+                        if (response.data.result.code === 200) {
+                            swal(response.data.result.msg[0], {icon: 'success', buttons: false, timer: 1000});
+                            const dom = $(event.target);
+                            dom.hide();
+                            dom.parent("li").next("li").children("a").show();
+                        } else {
+                            swal(response.data.result.msg[0], {icon: 'error'});
+                        }
+                    }).catch(response => {
+                        console.log(response);
+                    });
+                }
+            },
+            cancelGood(id, index, event) {
+                axios({
+                    url: this.context + "main/good/" + id,
+                    method: 'delete',
+                }).then(response => {
+                    if (response.data.result.code === 200) {
+                        swal("取消赞成功", {icon: "success", buttons: false, timer: 1000});
+                        let dom = $(event.target);
+                        if (dom.is("span")) {
+                            dom = dom.parent("a");
+                        }
+                        this.vo[index].post.good--;
+                        dom.hide();
+                        dom.next("a").show();
+                    } else {
+                        swal(response.data.result.msg[0], {icon: 'error'});
+                    }
+                }).catch(response => {
+                    console.log(response);
+                });
+            },
+            good: function (id, index, event) {
+                axios({
+                    url: this.context + "main/good/" + id,
+                    method: 'put',
+                }).then(response => {
+                    if (response.data.result.code === 200) {
+                        swal("点赞成功", {icon: "success", buttons: false, timer: 1000});
+                        let dom = $(event.target);
+                        if (dom.is("span")) {
+                            dom = dom.parent("a");
+                        }
+                        this.vo[index].post.good++;
+                        dom.hide();
+                        dom.prev("a").show();
+                    } else {
+                        swal(response.data.result.msg[0], {icon: 'error'});
+                    }
+                }).catch(response => {
+                    console.log(response);
+                });
+            },
             postMyPost: function () {
                 let formData = new FormData();
                 if ($("#onlyFriend").prop('checked')) {
@@ -467,6 +590,8 @@
                                 swal("删除动态成功！", {icon: 'success'}).then(function () {
                                     window.location.reload();
                                 });
+                            } else {
+                                swal(response.data.result.msg[0], {icon: 'error'});
                             }
                         }).catch(response => {
                             console.log(response);
@@ -484,7 +609,10 @@
                 method: 'get',
             }).then(response => {
                 if (response.data.result.code === 200) {
+                    console.log(response.data.result);
                     self.vo = response.data.result.data;
+                } else {
+                    swal(response.data.result.msg[0], {icon: 'error'});
                 }
             }).catch(response => {
                 console.log(response);
@@ -494,7 +622,9 @@
                 method: 'get',
             }).then(response => {
                 if (response.data.result.code === 200) {
-                    this.user = response.data.result.data;
+                    this.userVo = response.data.result.data;
+                } else {
+                    swal(response.data.result.msg[0], {icon: 'error'});
                 }
             }).catch(response => {
                 console.log(response);

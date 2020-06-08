@@ -7,28 +7,63 @@ import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.Date;
 
-public class User implements Serializable{
+public class User implements Serializable {
+
+    private static final long serialVersionUID = -5654418863461227475L;
     private String id;
     private String avatar;
     private String nickName;
     private Integer sex;
     private String password;
-    private int role;
-    private  String activeCode;
-    private int state;
     @Email(message = "email格式错误")
     @NotEmpty(message = "email不能为空")
     private String email;
     @NotEmpty(message = "生日不能为空")
-    @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd ")
+    @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
     private Date birthday;
     @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
     private Date registerDay;
-    public int getRole() {
+    private Integer role;
+    private  String activeCode;
+    private int state;
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", nickName='" + nickName + '\'' +
+                ", sex=" + sex +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", birthday=" + birthday +
+                ", registerDay=" + registerDay +
+                ", role=" + role +
+                ", activeCode='" + activeCode + '\'' +
+                ", state=" + state +
+                '}';
+    }
+
+    public String getActiveCode() {
+        return activeCode;
+    }
+
+    public void setActiveCode(String activeCode) {
+        this.activeCode = activeCode;
+    }
+
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
+    }
+    public Integer getRole() {
         return role;
     }
 
-    public void setRole(int role) {
+    public void setRole(Integer role) {
         this.role = role;
     }
 
@@ -96,36 +131,4 @@ public class User implements Serializable{
         this.registerDay = registerDay;
     }
 
-    public String getActiveCode() {
-        return activeCode;
-    }
-
-    public void setActiveCode(String activeCode) {
-        this.activeCode = activeCode;
-    }
-
-    public int getState() {
-        return state;
-    }
-
-    public void setState(int state) {
-        this.state = state;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id='" + id + '\'' +
-                ", avatar='" + avatar + '\'' +
-                ", nickName='" + nickName + '\'' +
-                ", sex=" + sex +
-                ", password='" + password + '\'' +
-                ", role=" + role +
-                ", activeCode='" + activeCode + '\'' +
-                ", state=" + state +
-                ", email='" + email + '\'' +
-                ", birthday=" + birthday +
-                ", registerDay=" + registerDay +
-                '}';
-    }
 }

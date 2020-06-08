@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.aynu.java2.weibo.mapper.CommonMapper">
+
+    <resultMap id="commonMap" type="cn.aynu.java2.weibo.entity.Common">
+        <association property="user" column="user_id" javaType="cn.aynu.java2.weibo.entity.User"
+                     select="cn.aynu.java2.weibo.mapper.IUserMapper.selectUserById"/>
+        <association property="post" column="post_id" javaType="cn.aynu.java2.weibo.entity.Post"
+                     select="cn.aynu.java2.weibo.mapper.PostMapper.selectPostById"/>
+    </resultMap>
+    <insert id="insertCommon" useGeneratedKeys="true" keyProperty="id">
+        insert into common(text, user_id, post_id) VALUES (#{text},#{user.id},#{post.id})
+    </insert>
+
+    <select id="selectCommonsByPostId" resultMap="commonMap">
+        select id, text, user_id, post_id, common_time from common where post_id=#{id}
+    </select>
+    <select id="selectCommonById" resultMap="commonMap">
+        select id, text, user_id, post_id, common_time from common where id=#{id}
+    </select>
+</mapper>
