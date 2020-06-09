@@ -42,7 +42,6 @@ public class UserHandler {
                 addCookie(autologin,user,request,response);
             }
             session.setAttribute("login_user",login_user);
-            //addCookie(user,request,response);
             jsonObject.put("result", Result.successResult("登陆成功", login_user));
         } else{ //如果用户名和密码不正确
             jsonObject.put("result", Result.failResult("用户名或密码错误", login_user));
@@ -63,30 +62,14 @@ public class UserHandler {
             response.addCookie(cookie2);
         }
     }
-    //自动登陆方法
-    private User autologin(HttpServletRequest request) {
-        String email=null;
-        String password=null;
-        Cookie[] cookies=request.getCookies();
-        for(Cookie cookie:cookies){
-            if("CookieEmail".equals(cookie.getName())){
-                email=cookie.getValue();
-            }
-            if("CookiePassword".equals(cookie.getName())){
-                password=cookie.getValue();
-            }
-        }
-        User user=new User();
-        user.setEmail(email);
-        user.setPassword(password);
-        return userService.findUserByLogin(user);
-    }
+
     //用户注册
     @RequestMapping("/register")
     @ResponseBody
     public JSONObject register(User user) throws MessagingException {
         user.setAvatar("/avater/test/1.jpg");
         user.setActiveCode(UUIDUtils.uuid());
+        user.setRole(1);
         System.out.println(user);
         JSONObject jsonObject = new JSONObject();
         userService.addUser(user);
@@ -130,22 +113,6 @@ public class UserHandler {
         }
         return jsonObject;
     }
-    //主页进入
-    @RequestMapping("/home")
-    public String index(HttpSession session,HttpServletRequest request){
-        //获取session中的登陆信息
-        User login_user= (User) session.getAttribute("login_user");
-        if(login_user==null){
-            //自动登陆
-            login_user=autologin(request);
-            if(login_user!=null){
-                session.setAttribute("login_user",login_user);
-                return "main";
-            }
-            return "login";
-        }else {
-            return "main";
-        }
-    }
+
 
 }
