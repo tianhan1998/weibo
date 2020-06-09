@@ -3,6 +3,7 @@ package cn.aynu.java2.weibo.service;
 import cn.aynu.java2.weibo.entity.*;
 import cn.aynu.java2.weibo.exception.DaoAssociationFailException;
 import cn.aynu.java2.weibo.exception.UploadFailException;
+import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -84,8 +85,9 @@ public interface PostService {
     /**
      * 查找所有动态
      * @return Post
+     * @param pageNum 页码数
      */
-    List<Post> selectAllPost();
+    PageInfo<Post> selectAllPost(String pageNum);
     /**
      * 插入动态
      * @param post 动态对象

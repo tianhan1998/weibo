@@ -38,7 +38,7 @@ public class Common implements Serializable {
     /**
      * 发表时间
      */
-    @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
+    @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     private Date commonTime;
 
     private static final long serialVersionUID = 1L;

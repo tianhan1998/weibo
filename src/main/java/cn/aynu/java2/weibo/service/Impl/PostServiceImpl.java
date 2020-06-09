@@ -7,6 +7,8 @@ import cn.aynu.java2.weibo.mapper.CommonMapper;
 import cn.aynu.java2.weibo.mapper.PostMapper;
 import cn.aynu.java2.weibo.service.PostService;
 import cn.aynu.java2.weibo.utils.UUIDUtils;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -109,8 +111,9 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> selectAllPost() {
-        return postMapper.selectAllPost();
+    public PageInfo<Post> selectAllPost(String pageNum) {
+        PageHelper.startPage(Integer.parseInt(pageNum),5);
+        return new PageInfo<>(postMapper.selectAllPost());
     }
 
     @Override
