@@ -421,7 +421,9 @@
             ],
             userVo: {
                 user: {}
-            }
+            },
+            pageNum:'1',
+            canLoadMore:true,
         },
         methods: {
             postCommon:function(id,index){
@@ -525,8 +527,6 @@
                         this.vo[index].post.good++;
                         dom.hide();
                         dom.prev("a").show();
-                    } else {
-                        swal(response.data.result.msg[0], {icon: 'error'});
                     }
                 }).catch(response => {
                     console.log(response);
@@ -599,36 +599,61 @@
 
                     }
                 })
+            },
+            getPost:function () {
+                const self=this;
+                axios({
+                    url: context + "main/post",
+                    method: 'get',
+                    params:{pageNum:this.pageNum++},
+                }).then(response => {
+                    if (response.data.result.code === 200) {
+                        console.log(response.data.result);
+                        $.each(response.data.result.data, function (i, vo) {
+                            if(self.vo.length===1) {
+                                self.$set(self.vo,i,vo);
+                            }else {
+                                self.$set(self.vo, self.vo.length, vo);
+                            }
+                        });
+                    } else {
+                        this.pageNum--;
+                        this.canLoadMore=false;
+                    }
+                }).catch(response => {
+                    console.log(response);
+                });
             }
         },
         mounted: function () {
-            const self = this;
             // swal('vue is online!',{icon:'success'});
-            axios({
-                url: context + "main/post",
-                method: 'get',
-            }).then(response => {
-                if (response.data.result.code === 200) {
-                    console.log(response.data.result);
-                    self.vo = response.data.result.data;
-                } else {
-                    swal(response.data.result.msg[0], {icon: 'error'});
-                }
-            }).catch(response => {
-                console.log(response);
-            });
+            const self=this;
+            this.getPost();
             axios({
                 url: context + "main/api/LoginUser",
                 method: 'get',
             }).then(response => {
                 if (response.data.result.code === 200) {
-                    this.userVo = response.data.result.data;
+                    self.userVo = response.data.result.data;
                 } else {
                     swal(response.data.result.msg[0], {icon: 'error'});
                 }
             }).catch(response => {
                 console.log(response);
             });
+            window.addEventListener('scroll', function(){
+                const scr = document.documentElement.scrollTop || document.body.scrollTop; // 向上滚动的那一部分高度
+                const clientHeight = document.documentElement.clientHeight; // 屏幕高度也就是当前设备静态下你所看到的视觉高度
+                const scrHeight = document.documentElement.scrollHeight || document.body.scrollHeight; // 整个网页的实际高度，兼容Pc端
+                if(scr + clientHeight >= scrHeight){
+                    if(self.canLoadMore){ //this.isMoreLoad控制滚动是否加载更多
+                        self.getPost();
+                    }else{
+                        return;
+                    }
+                }
+            });
+
         }
     });
 </script>
