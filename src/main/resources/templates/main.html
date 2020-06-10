@@ -277,7 +277,6 @@
                                             @click="deleteMyPost(item.post.id)"><a style="cursor: pointer">删除动态</a></li>
                                     </ul>
                                 </div>
-
                             </div>
                             <div class="p-3 border-bottom osahan-post-body">
                                 <p class="mb-0">{{item.post.text}}</p>
@@ -287,6 +286,8 @@
                                              class="img-mini img-fluid" alt="Responsive image">
                                     </div>
                                 </div>
+                                <input v-if="item.video!=null" :id="'videoUrl'+item.post.id" type="hidden" :value="item.video.url">
+                                <div v-if="item.video!=null" :id="'dse'+item.post.id"></div>
                             </div>
                             <div class="p-3 border-bottom osahan-post-footer">
                                 <a v-if="item.good" @click="good(item.post.id,index,$event)" class="mr-3 text-secondary"
@@ -305,10 +306,12 @@
                                    class="mr-3 text-secondary" style="cursor: pointer">
                                     <span class="mr-1 glyphicon glyphicon-heart-empty text-danger"></span>{{item.post.good}}
                                 </a>
-                                <a @click="showCommons(item.post.id)" v-if="item.commons!=null" style="margin-right: 20rem;cursor: pointer"
+                                <a @click="showCommons(item.post.id)" v-if="item.commons!=null"
+                                   style="margin-right: 20rem;cursor: pointer"
                                    class="text-secondary"><i
                                         class="feather-message-square"></i> {{item.commons.length}}</a>
-                                <a v-else @click="showCommons(item.post.id)" style="margin-right: 20rem;cursor: pointer" class="text-secondary"><i
+                                <a v-else @click="showCommons(item.post.id)" style="margin-right: 20rem;cursor: pointer"
+                                   class="text-secondary"><i
                                         class="feather-message-square"></i> 0</a>
                                 <span style="color: #888da8" class="small">{{item.post.postTime}}</span>
                             </div>
@@ -335,7 +338,9 @@
                                               rows="1"></textarea>
                                 </div>
                                 <div>
-                                    <button @click="postCommon(item.post.id,index)" class="btn btn-outline-secondary btn-sm btn-block">提交</button>
+                                    <button @click="postCommon(item.post.id,index)"
+                                            class="btn btn-outline-secondary btn-sm btn-block">提交
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -388,9 +393,12 @@
 <!--vue-->
 <script th:src="@{/js/axios.min.js}"></script>
 <script th:src="@{/js/vue.min.js}"></script>
+<!--video-->
+<script src="//cdn.jsdelivr.net/npm/xgplayer/browser/index.js" type="text/javascript"></script>
 <script type="text/javascript">
     const context = "[[@{/}]]";
     const sessionName = "[[${session.login_user.nickName}]]";
+
 
     function uploadPhoto() {
         $("#photo").click();
@@ -422,35 +430,37 @@
             userVo: {
                 user: {}
             },
-            pageNum:'1',
-            canLoadMore:true,
+            pageNum: '1',
+            canLoadMore: true,
+            loadVideo:1,
         },
+
         methods: {
-            postCommon:function(id,index){
+            postCommon: function (id, index) {
                 axios({
-                    url:context+"main/common",
-                    method:'post',
-                    data:{text:$("#comText"+id).val(),post:{id:id}}
-                }).then(response=>{
-                    if(response.data.result.code===200){
-                        swal("回复成功",{icon:'success',buttons:false,timer:1000}).then(()=>{
-                            let newCommon=response.data.result.data;
+                    url: context + "main/common",
+                    method: 'post',
+                    data: {text: $("#comText" + id).val(), post: {id: id}}
+                }).then(response => {
+                    if (response.data.result.code === 200) {
+                        swal("回复成功", {icon: 'success', buttons: false, timer: 1000}).then(() => {
+                            let newCommon = response.data.result.data;
                             console.log(newCommon);
-                            this.$set(this.vo[index].commons,this.vo[index].commons.length,newCommon);
+                            this.$set(this.vo[index].commons, this.vo[index].commons.length, newCommon);
                             // this.vo[index].commons[this.vo[index].commons.length]=newCommon;
                         });
-                    }else{
-                        swal(response.data.result.msg[0],{icon:'error'});
+                    } else {
+                        swal(response.data.result.msg[0], {icon: 'error'});
                     }
-                }).catch(response=>{
+                }).catch(response => {
                     console.log(response);
                 });
             },
-            showCommons:function(id){
-                let dom=$("#commons"+id);
-                if(dom.is(':hidden')){
+            showCommons: function (id) {
+                let dom = $("#commons" + id);
+                if (dom.is(':hidden')) {
                     dom.show();
-                }else{
+                } else {
                     dom.hide();
                 }
             },
@@ -600,34 +610,42 @@
                     }
                 })
             },
-            getPost:function () {
-                const self=this;
+            getPost: function () {
+                const self = this;
                 axios({
                     url: context + "main/post",
                     method: 'get',
-                    params:{pageNum:this.pageNum++},
-                }).then(response => {
+                    params: {pageNum: this.pageNum++},
+                }).then(function (response)  {
                     if (response.data.result.code === 200) {
                         console.log(response.data.result);
                         $.each(response.data.result.data, function (i, vo) {
-                            if(self.vo.length===1) {
-                                self.$set(self.vo,i,vo);
-                            }else {
+                            if (self.vo.length === 1) {
+                                self.$set(self.vo, i, vo);
+                            } else {
                                 self.$set(self.vo, self.vo.length, vo);
+                            }
+                            if(vo.video!=null){
+                                self.$nextTick(function () {
+                                    let player = new Player({
+                                        id: 'dse'+vo.post.id,
+                                        url: $("#videoUrl"+vo.post.id).val(),
+                                        fluid:true,
+                                    });
+                                });
                             }
                         });
                     } else {
-                        this.pageNum--;
-                        this.canLoadMore=false;
+                        self.pageNum--;
                     }
-                }).catch(response => {
+                }).catch(function (response) {
                     console.log(response);
                 });
             }
         },
         mounted: function () {
             // swal('vue is online!',{icon:'success'});
-            const self=this;
+            const self = this;
             this.getPost();
             axios({
                 url: context + "main/api/LoginUser",
@@ -641,14 +659,14 @@
             }).catch(response => {
                 console.log(response);
             });
-            window.addEventListener('scroll', function(){
+            window.addEventListener('scroll', function () {
                 const scr = document.documentElement.scrollTop || document.body.scrollTop; // 向上滚动的那一部分高度
                 const clientHeight = document.documentElement.clientHeight; // 屏幕高度也就是当前设备静态下你所看到的视觉高度
                 const scrHeight = document.documentElement.scrollHeight || document.body.scrollHeight; // 整个网页的实际高度，兼容Pc端
-                if(scr + clientHeight >= scrHeight){
-                    if(self.canLoadMore){ //this.isMoreLoad控制滚动是否加载更多
+                if (scr + clientHeight >= scrHeight) {
+                    if (self.canLoadMore) { //this.isMoreLoad控制滚动是否加载更多
                         self.getPost();
-                    }else{
+                    } else {
                         return;
                     }
                 }
