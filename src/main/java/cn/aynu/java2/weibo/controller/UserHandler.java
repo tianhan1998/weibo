@@ -115,7 +115,7 @@ public class UserHandler {
         cookie2.setPath(request.getContextPath()+"/");
         response.addCookie(cookie2);
         request.setAttribute("login_error","用户退出成功，请重新登陆！");
-        return "login";
+        return "redirect:/login";
     }
     //管理员登陆
     @RequestMapping("/adminUser")
