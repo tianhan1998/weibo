@@ -6,6 +6,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -56,5 +57,31 @@ public class SubServiceImpl implements SubService {
                 return false;
             }
         }
+    }
+
+    @Override
+    public Boolean deleteAllSubByUserId(String id, List<String> msg) {
+        boolean flag=true;
+        Set<Object> members = redisTemplate.opsForSet().members("gz:userId:" + id);
+        if(members!=null){
+            for(Object tempId:members){
+                 if(redisTemplate.opsForSet().remove("gz:userId:"+id,tempId)!=null){
+                     Set<Object> targetFs = redisTemplate.opsForSet().members("fs:userId" + tempId);
+                     if(targetFs.contains(id)){
+                         if(redisTemplate.opsForSet().remove("fs:userId"+tempId,id)==null) {
+                             msg.add("删除用户id为" + tempId + "的粉丝列表目标" + id + "失败");
+                             flag=false;
+                         }
+                     }
+                 }else{
+                     msg.add("删除用户id为"+id+"的关注列表目标"+tempId+"失败");
+                     flag=false;
+                 }
+            }
+        }else{
+            msg.add("用户不存在");
+            flag=false;
+        }
+        return flag;
     }
 }

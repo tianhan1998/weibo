@@ -72,7 +72,7 @@ public interface PostService {
     Integer selectVideoIdByPost(Post post);
     /**
      * 根据id数组找所有的图片实体类
-     * @param ids
+     * @param ids 图片id组
      * @return 图片实体类
      */
     List<Photo> selectPhotosByIds(List<Integer> ids);
@@ -102,9 +102,10 @@ public interface PostService {
     /**
      * 根据用户id搜索所有动态
      * @param id 用户id
+     * @param pageNum 页码
      * @return post实体类list
      */
-    List<Post> selectAllPostByUserId(String id);
+    PageInfo<Post> selectAllPostByUserId(String id,String pageNum);
 
 
     /**

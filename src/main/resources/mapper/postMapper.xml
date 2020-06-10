@@ -82,7 +82,7 @@
         select id, post_time, text, good, user_id, stage from post where id=#{id}
     </select>
     <select id="selectAllPostByUserId" resultMap="postMapper">
-        select id, post_time, text, good, user_id, stage from post where user_id=#{id}
+        select id, post_time, text, good, user_id, stage from post where user_id=#{id} order by post_time desc
     </select>
     <select id="selectIsGoodByUserIdAndPostId" resultType="java.lang.Integer">
         select count(*) from post_good where user_id=#{userId} and post_id=#{postId}

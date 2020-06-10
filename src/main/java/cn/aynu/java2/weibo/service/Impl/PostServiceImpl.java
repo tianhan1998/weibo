@@ -198,8 +198,9 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> selectAllPostByUserId(String id) {
-        return postMapper.selectAllPostByUserId(id);
+    public PageInfo<Post> selectAllPostByUserId(String id, String pageNum) {
+        PageHelper.startPage(Integer.parseInt(pageNum),5);
+        return new PageInfo<>(postMapper.selectAllPostByUserId(id));
     }
 
     @Override
