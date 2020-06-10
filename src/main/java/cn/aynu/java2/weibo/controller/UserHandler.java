@@ -102,6 +102,21 @@ public class UserHandler {
         userService.activeUser(user);
         return "login";
     }
+    //登出
+    @RequestMapping("/loginout")
+    public String loginout(HttpSession session,HttpServletRequest request,HttpServletResponse response){
+        session.removeAttribute("login_user");
+        Cookie cookie1 =new Cookie("CookieEmail",null);
+        cookie1.setMaxAge(0);
+        cookie1.setPath(request.getContextPath()+"/");
+        response.addCookie(cookie1);
+        Cookie cookie2 =new Cookie("CookiePassword",null);
+        cookie2.setMaxAge(0);
+        cookie2.setPath(request.getContextPath()+"/");
+        response.addCookie(cookie2);
+        request.setAttribute("login_error","用户退出成功，请重新登陆！");
+        return "/";
+    }
     //管理员登陆
     @RequestMapping("/adminUser")
     @ResponseBody
