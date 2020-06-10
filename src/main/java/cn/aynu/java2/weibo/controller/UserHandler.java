@@ -72,7 +72,7 @@ public class UserHandler {
     @RequestMapping("/register")
     @ResponseBody
     public JSONObject register(User user) throws MessagingException {
-        user.setAvatar("/avater/test/1.jpg");
+        user.setAvatar("/img/avatar.jpg");
         user.setActiveCode(UUIDUtils.uuid());
         user.setRole(1);
         System.out.println(user);
@@ -115,7 +115,7 @@ public class UserHandler {
         cookie2.setPath(request.getContextPath()+"/");
         response.addCookie(cookie2);
         request.setAttribute("login_error","用户退出成功，请重新登陆！");
-        return "/";
+        return "login";
     }
     //管理员登陆
     @RequestMapping("/adminUser")
