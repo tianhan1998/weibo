@@ -8,7 +8,6 @@ import cn.aynu.java2.weibo.utils.VoUtils;
 import cn.aynu.java2.weibo.vo.PostVo;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -92,16 +91,18 @@ public class MainController {
         return json;
     }
 
-    @PostMapping("/post/{id}")
-    public JSONObject findPostByUser(@PathVariable String id,HttpSession session){
+    @GetMapping("/post/user")
+    public JSONObject findPostByUser(String id,@RequestParam(defaultValue = "1") String pageNum,HttpSession session){
         JSONObject json=new JSONObject();
         List<PostVo> postVoList;
         try{
-            List<Post> postList=postService.selectAllPostByUserId(id);
-            if(postList!=null&&postList.size()>0){
+            PageInfo<Post> postPageInfo=postService.selectAllPostByUserId(id,pageNum);
+            if(postPageInfo.getList()!=null&&postPageInfo.getList().size()>0){
                 User loginUser = (User) session.getAttribute("login_user");
-                postVoList=voUtils.transferToPostVo(postList,loginUser);
-                json.put("result",successResult("查找成功",postVoList));
+                postVoList=voUtils.transferToPostVo(postPageInfo.getList(),loginUser);
+                Result<Object> result=successResult("查找成功",postVoList);
+                result.setPageInfo(postPageInfo);
+                json.put("result",result);
             }else{
                 json.put("result",failResult("查找失败",null));
             }
