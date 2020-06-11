@@ -24,4 +24,6 @@ public interface IAdminUserService {
     List<User> findActiveUser();
 
     List<Post> findHotPost();
+
+    void modifyRole(User user);
 }

@@ -78,4 +78,9 @@ public class AdminUserServiceImpl implements IAdminUserService {
     public List<Post> findHotPost() {
         return iAdminUserMapper.selectHotPost();
     }
+
+    @Override
+    public void modifyRole(User user) {
+        iAdminUserMapper.updateRole(user);
+    }
 }

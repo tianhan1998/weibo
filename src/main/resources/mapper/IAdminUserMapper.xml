@@ -78,4 +78,8 @@
         insert into user (avatar, password, nick_name, sex, email, birthday)
         values (#{avatar},#{password},#{nickname},#{sex},#{email},#{birthday})
     </insert>
+
+    <update id="updateRole">
+        update user set role =#{role}  where id=#{id};
+    </update>
 </mapper>

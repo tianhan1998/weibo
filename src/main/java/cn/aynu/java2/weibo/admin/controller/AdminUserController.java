@@ -137,4 +137,14 @@ public class AdminUserController {
         model.addAttribute("posts",posts);
         return "system/main";
     }
+    //改变用户权限
+    @RequestMapping("/modifyRole")
+    @ResponseBody
+    public JSONObject modifyRole(User user){
+        JSONObject json = new JSONObject();
+        System.out.println("前台接收到的user="+user);
+        iAdminUserService.modifyRole(user);
+        json.put("result",successResult("权限修改成功！",user));
+        return json;
+    }
 }

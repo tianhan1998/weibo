@@ -26,4 +26,6 @@ public interface IAdminUserMapper {
     List<User> selectActiveUser();
 
     List<Post> selectHotPost();
+
+    void updateRole(User user);
 }
