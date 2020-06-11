@@ -26,7 +26,7 @@
                             class="navbar-toggle collapsed" type="button">
                         <i class="fa fa-reorder"></i>
                     </button>
-                    <a th:href="@{statistics}" class="navbar-brand">后台管理系统</a>
+                    <a th:href="@{/admin/user/statistics}" class="navbar-brand">后台管理系统</a>
                 </div>
                 <div class="navbar-collapse collapse" id="navbar">
                     <ul class="nav navbar-nav">
@@ -67,49 +67,34 @@
                     </div>
                 </div>
                 <div class="ibox-content table-responsive">
-                    <form id="findUserByCondition"  th:action="${#request.getContextPath()}+'/admin/user/findUserByCondition'" type="post">
+                    <form id="findPost" th:action="${#request.getContextPath()}+'/admin/post/findPost'" type="post">
                         <div class="form-group col-lg-3">
-                            <span class="input-group-addon" id="sizing-addon1">生日-起始时间</span>
-                            <input id="birthday_min" name="beginTime" type="date" class="form-control" placeholder="birthday_begin">
+                            <span class="input-group-addon" id="sizing-addon1">发布日期-起始时间</span>
+                            <input id="post_time_min" name="minTime" type="date" th:value="${#dates.format(minTime)}" class="form-control" placeholder="发布日期-起始时间">
                         </div>
                         <div class="form-group col-lg-3">
-                            <span class="input-group-addon" id="sizing-addon2">生日-截止时间</span>
-                            <input id="birthday_max" name="endTime" type="date" class="form-control" placeholder="birthday_end">
+                            <span class="input-group-addon" id="sizing-addon2">发布日期-截止时间</span>
+                            <input id="post_time_max" name="maxTime" type="date" th:value="${#dates.format(maxTime)}" class="form-control" placeholder="发布日期-截止时间">
                         </div>
                         <div class="form-group col-lg-3">
-                            <span class="input-group-addon" id="sizing-addon3">注册日期-起始时间</span>
-                            <input id="register_day_min" name="beginDay" type="date" class="form-control" placeholder="register_day_begin">
+                            <span class="input-group-addon" id="sizing-addon3">获赞数-最小量</span>
+                            <input id="good_min" name="minGood" type="text" th:value="${minGood}" class="form-control" placeholder="获赞数-最小量">
                         </div>
                         <div class="form-group col-lg-3">
-                            <span class="input-group-addon" id="sizing-addon4">注册日期-截止时间</span>
-                            <input id="register_day_max" name="endDay" type="date" class="form-control" placeholder="register_day_end">
+                            <span class="input-group-addon" id="sizing-addon4">获赞数-最大量</span>
+                            <input id="good_max" name="maxGood" type="text" th:value="${maxGood}" class="form-control" placeholder="获赞数-最大量">
                         </div>
                         <div class="form-group col-lg-2">
-                            <input id="mem-id" name="id" type="text" th:value="${user.id}" class="form-control" placeholder="id">
+                            <input id="post-id" name="id" type="text" th:value="${post.id}" class="form-control" placeholder="id">
                         </div>
                         <div class="form-group  col-lg-2">
-                            <input id="mem-nickname" name="nickName" th:value="${user.nickName}" type="text"  class="form-control" placeholder="昵称">
+                            <input id="post-text" name="text" type="text" th:value="${post.text}" class="form-control" placeholder="动态内容">
                         </div>
                         <div class="form-group  col-lg-2">
-                            <input id="mem-email" name="email" th:value="${user.email}" type="text" class="form-control" placeholder="邮箱">
+                            <input id="post_user_id" name="user.id" th:value="${post.user.id}" type="text" class="form-control" placeholder="用户id">
                         </div>
                         <div class="form-group col-lg-2">
-                            <select class="form-control" id="sex-select" name="sex" size="1">
-                                <option value="">请选择-性别</option>
-                                <option value="0">女</option>
-                                <option value="1">男</option>
-                            </select>
-                        </div>
-                        <div class="form-group col-lg-2">
-                            <select class="form-control" id="role-select" name="role" size="1">
-                                <option value="">请选择-身份</option>
-                                <option value="0">普通用户</option>
-                                <option value="1">管理员</option>
-                                <option value="2">封禁</option>
-                            </select>
-                        </div>
-                        <div class="form-group col-lg-2">
-                            <button class="btn btn-primary" type="submit">查询</button>
+                            <button class="btn btn-primary" type="submit" >查询</button>
                         </div>
                     </form>
                 </div>
@@ -133,35 +118,30 @@
                         <thead>
                         <tr>
                             <th>ID</th>
-                            <th>昵称</th>
-                            <th>性别</th>
-                            <th>邮箱</th>
-                            <th>生日</th>
-                            <th>注册日期</th>
-                            <th>权限</th>
+                            <th>发布时间</th>
+                            <th>动态内容</th>
+                            <th>收获点赞</th>
+                            <th>用户ID</th>
+                            <th>用户昵称</th>
+                            <th>用户邮箱</th>
                             <th>操作</th>
                         </tr>
                         </thead>
                         <tbody id="add">
-                        <tr th:each="u ,userStat : ${users}">
-                            <td th:text="${u.id}"></td>
-                            <td th:text="${u.nickName}"></td>
-                            <td th:if="${u.sex == 0}">女</td>
-                            <td th:if="${u.sex == 1}">男</td>
-                            <td th:text="${u.email}"></td>
-                            <td th:text="${#dates.format(u.birthday, 'yyyy-MM-dd')}"></td>
-                            <td th:text="${#dates.format(u.registerDay, 'yyyy-MM-dd')}"></td>
-                            <td th:if="${u.role == 0}">管理员</td>
-                            <td th:if="${u.role == 1}">普通用户</td>
-                            <td th:if="${u.role == 2}">封禁用户</td>
-<!--                            <td><span class="label label-primary">团队赛</span></td>-->
+                        <tr th:each="p,pStat :${posts}">
+                            <td th:text="${p.id}"></td>
+                            <td th:text="${#dates.format(p.postTime, 'yyyy-MM-dd')}"></td>
+                            <td th:text="${#strings.abbreviate(p.text,25)}"></td>
+                            <td th:text="${p.good}"></td>
+                            <td th:text="${p.user.id}"></td>
+                            <td th:text="${p.user.nickName}"></td>
+                            <td th:text="${p.user.email}"></td>
                             <td>
-                                <button type="button" class="btn btn-w-m btn-danger btn-xs" data-toggle="modal" data-target="#myModal">删除</button>
+                                <button type="button" class="btn btn-primary btn-danger btn-xs" data-toggle="modal" data-target="#myModal" th:onclick="'javaScript:deleteUser('+${p.id}+')'">删除</button>
                             </td>
                         </tr>
                         </tbody>
                     </table>
-
                     <div class="modal inmodal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true"
                          style="display: none;">
                         <div class="modal-dialog">
@@ -172,16 +152,18 @@
 
                                     <i class="fa fa-laptop modal-icon"></i>
                                     <h4 class="modal-title">删除</h4>
-                                    <small class="font-bold">确认要删除这个账户吗？</small>
+                                    <small class="font-bold">确认要删除这条动态吗？</small>
 
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
-                                    <button type="button" class="btn btn-primary" th:onclick="'javaScript:deltheMem()'">确认</button>
+                                    <button type="button" class="btn btn-primary" th:onclick="'javaScript:deltheMem('+${#session.getAttribute('id')}+')'">确认</button>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+
                 </div>
             </div>
         </div>
@@ -217,27 +199,6 @@
 <script>
     var context="[[@{/}]]";
 
-    function findUserByCondition(){
-        $.ajax({
-            type:"post",
-            url: context + "admin/user/findUserByCondition",
-            dataType:"json",
-            data:$("#findUserByCondition").serialize(),
-            success:function (result) {
-                console.log(result);
-                if(result.result.code===200){//查询成功
-                    swal("查询成功").then(function () {
-                        window.location.href="admin/userList";
-                    });
-                }else if(result.result.code===404){//查询失败
-                    swal(result.result.msg).then(function () {
-                        window.location.reload();
-                    });
-                }
-            }
-        });
-    }
-
     $(document).ready(function () {
         $("button[value='删除']").click(function () {
             $("myModal").modal(options);
@@ -268,17 +229,17 @@
 
     });
 
-//    模态框传值
-//    生成input标签进行传参
-    function createInput(id) {
+    //    模态框传值
+    //    生成input标签进行传参
+    function createInput() {
         var iv = "<input type='text' value='"+id+"' class='inv' style='display: none'>";
         $('.modal-footer').append(iv);
     }
     function deltheMem(id) {
         $.ajax({
-            url:context+"admin/user/cancelUser?id="+id,
+            url: context+"admin/post/deletePost?id="+id,
             type:"get",
-            dataType: "json",
+            dataType:"json",
             data:{"memId":$('.inv').val()},
             success:function (data) {
                 //清空matchid
@@ -289,7 +250,7 @@
                 $('.inv').remove();
                 if(data.result.code == "200"){
                     swal("删除成功!").then(function () {
-                        window.location.href=context + "admin/user/findUserByCondition";
+                        window.location.href=context+"admin/post/findPost";
                     })
                 }else{
                     swal("删除失败!");

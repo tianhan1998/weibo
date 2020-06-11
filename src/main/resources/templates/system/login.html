@@ -107,7 +107,7 @@
 					console.log(result);
 					if(result.result.code===200){//登录成功
 						swal(result.result.msg[0]).then(function () {
-							window.location.href=context+"admin/user/findUserByCondition";
+							window.location.href=context+"admin/user/statistics";
 						});
 					}else{//登录失败
 						$("#mem_log").show();

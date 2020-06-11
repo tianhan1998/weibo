@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>围脖后台管理系统</title>
+
+    <link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/bootstrap/css/bootstrap2.min.css}" rel="stylesheet">
+    <link th:href="@{/bootstrap/css/materialdesignicons.min.css}" rel="stylesheet">
+    <link th:href="@{/bootstrap/css/style.min.css}" rel="stylesheet">
+    <link th:href="@{/font-awesome/css/font-awesome.css}" rel="stylesheet">
+
+    <link th:href="@{/assets/css/animate.css}" rel="stylesheet">
+    <link th:href="@{/assets/css/style.css}" rel="stylesheet">
+
+</head>
+
+<body class="top-navigation">
+<div id="wrapper">
+    <div id="page-wrapper" class="gray-bg">
+        <div class="row border-bottom white-bg">
+            <nav class="navbar navbar-static-top" role="navigation">
+                <div class="navbar-header">
+                    <button aria-controls="navbar" aria-expanded="false" data-target="#navbar" data-toggle="collapse"
+                            class="navbar-toggle collapsed" type="button">
+                        <i class="fa fa-reorder"></i>
+                    </button>
+                    <a th:href="@{statistics}" class="navbar-brand">后台管理系统</a>
+                </div>
+                <div class="navbar-collapse collapse" id="navbar">
+                    <ul class="nav navbar-nav">
+                        <li class="active">
+                            <a aria-expanded="false" role="button" th:href="${#request.getContextPath()}+'/admin/user/findUserByCondition'">  用户管理</a>
+                        </li>
+
+                        <li class="dropdown">
+                            <a aria-expanded="false" role="button" th:href="${#request.getContextPath()}+'/admin/post/findPost'"> 动态管理</a>
+                        </li>
+                        <li class="dropdown">
+                            <a aria-expanded="false" role="button" href="List"> 所有比赛列表</a>
+                        </li>
+                        <li class="dropdown">
+                            <a aria-expanded="false" role="button" href="putMatch"> 发布新比赛</a>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-top-links navbar-right">
+                        <li>
+                            <a href="/admin/user/adminLogout">
+                                <i class="fa fa-sign-out"></i> 退出登录
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+        <div class="wrapper wrapper-content">
+            <!--            表格-->
+            <!--页面主要内容-->
+            <main class="lyear-layout-content" style="padding: 68px 0px 0px 0px;">
+
+                <div class="container-fluid">
+
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card bg-primary">
+                                <div class="card-body clearfix">
+                                    <div class="pull-right">
+                                        <p class="h6 text-white m-t-0">用户总数</p>
+                                        <p class="h3 text-white m-b-0" th:text="${userCount}"></p>
+                                    </div>
+                                    <div class="pull-left"> <span class="img-avatar img-avatar-48 bg-translucent"><i class="mdi mdi-account fa-1-5x"></i></span> </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card bg-danger">
+                                <div class="card-body clearfix">
+                                    <div class="pull-right">
+                                        <p class="h6 text-white m-t-0">本周动态</p>
+                                        <p class="h3 text-white m-b-0" th:text="${postCount}"></p>
+                                    </div>
+                                    <div class="pull-left"> <span class="img-avatar img-avatar-48 bg-translucent"><i class="mdi mdi-comment-outline fa-1-5x"></i></span> </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th>id</th>
+                                    <th>点赞数</th>
+                                    <th>用户id</th>
+                                    <th>用户邮箱</th>
+                                    <th>用户昵称</th>
+                                    <th>用户身份</th>
+                                    <th>详细信息</th>
+                                    <th>发布时间</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="p,pstate : ${posts}">
+                                    <td th:text="${p.id}"></td>
+                                    <td th:text="${p.good}"></td>
+                                    <td th:text="${p.user.id}"></td>
+                                    <td th:text="${p.user.email}"></td>
+                                    <td th:text="${p.user.nickName}"></td>
+                                    <td th:if="${p.user.role == 0}">管理员</td>
+                                    <td th:if="${p.user.role == 1}">普通用户</td>
+                                    <td><a class="label label-warning" th:href="${#request.getContextPath()}+'/admin/post/findPostById?id='+${p.id}">查看</a></td>
+                                    <td th:text="${#dates.format(p.postTime,'yyyy-MM-dd')}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+            <!--End 页面主要内容-->
+        <div class="footer">
+            <div class="pull-right">
+                <p class="m-t"> <small>©2019 SCHOOL OF SOFTWARE ENGINEERING AYNU Algorithm art club All Rights Reserved</small> </p>
+            </div>
+            <div>
+                <p class="m-t"> <small>©2020 313 复仇者联盟 版权所有</small> </p>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/plugins/metisMenu/jquery.metisMenu.js}"></script>
+<script th:src="@{/js/plugins/slimscroll/jquery.slimscroll.min.js}"></script>
+<script th:src="@{/js/plugins/peity/jquery.peity.min.js}"></script>
+<script type="text/javascript" th:src="@{/bootstrap/js/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/bootstrap/js/bootstrap2.min.js}"></script>
+<script type="text/javascript" th:src="@{/bootstrap/js/perfect-scrollbar.min.js}"></script>
+<script type="text/javascript" th:src="@{/bootstrap/js/main.min.js}"></script>
+
+<script th:src="@{/js/inspinia.js}"></script>
+<script th:src="@{/js/plugins/pace/pace.min.js}"></script>
+
+<script th:src="@{/js/plugins/flot/jquery.flot.js}"></script>
+<script th:src="@{/js/plugins/flot/jquery.flot.tooltip.min.js}"></script>
+<script th:src="@{/js/plugins/flot/jquery.flot.resize.js}"></script>
+
+<script th:src="@{/js/demo/peity-demo.js}"></script>
+<script th:src="@{/js/sweetalert.min.js}"></script>
+
+<script>
+    var context="[[@{/}]]";
+
+    function findPostById(id) {
+        $.ajax({
+            url:context+'admin/post/findPostById',
+            type:"POST",
+            data:{ id:id },
+            dataType:"json",
+            success:function(obj){
+
+                var str = '';//动态拼接table
+                for (var i = 0; i < obj.length; i++) {
+                    //对应数组表的字段值
+                    var num = i+1;
+                    str += '<tr>';
+                    str += '<td>' + obj.result.post.text + '</td>';
+                    str += '<td>' + 'obj[i].bodycode' + '</td>';
+                    str += '<td>' + 'obj[i].shop_id' + '</td>';
+                    str += '</tr>';
+                }
+                //运用html方法将拼接的table添加到tbody中
+                $("#tbody").html(str);
+            }
+        });
+    }
+
+    $(document).rea
+    $(document).ready(function () {
+        $("button[value='查看']").click(function () {
+            $("myModal").modal(options);
+        });
+
+        $.ajax({
+            url:context+'admin/post/findPostById',
+            type:"POST",
+            data:{ id:id },
+            dataType:"json",
+            success:function(obj){
+
+                var str = '';//动态拼接table
+                for (var i = 0; i < obj.length; i++) {
+                    //对应数组表的字段值
+                    var num = i+1;
+                    str += '<tr>';
+                    str += '<td>' + obj.result.post.text + '</td>';
+                    str += '<td>' + 'obj[i].bodycode' + '</td>';
+                    str += '<td>' + 'obj[i].shop_id' + '</td>';
+                    str += '</tr>';
+                }
+                //运用html方法将拼接的table添加到tbody中
+                $("#tbody").html(str);
+            }
+        });
+
+
+    });
+
+    //    模态框传值
+    //    生成input标签进行传参
+    function createInput(id) {
+        var iv = "<input type='text' value='"+id+"' class='inv' style='display: none'>";
+        $('.modal-footer').append(iv);
+    }
+    function deltheMem() {
+        $.ajax({
+            url:"/ORS/admin/deleteMem",
+            type:"get",
+            dataType:"json",
+            data:{"memId":$('.inv').val()},
+            success:function (data) {
+                //清空matchid
+                $('.inv').remove();
+                //关闭模态框
+                $('#myModal').modal("hide");
+
+                $('.inv').remove();
+                if(data.code == "200"){
+                    swal("删除成功!").then(function () {
+                        window.location.reload();
+                    })
+                }else{
+                    swal("删除失败!");
+                }
+            }
+        })
+    }
+
+</script>
+
+</body>
+
+</html>

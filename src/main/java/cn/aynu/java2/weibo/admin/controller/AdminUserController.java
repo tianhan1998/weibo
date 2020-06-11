@@ -1,14 +1,18 @@
 package cn.aynu.java2.weibo.admin.controller;
 
 import cn.aynu.java2.weibo.admin.service.IAdminUserService;
+import cn.aynu.java2.weibo.entity.Post;
 import cn.aynu.java2.weibo.entity.User;
+import cn.aynu.java2.weibo.service.PostService;
+import cn.aynu.java2.weibo.service.SubService;
 import com.alibaba.fastjson.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.List;
 
@@ -20,17 +24,24 @@ import static cn.aynu.java2.weibo.entity.Result.*;
 @Controller
 @RequestMapping("/admin/user")
 public class AdminUserController {
-    @Autowired
+    @Resource
     private IAdminUserService iAdminUserService;
 
+    @Resource
+    private PostService postService;
+
+    @Resource
+    private SubService subService;
+
+    //管理员登录
     @RequestMapping("/adminLogin")
     @ResponseBody
-    public JSONObject adminLogin(User user, Model model){
+    public JSONObject adminLogin(User user, HttpSession session){
         JSONObject json = new JSONObject();
         User user_Admin = iAdminUserService.findUserByInfo(user);
         if(user_Admin != null){
             if(user_Admin.getRole() == 0){
-                model.addAttribute("user",user_Admin);
+                session.setAttribute("user_Admin",user);
                 json.put("result",successResult("管理员登录成功！",user_Admin));
             }else {
                 json.put("result",failResult("抱歉，当前用户权限不足！"));
@@ -41,6 +52,7 @@ public class AdminUserController {
         return json;
     }
 
+    //用户信息复合条件查询
     @RequestMapping("/findUserByCondition")
     public String findUserByCondition(User user, Date beginTime,Date endTime,Date beginDay,Date endDay,Model model){
         JSONObject json=new JSONObject();
@@ -52,19 +64,43 @@ public class AdminUserController {
         } else{
             json.put("result",failResult("信息查询失败！"));
         }
-        return "system/mem_list.html";
+        return "system/mem_list";
     }
 
+    //用户权限修改
+    @RequestMapping("/roleUpdate")
+    @ResponseBody
+    public JSONObject roleUpdate(Integer id,Integer role){
+        JSONObject json=new JSONObject();
+        try {
+            int row = iAdminUserService.roleUpdate(id,role);
+            if(row > 0){
+                json.put("result",successResult("权限修改成功！"));
+            }else {
+                json.put("result",failResult("权限修改失败！"));
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+            json.put("result", exceptionResult(e.getMessage()));
+        }
+        return json;
+    }
+
+    //用户注销-管理端
     @RequestMapping("/cancelUser")
     @ResponseBody
     public JSONObject cancelUser(Integer id){
-        System.out.println(id);
         JSONObject json=new JSONObject();
-        int row = iAdminUserService.cancelUser(id);
-        if(row > 0){
-            json.put("result",successResult(id+" 该id账户已注销！"));
-        } else{
-            json.put("result",failResult(id+"该账户注销失败！"));
+        try{
+            int row = iAdminUserService.cancelUser(id);
+            if(row > 0){
+                json.put("result",successResult(id+" 该id账户已注销！"));
+            } else{
+                json.put("result",failResult(id+"该账户注销失败！"));
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            json.put("result", exceptionResult(e.getMessage()));
         }
         return json;
     }
@@ -72,6 +108,7 @@ public class AdminUserController {
     @RequestMapping("/addUser")
     @ResponseBody
     public JSONObject addUser(User user){
+        System.out.println(user);
         JSONObject json=new JSONObject();
         user.setAvatar("/avatar/test/1.jpg");
         int row = iAdminUserService.addUser(user);
@@ -81,5 +118,23 @@ public class AdminUserController {
             json.put("result",failResult("添加用户失败！"));
         }
         return json;
+    }
+
+     //管理端首页信息
+    @RequestMapping("/statistics")
+    public String statistics(Model model){
+        //用户总数
+        int userCount = iAdminUserService.findUserCount();
+        //本周动态数
+        int postCount = iAdminUserService.findPostCount();
+        //活跃用户
+        //List<User> users = iAdminUserService.findActiveUser();
+        //热门动态
+        List<Post> posts = iAdminUserService.findHotPost();
+        model.addAttribute("userCount",userCount);
+        model.addAttribute("postCount",postCount);
+        //model.addAttribute("users",users);
+        model.addAttribute("posts",posts);
+        return "system/main";
     }
 }

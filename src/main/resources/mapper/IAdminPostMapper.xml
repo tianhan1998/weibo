@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.aynu.java2.weibo.admin.mapper.IAdminPostMapper">
+    <select id="selectPost" resultMap="postMap">
+        select * from post
+        <where>
+            <if test="post.id != null">
+                id = #{post.id}
+            </if>
+            <if test="minTime != null">
+                and post_time <![CDATA[>=]]> #{minTime}
+            </if>
+            <if test="maxTime != null">
+                and post_time <![CDATA[<=]]> #{maxTime}
+            </if>
+            <if test="post.text != null and post.text != ''">
+                and text like  CONCAT('%',#{post.text},'%')
+            </if>
+            <if test="minGood != null">
+                and good <![CDATA[>=]]> #{minGood}
+            </if>
+            <if test="maxGood != null">
+                and good <![CDATA[<=]]> #{maxGood}
+            </if>
+            <if test="post.user.id != null and post.user.id != ''">
+                and user_id = #{post.user.id}
+            </if>
+        </where>
+    </select>
+    <resultMap id="postMap" type="cn.aynu.java2.weibo.entity.Post">
+        <id property="id" column="id"/>
+        <association property="user"
+                     column="user_id"
+                     javaType="User"
+                     select="selectUserByPost"/>
+    </resultMap>
+    <select id="selectUserByPost" resultType="cn.aynu.java2.weibo.entity.User">
+        select id,nick_name,email from user where id = #{user_id}
+    </select>
+</mapper>
