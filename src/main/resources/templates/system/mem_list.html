@@ -108,6 +108,7 @@
                         </div>
                         <div class="form-group col-lg-2">
                             <button class="btn btn-primary" type="submit">查询</button>
+<!--                            <button class="btn btn-w-md btn-round btn-secondary" th:href="${#request.getContextPath()}+'/admin/addAdmin'">添加管理</button>-->
                         </div>
                     </form>
                 </div>
@@ -118,7 +119,7 @@
             <!--            表格-->
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>账号列表 </h5>
+                    <h5>用户列表 </h5>
                     <div class="ibox-tools">
                         <a class="collapse-link">
                             <i class="fa fa-chevron-up"></i>
@@ -157,7 +158,7 @@
                             </select>
                             </td>
                             <td>
-                                <button type="button" class="btn btn-w-m btn-danger btn-xs" data-toggle="modal" data-target="#myModal">删除</button>
+                                <button type="button" th:name="select" class="btn btn-w-m btn-danger btn-xs" data-toggle="modal" data-target="#myModal" th:data-id="${u.id}" onclick="getId(this.getAttribute('data-id'))">删除</button>
                             </td>
                         </tr>
                         </tbody>
@@ -268,7 +269,7 @@
         });
     }
 
-    $(document).ready(function () {
+/*    $(document).ready(function () {
         $("button[value='删除']").click(function () {
             $("myModal").modal(options);
         });
@@ -296,7 +297,7 @@
         });
 
 
-    });
+    });*/
 
 //    模态框传值
 //    生成input标签进行传参
@@ -304,7 +305,8 @@
         var iv = "<input type='text' value='"+id+"' class='inv' style='display: none'>";
         $('.modal-footer').append(iv);
     }
-    function deltheMem(id) {
+    function deltheMem() {
+        var id = $("#myModal").val();
         $.ajax({
             url:context+"admin/user/cancelUser?id="+id,
             type:"get",
