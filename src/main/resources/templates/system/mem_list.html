@@ -13,7 +13,11 @@
 
     <link th:href="@{/assets/css/animate.css}" rel="stylesheet">
     <link th:href="@{/assets/css/style.css}" rel="stylesheet">
-
+    <style>
+        th{
+            text-align: center;
+        }
+    </style>
 </head>
 
 <body class="top-navigation">
@@ -36,12 +40,6 @@
 
                         <li class="dropdown">
                             <a aria-expanded="false" role="button" th:href="${#request.getContextPath()}+'/admin/post/findPost'"> 动态管理</a>
-                        </li>
-                        <li class="dropdown">
-                            <a aria-expanded="false" role="button" href="List"> 所有比赛列表</a>
-                        </li>
-                        <li class="dropdown">
-                            <a aria-expanded="false" role="button" href="putMatch"> 发布新比赛</a>
                         </li>
                     </ul>
                     <ul class="nav navbar-top-links navbar-right">
@@ -103,8 +101,8 @@
                         <div class="form-group col-lg-2">
                             <select class="form-control" id="role-select" name="role" size="1">
                                 <option value="">请选择-身份</option>
-                                <option value="0">普通用户</option>
-                                <option value="1">管理员</option>
+                                <option value="0">管理员</option>
+                                <option value="1">普通用户</option>
                                 <option value="2">封禁</option>
                             </select>
                         </div>
@@ -127,7 +125,7 @@
                         </a>
                     </div>
                 </div>
-                <div class="ibox-content table-responsive">
+                <div class="ibox-content table-responsive text-center">
 
                     <table class="table table-bordered">
                         <thead>

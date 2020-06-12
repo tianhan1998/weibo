@@ -44,12 +44,6 @@
                         <li class="dropdown">
                             <a aria-expanded="false" role="button" th:href="${#request.getContextPath()}+'/admin/post/findPost'"> 动态管理</a>
                         </li>
-                        <li class="dropdown">
-                            <a aria-expanded="false" role="button" href="List"> 所有比赛列表</a>
-                        </li>
-                        <li class="dropdown">
-                            <a aria-expanded="false" role="button" href="putMatch"> 发布新比赛</a>
-                        </li>
                     </ul>
                     <ul class="nav navbar-top-links navbar-right">
                         <li>
@@ -119,6 +113,7 @@
                                     <td th:text="${p.user.nickName}"></td>
                                     <td th:if="${p.user.role == 0}">管理员</td>
                                     <td th:if="${p.user.role == 1}">普通用户</td>
+                                    <td th:if="${p.user.role == 2}">封禁用户</td>
                                     <td><a class="label label-warning" th:href="${#request.getContextPath()}+'/admin/post/findPostById?id='+${p.id}">查看</a></td>
                                     <td th:text="${#dates.format(p.postTime,'yyyy-MM-dd')}"></td>
                                 </tr>

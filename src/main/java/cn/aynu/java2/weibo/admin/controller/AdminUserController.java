@@ -26,10 +26,8 @@ import static cn.aynu.java2.weibo.entity.Result.*;
 public class AdminUserController {
     @Resource
     private IAdminUserService iAdminUserService;
-
     @Resource
     private PostService postService;
-
     @Resource
     private SubService subService;
 

@@ -271,7 +271,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public int selectCommonNumByUserId(String id) {
-        return commonMapper.selectCommonNumByUserId();
+        return commonMapper.selectCommonNumByUserId(id);
     }
 
     @Override
@@ -287,6 +287,11 @@ public class PostServiceImpl implements PostService {
     @Override
     public int deleteCommonByPostId(String id) {
         return commonMapper.deleteCommonByPostId(id);
+    }
+
+    @Override
+    public int deleteGoodByUserId(String id) {
+        return postMapper.deleteGoodByUserId(id);
     }
 
     private void deletePhotos(List<File> photos){

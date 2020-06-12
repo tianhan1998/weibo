@@ -23,6 +23,12 @@ public interface PostMapper {
      */
     int deletePostGoodByPostId(String id);
     /**
+     * 根据用户id删除所有用户点赞
+     * @param id 用户id
+     * @return 行数
+     */
+    int deleteGoodByUserId(String id);
+    /**
      * 删除点赞关联表通过用户id
      * @param postGood
      * @return
