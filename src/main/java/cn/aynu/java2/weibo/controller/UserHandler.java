@@ -35,18 +35,23 @@ public class UserHandler {
         System.out.println(user);
         //如果用户名和密码正确
         if(login_user!=null){
-            if(login_user.getState()==1){//用户已激活
-                if("1".equals(remember)){//保存用户名
-                    addCookie(autologin,user,request,response);
+            if(login_user.getRole()!=2){//用户未被封禁
+                if(login_user.getState()==1){//用户已激活
+                    if("1".equals(remember)){//保存用户名
+                        addCookie(autologin,user,request,response);
+                    }
+                    else if("1".equals(autologin)){//保存用户名和密码
+                        addCookie(autologin,user,request,response);
+                    }
+                    session.setAttribute("login_user",login_user);
+                    jsonObject.put("result", Result.successResult("登陆成功", login_user));
                 }
-                else if("1".equals(autologin)){//保存用户名和密码
-                    addCookie(autologin,user,request,response);
+                else{//用户名密码正确，但未激活
+                    jsonObject.put("result", Result.failResult("此用户未激活，请激活后使用", login_user));
                 }
-                session.setAttribute("login_user",login_user);
-                jsonObject.put("result", Result.successResult("登陆成功", login_user));
             }
-            else{//用户名密码正确，但未激活
-                jsonObject.put("result", Result.failResult("用户未激活，请激活后使用", login_user));
+            else {
+                jsonObject.put("result", Result.failResult("用户已被封禁", login_user));
             }
         } else{ //如果用户名和密码不正确
             jsonObject.put("result", Result.failResult("用户名或密码错误", login_user));
