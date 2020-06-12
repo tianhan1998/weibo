@@ -142,19 +142,22 @@
                             <th>操作</th>
                         </tr>
                         </thead>
-                        <tbody id="add">
-                        <tr th:each="u ,userStat : ${users}">
-                            <td th:text="${u.id}"></td>
-                            <td th:text="${u.nickName}"></td>
-                            <td th:if="${u.sex == 0}">女</td>
-                            <td th:if="${u.sex == 1}">男</td>
-                            <td th:text="${u.email}"></td>
-                            <td th:text="${#dates.format(u.birthday, 'yyyy-MM-dd')}"></td>
-                            <td th:text="${#dates.format(u.registerDay, 'yyyy-MM-dd')}"></td>
-                            <td th:if="${u.role == 0}">管理员</td>
-                            <td th:if="${u.role == 1}">普通用户</td>
-                            <td th:if="${u.role == 2}">封禁用户</td>
-<!--                            <td><span class="label label-primary">团队赛</span></td>-->
+                        <tbody   id="add">
+                        <tr value="123" th:each="u ,userStat : ${users}">
+                            <td name="id" th:value="${u.id}" th:text="${u.id}" ></td>
+                            <td name="nickName" th:text="${u.nickName}"></td>
+                            <td name="sex" th:if="${u.sex == 0}">女</td>
+                            <td name="sex" th:if="${u.sex == 1}">男</td>
+                            <td name="email" th:text="${u.email}"></td>
+                            <td name="birthday" th:text="${#dates.format(u.birthday, 'yyyy-MM-dd')}"></td>
+                            <td name="registerDay" th:text="${#dates.format(u.registerDay, 'yyyy-MM-dd')}"></td>
+                            <td>
+                            <select th:id="${u.id}" name="role" th:onchange="rolechange([[${u.id}]])" >
+                                <option th:selected="${u.role}==0" value="0">管理员</option>
+                                <option th:selected="${u.role}==1" value="1">普通用户</option>
+                                <option th:selected="${u.role}==2" value="2">封禁</option>
+                            </select>
+                            </td>
                             <td>
                                 <button type="button" class="btn btn-w-m btn-danger btn-xs" data-toggle="modal" data-target="#myModal">删除</button>
                             </td>
@@ -217,6 +220,31 @@
 <script>
     var context="[[@{/}]]";
 
+    function rolechange(id){
+        var id=id;
+        var role=$("#" + id + "").val();
+        //alert($("#" + id + "").val());
+        $.ajax({
+            type:"post",
+            url: context + "admin/user/modifyRole",
+            dataType:"json",
+            data:{
+                id,role
+            },
+            success:function (result) {
+                console.log(result);
+                if(result.result.code===200){//更改成功
+                    swal("更改成功").then(function () {
+                        window.location.reload()
+                    });
+                }else if(result.result.code===404){//查询失败
+                    swal(result.result.msg).then(function () {
+                        window.location.reload();
+                    });
+                }
+            }
+        });
+    }
     function findUserByCondition(){
         $.ajax({
             type:"post",
