@@ -103,6 +103,16 @@ public class AdminUserController {
         return json;
     }
 
+    //用户退出
+    @RequestMapping("/exit")
+    @ResponseBody
+    public JSONObject exit(HttpSession session){
+        JSONObject json = new JSONObject();
+        session.removeAttribute("");
+        json.put("result",successResult("login_user"));
+        return json;
+    }
+
     @RequestMapping("/addAdmin")
     @ResponseBody
     public JSONObject addUser(User user){

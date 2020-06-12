@@ -44,7 +44,7 @@
                     </ul>
                     <ul class="nav navbar-top-links navbar-right">
                         <li>
-                            <a href="/admin/user/adminLogout">
+                            <a href="#" th:onclick="'javaScript:exit()'">
                                 <i class="fa fa-sign-out"></i> 退出登录
                             </a>
                         </li>
@@ -218,6 +218,29 @@
 
 <script>
     var context="[[@{/}]]";
+
+    function exit(){
+        $.ajax({
+            url:context+'admin/user/exit',
+            type:"get",
+            dateType:"json",
+            success:function (msg) {
+                console.log(msg);
+                if(msg.result.code===200){//退出成功
+                    swal("退出成功").then(function () {
+                        window.location.href=context+"admin";
+                    });
+                }else {//退出失败
+                    swal(msg.result.msg).then(function () {
+                        window.location.reload();
+                    });
+                }
+            },
+            error:function (msg) {
+                console.log(msg);
+            }
+        });
+    }
 
     function getId(id){
         $("#myModal").val(id);
