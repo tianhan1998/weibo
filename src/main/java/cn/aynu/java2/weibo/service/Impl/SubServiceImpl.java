@@ -61,26 +61,34 @@ public class SubServiceImpl implements SubService {
 
     @Override
     public Boolean deleteAllSubByUserId(String id, List<String> msg) {
-        boolean flag=true;
+        boolean flag = true;
         Set<Object> members = redisTemplate.opsForSet().members("gz:userId:" + id);
-        if(members!=null){
-            for(Object tempId:members){
-                 if(redisTemplate.opsForSet().remove("gz:userId:"+id,tempId)!=null){
-                     Set<Object> targetFs = redisTemplate.opsForSet().members("fs:userId" + tempId);
-                     if(targetFs.contains(id)){
-                         if(redisTemplate.opsForSet().remove("fs:userId"+tempId,id)==null) {
-                             msg.add("删除用户id为" + tempId + "的粉丝列表目标" + id + "失败");
-                             flag=false;
-                         }
-                     }
-                 }else{
-                     msg.add("删除用户id为"+id+"的关注列表目标"+tempId+"失败");
-                     flag=false;
-                 }
+        Set<Object> fs = redisTemplate.opsForSet().members("fs:userId:" + id);
+        if (members != null) {
+            for (Object tempId : members) {
+                Set<Object> targetFs = redisTemplate.opsForSet().members("fs:userId" + tempId);
+                if (targetFs.contains(Integer.parseInt(id))) {
+                    if (redisTemplate.opsForSet().remove("fs:userId" + tempId, id) == null) {
+                        msg.add("删除用户id为" + tempId + "的粉丝列表目标" + id + "失败");
+                        flag = false;
+                    }
+                }
             }
-        }else{
+            redisTemplate.delete("gz:userId:" + id);
+        } else if (fs != null) {
+            for (Object tempId : fs) {
+                Set<Object> targetGz = redisTemplate.opsForSet().members("gz:userId:" + tempId);
+                if (targetGz.contains(Integer.parseInt(id))) {
+                    if (redisTemplate.opsForSet().remove("gz:userId:" + tempId, id) == null) {
+                        msg.add("删除用户" + tempId + "的关注列表" + id + "失败");
+                        flag = false;
+                    }
+                }
+            }
+            redisTemplate.delete("fs:userId:" + id);
+        } else {
             msg.add("用户不存在");
-            flag=false;
+            flag = false;
         }
         return flag;
     }
