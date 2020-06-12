@@ -39,7 +39,7 @@ public class AdminUserController {
         User user_Admin = iAdminUserService.findUserByInfo(user);
         if(user_Admin != null){
             if(user_Admin.getRole() == 0){
-                session.setAttribute("user_Admin",user);
+                session.setAttribute("login_user",user);
                 json.put("result",successResult("管理员登录成功！",user_Admin));
             }else {
                 json.put("result",failResult("抱歉，当前用户权限不足！"));
