@@ -39,7 +39,7 @@ public class AdminUserController {
         User user_Admin = iAdminUserService.findUserByInfo(user);
         if(user_Admin != null){
             if(user_Admin.getRole() == 0){
-                session.setAttribute("login_user",user);
+                session.setAttribute("login_admin",user_Admin);
                 json.put("result",successResult("管理员登录成功！",user_Admin));
             }else {
                 json.put("result",failResult("抱歉，当前用户权限不足！"));
@@ -108,8 +108,8 @@ public class AdminUserController {
     @ResponseBody
     public JSONObject exit(HttpSession session){
         JSONObject json = new JSONObject();
-        session.removeAttribute("");
-        json.put("result",successResult("login_user"));
+        session.removeAttribute("login_admin");
+        json.put("result",successResult("login_admin"));
         return json;
     }
 
