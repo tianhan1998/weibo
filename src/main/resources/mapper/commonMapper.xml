@@ -20,4 +20,24 @@
     <select id="selectCommonById" resultMap="commonMap">
         select id, text, user_id, post_id, common_time from common where id=#{id}
     </select>
+
+    <delete id="deleteCommonById">
+        delete from common where id=#{id}
+    </delete>
+
+    <select id="selectCommonNumByUserId" resultType="int">
+          select count(*) from common where user_id=#{id}
+    </select>
+
+    <delete id="deleteCommonByUserId">
+         delete from common where user_id=#{id}
+    </delete>
+
+    <select id="selectCommonNumByPostId" resultType="int">
+          select count(*) from common where post_id=#{id}
+    </select>
+
+    <delete id="deleteCommonByPostId">
+         delete from common where post_id=#{id}
+    </delete>
 </mapper>

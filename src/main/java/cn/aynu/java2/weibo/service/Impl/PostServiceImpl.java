@@ -264,6 +264,31 @@ public class PostServiceImpl implements PostService {
         return postMapper.deletePostVideoByPostId(id);
     }
 
+    @Override
+    public int deleteCommonById(String id) {
+        return commonMapper.deleteCommonById(id);
+    }
+
+    @Override
+    public int selectCommonNumByUserId(String id) {
+        return commonMapper.selectCommonNumByUserId();
+    }
+
+    @Override
+    public int deleteCommonByUserId(String id) {
+        return commonMapper.deleteCommonByUserId(id);
+    }
+
+    @Override
+    public int selectCommonNumByPostId(String id) {
+        return commonMapper.selectCommonNumByPostId(id);
+    }
+
+    @Override
+    public int deleteCommonByPostId(String id) {
+        return commonMapper.deleteCommonByPostId(id);
+    }
+
     private void deletePhotos(List<File> photos){
         for (File photo:photos){
             if(photo.exists()){

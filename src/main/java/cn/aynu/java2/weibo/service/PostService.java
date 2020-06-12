@@ -150,5 +150,18 @@ public interface PostService {
      */
     int deletePostVideoByPostId(String id);
 
+    /*根据评论id删除评论*/
+    int deleteCommonById(String id);
 
+    /*查询根据用户删除所有id的总条数*/
+    int selectCommonNumByUserId(String id);
+
+    /*根据用户删除所有id*/
+    int deleteCommonByUserId(String id);
+
+    /*查询根据用户删除所有id的总条数*/
+    int selectCommonNumByPostId(String id);
+
+    /*根据post_id删除动态评论*/
+    int deleteCommonByPostId(String id);
 }

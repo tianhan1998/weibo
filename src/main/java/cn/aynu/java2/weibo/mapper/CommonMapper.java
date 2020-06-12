@@ -30,4 +30,14 @@ public interface CommonMapper {
      * @return common实体类
      */
     Common selectCommonById(String id);
+
+    int deleteCommonById(String id);
+
+    int deleteCommonByUserId(String id);
+
+    int deleteCommonByPostId(String id);
+
+    int selectCommonNumByUserId();
+
+    int selectCommonNumByPostId(String id);
 }
