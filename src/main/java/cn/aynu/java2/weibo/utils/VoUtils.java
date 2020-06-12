@@ -1,7 +1,9 @@
 package cn.aynu.java2.weibo.utils;
 
 import cn.aynu.java2.weibo.entity.*;
+import cn.aynu.java2.weibo.service.IUserService;
 import cn.aynu.java2.weibo.service.PostService;
+import cn.aynu.java2.weibo.vo.ConnectionVo;
 import cn.aynu.java2.weibo.vo.PostVo;
 import cn.aynu.java2.weibo.vo.UserVo;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -23,8 +25,53 @@ public class VoUtils {
     @Resource
     PostService postService;
 
+    @Resource
+    IUserService userService;
+
     @Resource(name = "redisTemplate")
     RedisTemplate<Object,Object> redisTemplate;
+
+    public List<ConnectionVo> transferToConnectionVo(Set<Object> userList,User me) {
+        if (userList != null) {
+            List<ConnectionVo> results = new ArrayList<>();
+            for (Object userId : userList) {
+                List<User> commonUsers = new ArrayList<>();
+                if(userId.equals(Integer.parseInt(me.getId()))){
+                    continue;
+                }
+                User tempUser=userService.selectUserById(userId.toString());
+                ConnectionVo connectionVo = new ConnectionVo(tempUser);
+                Set<Object> intersect = redisTemplate.opsForSet().intersect("gz:userId:" + me.getId(), "gz:userId:" + tempUser.getId());
+                connectionVo.setCommonFriend(intersect.size());
+                for(Object commonId:intersect){
+                    User tempCommon=userService.selectUserById(commonId.toString());
+                    /*
+                    自关注id，不算
+                     */
+                    if(tempCommon.getId().equals(me.getId())){
+                        connectionVo.setCommonFriend(connectionVo.getCommonFriend()-1);
+                        continue;
+                    }
+                    /*
+                    互相关注，不算
+                     */
+                    if(commonId.equals(userId)){
+                        connectionVo.setCommonFriend(connectionVo.getCommonFriend()-1);
+                        continue;
+                    }
+                    commonUsers.add(tempCommon);
+                }
+                Set<Object> myGz=redisTemplate.opsForSet().members("gz:userId:"+me.getId());
+                if(myGz.contains(userId)){
+                    connectionVo.setFriend(true);
+                }
+                connectionVo.setCommonFriends(commonUsers);
+                results.add(connectionVo);
+            }
+            return results;
+        }
+        return null;
+    }
 
     public List<PostVo> transferToPostVo(List<Post> postList, User user){
         List<PostVo> postVoList=new ArrayList<>();

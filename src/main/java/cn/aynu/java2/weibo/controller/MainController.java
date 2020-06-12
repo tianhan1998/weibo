@@ -8,6 +8,7 @@ import cn.aynu.java2.weibo.utils.VoUtils;
 import cn.aynu.java2.weibo.vo.PostVo;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
+import org.apache.ibatis.annotations.Delete;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -252,6 +253,27 @@ public class MainController {
                 }else{
                     json.put("result",failResult("评论失败"));
                 }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            json.put("result", exceptionResult(e.getMessage()));
+        }
+        return json;
+    }
+    @DeleteMapping("common")
+    public JSONObject deleteCommon(String id,HttpSession session) {
+        JSONObject json = new JSONObject();
+        User user = (User) session.getAttribute("login_user");
+        try {
+            Common common=postService.selectCommonById(id);
+            if(common.getUser().getId().equals(user.getId())){
+                if(postService.deleteCommonById(common.getId().toString())>0){
+                    json.put("result",successResult("删除评论成功"));
+                }else{
+                    json.put("result",failResult("删除评论失败"));
+                }
+            } else {
+                json.put("result", failResult("权限错误"));
             }
         } catch (Exception e) {
             e.printStackTrace();

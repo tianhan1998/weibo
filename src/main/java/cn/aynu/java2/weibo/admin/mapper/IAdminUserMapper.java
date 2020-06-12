@@ -17,7 +17,7 @@ public interface IAdminUserMapper {
 
     int insertUser(User user);
 
-    int deleteUserById(Integer id);
+    int deleteUserById(String id);
 
     int selectUserCount();
 

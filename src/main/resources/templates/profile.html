@@ -108,7 +108,7 @@
                            <span style="color: #888da8" class="small">{{item.post.postTime}}</span>
                         </div>
                         <div :id="'commons'+item.post.id" style="display: none">
-                           <div v-if="item.commons!==null&&item.commons.length>0" v-for="common in item.commons">
+                           <div v-if="item.commons!==null&&item.commons.length>0" v-for="common,commonIndex in item.commons">
                               <div class="p-3 d-flex align-items-top border-bottom osahan-post-comment">
                                  <div class="dropdown-list-image mr-3">
                                     <img class="rounded-circle" :src="context+common.user.avatar" alt="">
@@ -122,6 +122,7 @@
                                     </div>
                                  </div>
                                  <span class="ml-auto small">{{common.commonTime}}</span>
+                                 <button @click="deleteCommon(common.id,index,commonIndex)" class="btn btn-danger btn-xs" type="button">删除</button>
                               </div>
                            </div>
                            <div class="p-3">
@@ -219,6 +220,33 @@
          },
 
          methods: {
+            deleteCommon(id,index,commonIndex){
+               swal({
+                  title: "是否确定删除评论？",
+                  text: "删除无法恢复您的评论，是否继续？",
+                  icon: "warning",
+                  dangerMode: true,
+                  buttons: ['取消', '删除'],
+               }).then(result => {
+                  if(result) {
+                     axios({
+                        url: context + "main/common",
+                        method: 'delete',
+                        params: {id: id},
+                     }).then(reason => {
+                        if(reason.data.result.code===200){
+                           swal("删除成功!",{icon:"success",buttons:false,timer:1000}).then(()=>{
+                              this.$delete(this.vo[index].commons,commonIndex);
+                           });
+                        }else{
+                           swal(reason.data.result.msg[0],{icon:'error'});
+                        }
+                     }).catch(reason => {
+                        console.log(reason);
+                     });
+                  }
+               })
+            },
             postCommon: function (id, index) {
                axios({
                   url: context + "main/common",
@@ -231,6 +259,7 @@
                         console.log(newCommon);
                         this.$set(this.vo[index].commons, this.vo[index].commons.length, newCommon);
                         // this.vo[index].commons[this.vo[index].commons.length]=newCommon;
+                        $("#comText"+id).val('');
                      });
                   } else {
                      swal(response.data.result.msg[0], {icon: 'error'});

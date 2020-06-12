@@ -15,7 +15,7 @@ public interface IAdminUserService {
 
     int addUser(User user);
 
-    int cancelUser(Integer id);
+    int cancelUser(String id);
 
     int findUserCount();
 

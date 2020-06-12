@@ -220,6 +220,10 @@
 <script>
     var context="[[@{/}]]";
 
+    function getId(id){
+        $("#myModal").val(id);
+    }
+
     function rolechange(id){
         var id=id;
         var role=$("#" + id + "").val();

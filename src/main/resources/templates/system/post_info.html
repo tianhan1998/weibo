@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>动态信息</title>
+
+    <link th:href="@{/bootstrap/css/bootstrap2.min.css}" rel="stylesheet">
+    <link th:href="@{/font-awesome/css/font-awesome.css}" rel="stylesheet">
+
+    <link th:href="@{/assets/css/animate.css}" rel="stylesheet">
+    <link th:href="@{/bootstrap/css/style.min.css}" rel="stylesheet">
+</head>
+
+<body class="gray-bg">
+
+<div class="middle-box text-center loginscreen animated fadeInDown">
+    <div class="col-sm-12 col-lg-12">
+        <div class="card">
+            <div class="card-header bg-cyan">
+                <h4>动态</h4>
+            </div>
+            <div class="card-body">
+                <span th:text="${post.text}"></span>
+                <br>
+                <span th:each="p,pState:${photos}">
+                    <img th:src="${#request.getContextPath()}+'/'+${p.url}" height="50%" width="50%">
+                </span>
+                <div th:if="${video!=null}">
+                    <video th:src="${#request.getContextPath()}+'/'+${video.url}" height="50%" width="50%" autoplay="autoplay" preload="none" controls></video>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 col-lg-12">
+        <div class="card">
+            <div class="card-header bg-cyan">
+                <h4>评论</h4>
+            </div>
+            <div class="card-body" th:each="c,cState :${commons}">
+                <div >
+                    <div>
+                        <img th:src="${#request.getContextPath()}+${c.user.avatar}" height="3%" width="3%" style="float: left">
+                        <p th:text="${c.text}"></p>
+                    </div>
+                    <p th:text="${#dates.format(c.commonTime,'yyyy-MM-dd')}" style="float: right"></p>
+                </div>
+                <hr/>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-1 col-lg-1" style="float: right">
+        <div class="card">
+            <div class="card-header bg-cyan">
+                <span onclick="javaScript:window.history.back()">返回</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Mainly scripts -->
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+<!--		引入加密-->
+<script src="https://cdn.bootcss.com/jsencrypt/3.0.0-beta.1/jsencrypt.js"></script>
+<script th:src="@{/js/sweetalert.min.js}"></script>
+<script>
+    // var publicKey;
+    // var encrypt = new JSEncrypt();//RSA加密对象
+    var context="[[@{/}]]";
+
+</script>
+</body>
+</html>

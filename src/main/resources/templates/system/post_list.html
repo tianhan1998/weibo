@@ -13,7 +13,11 @@
 
     <link th:href="@{/assets/css/animate.css}" rel="stylesheet">
     <link th:href="@{/assets/css/style.css}" rel="stylesheet">
-
+    <style>
+        th{
+            text-align: center;
+        }
+    </style>
 </head>
 
 <body class="top-navigation">
@@ -101,7 +105,7 @@
             </div>
         </div>
 
-        <div class="wrapper wrapper-content" style="padding-top: 0px">
+        <div class="wrapper wrapper-content text-center" style="padding-top: 0px;">
             <!--            表格-->
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
@@ -137,7 +141,8 @@
                             <td th:text="${p.user.nickName}"></td>
                             <td th:text="${p.user.email}"></td>
                             <td>
-                                <button type="button" class="btn btn-primary btn-danger btn-xs" data-toggle="modal" data-target="#myModal" th:onclick="'javaScript:deleteUser('+${p.id}+')'">删除</button>
+                                <a class="btn btn-primary btn-xs" th:href="${#request.getContextPath()}+'/admin/post/findPostById?id='+${p.id}">查看</a>
+                                <button type="button" class="btn btn-primary btn-danger btn-xs" data-toggle="modal" data-target="#myModal" th:data-id="${p.id}" onclick="getId(this.getAttribute('data-id'))">删除</button>
                             </td>
                         </tr>
                         </tbody>
@@ -157,7 +162,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
-                                    <button type="button" class="btn btn-primary" th:onclick="'javaScript:deltheMem('+${#session.getAttribute('id')}+')'">确认</button>
+                                    <button type="button" class="btn btn-primary" th:onclick="'javaScript:deltheMem()'">确认</button>
                                 </div>
                             </div>
                         </div>
@@ -199,6 +204,10 @@
 <script>
     var context="[[@{/}]]";
 
+    function getId(id){
+        $("#myModal").val(id);
+    }
+
     $(document).ready(function () {
         $("button[value='删除']").click(function () {
             $("myModal").modal(options);
@@ -235,7 +244,8 @@
         var iv = "<input type='text' value='"+id+"' class='inv' style='display: none'>";
         $('.modal-footer').append(iv);
     }
-    function deltheMem(id) {
+    function deltheMem() {
+        var id = $("#myModal").val();
         $.ajax({
             url: context+"admin/post/deletePost?id="+id,
             type:"get",

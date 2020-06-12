@@ -44,151 +44,95 @@
                      <h5 class="pl-3 pt-3 pr-3 border-bottom mb-0 pb-3">More suggestions for you</h5>
                      <ul class="nav border-bottom osahan-line-tab" id="myTab" role="tablist">
                         <li class="nav-item">
-                           <a class="nav-link active" id="home-tab" data-toggle="tab" href="#fs" role="tab" aria-controls="fs" aria-selected="true">我的粉丝</a>
+                           <a class="nav-link active" id="home-tab" data-toggle="tab" href="#gz" role="tab" aria-controls="gz" aria-selected="true">我的关注</a>
                         </li>
                         <li class="nav-item">
-                           <a class="nav-link" id="profile-tab" data-toggle="tab" href="#gz" role="tab" aria-controls="gz" aria-selected="false">我的关注</a>
+                           <a class="nav-link" id="profile-tab" data-toggle="tab" href="#fs" role="tab" aria-controls="fs" aria-selected="false">我的粉丝</a>
                         </li>
                      </ul>
                      <div class="tab-content" id="myTabContent">
-                        <div class="tab-pane fade show active" id="fs" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="tab-pane fade show active" id="gz" role="tabpanel" aria-labelledby="home-tab">
                            <div class="p-3">
                               <div class="row">
-                                 <div class="col-md-4">
-                                    <a href="profile.html">
-                                       <div class="border network-item rounded mb-3">
-                                          <div class="p-3 d-flex align-items-center network-item-header">
-                                             <div class="dropdown-list-image mr-3">
-                                                <img class="rounded-circle" src="img/p1.png" alt="">
+                                    <div v-for="item in gzvo" class="col-md-4">
+                                       <div >
+                                          <div class="border network-item rounded mb-3">
+                                             <div class="p-3 d-flex align-items-center network-item-header">
+                                                <div class="dropdown-list-image mr-3">
+                                                   <img class="rounded-circle" :src="context+item.user.avatar" alt="">
+                                                </div>
+                                                <div class="font-weight-bold">
+                                                   <a style="font-size: 1rem" :href="context+'profile/'+item.user.id" class="font-weight-bold text-dark mb-0">{{item.user.nickName}}</a>
+                                                </div>
                                              </div>
-                                             <div class="font-weight-bold">
-                                                <h6 class="font-weight-bold text-dark mb-0">Sophia Lee</h6>
-                                                <div class="small text-black-50">Photographer at Photography</div>
+                                             <div class="d-flex align-items-center p-3 border-top border-bottom network-item-body">
+                                                <div v-if="item.commonFriend!=0" class="overlap-rounded-circle">
+                                                    <div v-for="common in item.commonFriends">
+                                                      <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top" title="Sophia Lee" :src="context+common.avatar" alt="">
+                                                    </div>
+                                                </div>
+                                                <span class="font-weight-bold small text-primary">{{item.commonFriend}} 个共同关注</span>
                                              </div>
-                                          </div>
-                                          <div class="d-flex align-items-center p-3 border-top border-bottom network-item-body">
-                                             <div class="overlap-rounded-circle">
-                                                <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top" title="Sophia Lee" src="img/p1.png" alt="">
-                                                <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top" title="John Doe" src="img/p2.png" alt="">
-                                                <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top" title="Julia Cox" src="img/p3.png" alt="">
-                                                <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top" title="Robert Cook" src="img/p4.png" alt="">
-                                                <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top" title="Sophia Lee" src="img/p5.png" alt="">
-                                             </div>
-                                             <span class="font-weight-bold small text-primary">4 mutual connections</span>
-                                          </div>
-                                          <div class="network-item-footer py-3 d-flex text-center">
-                                             <div class="col-6 pl-3 pr-1">
-                                                <button type="button" class="btn btn-primary btn-sm btn-block"> Connect </button>
-                                             </div>
-                                             <div class="col-6 pr-3 pl-1">
-                                                <button type="button" class="btn btn-outline-primary btn-sm btn-block"> <i class="feather-user-plus"></i> Follow </button>
-                                             </div>
-                                          </div>
-                                       </div>
-                                    </a>
-                                 </div>
-                                 <div class="col-md-4">
-                                    <a href="profile.html">
-                                       <div class="border network-item rounded mb-3">
-                                          <div class="p-3 d-flex align-items-center network-item-header">
-                                             <div class="dropdown-list-image mr-3">
-                                                <img class="rounded-circle" src="img/p2.png" alt="">
-                                             </div>
-                                             <div class="font-weight-bold">
-                                                <h6 class="font-weight-bold text-dark mb-0">John Doe</h6>
-                                                <div class="small text-black-50">Traveler</div>
-                                             </div>
-                                          </div>
-                                          <div class="d-flex align-items-center p-3 border-top border-bottom network-item-body">
-                                             <div class="overlap-rounded-circle">
-                                                <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top" title="Sophia Lee" src="img/p6.png" alt="">
-                                                <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top" title="John Doe" src="img/p7.png" alt="">
-                                                <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top" title="Julia Cox" src="img/p8.png" alt="">
-                                                <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top" title="Robert Cook" src="img/p9.png" alt="">
-                                             </div>
-                                             <span class="font-weight-bold small text-primary">4 mutual connections</span>
-                                          </div>
-                                          <div class="network-item-footer py-3 d-flex text-center">
-                                             <div class="col-6 pl-3 pr-1">
-                                                <button type="button" class="btn btn-primary btn-sm btn-block"> Connect </button>
-                                             </div>
-                                             <div class="col-6 pr-3 pl-1">
-                                                <button type="button" class="btn btn-outline-primary btn-sm btn-block"> <i class="feather-user-plus"></i> Follow </button>
+                                             <div class="network-item-footer py-3 d-flex text-center">
+                                                <div v-if="!item.friend" class="col-6 pl-3 pr-1">
+                                                   <button :id="'sub'+item.user.id" type="button" @click="sub(item.user.id)" class="btn btn-primary btn-sm btn-block"> 关注 </button>
+                                                </div>
+                                                <div v-if="item.friend" class="col-6 pl-3 pr-1">
+                                                   <button :id="'unSub'+item.user.id" type="button" @click="unSub(item.user.id)"  class="btn btn-primary btn-sm btn-block"> 取消关注 </button>
+                                                </div>
+                                                <div v-if="!item.friend" class="col-6 pl-3 pr-1">
+                                                   <button :id="'unSub'+item.user.id" type="button" style="display: none" @click="unSub(item.user.id)"  class="btn btn-primary btn-sm btn-block"> 取消关注 </button>
+                                                </div>
+                                                <div v-if="item.friend" class="col-6 pl-3 pr-1">
+                                                   <button :id="'sub'+item.user.id" type="button" style="display: none" @click="sub(item.user.id)"  class="btn btn-primary btn-sm btn-block"> 关注 </button>
+                                                </div>
                                              </div>
                                           </div>
                                        </div>
-                                    </a>
-                                 </div>
-                                 <div class="col-md-4">
-                                    <a href="profile.html">
-                                       <div class="border network-item rounded mb-3">
-                                          <div class="p-3 d-flex align-items-center network-item-header">
-                                             <div class="dropdown-list-image mr-3">
-                                                <img class="rounded-circle" src="img/p3.png" alt="">
-                                             </div>
-                                             <div class="font-weight-bold">
-                                                <h6 class="font-weight-bold text-dark mb-0">Julia Cox</h6>
-                                                <div class="small text-black-50">Art Designer</div>
-                                             </div>
-                                          </div>
-                                          <div class="d-flex align-items-center p-3 border-top border-bottom network-item-body">
-                                             <div class="overlap-rounded-circle">
-                                                <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top" title="Sophia Lee" src="img/p10.png" alt="">
-                                                <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top" title="John Doe" src="img/p11.png" alt="">
-                                                <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top" title="Julia Cox" src="img/p12.png" alt="">
-                                                <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top" title="Robert Cook" src="img/p13.png" alt="">
-                                             </div>
-                                             <span class="font-weight-bold small text-primary">4 mutual connections</span>
-                                          </div>
-                                          <div class="network-item-footer py-3 d-flex text-center">
-                                             <div class="col-6 pl-3 pr-1">
-                                                <button type="button" class="btn btn-primary btn-sm btn-block"> Connect </button>
-                                             </div>
-                                             <div class="col-6 pr-3 pl-1">
-                                                <button type="button" class="btn btn-outline-primary btn-sm btn-block"> <i class="feather-user-plus"></i> Follow </button>
-                                             </div>
-                                          </div>
-                                       </div>
-                                    </a>
-                                 </div>
-                                 <div class="col-md-4">
-                                    <a href="profile.html">
-                                       <div class="border network-item rounded mb-3">
-                                          <div class="p-3 d-flex align-items-center network-item-header">
-                                             <div class="dropdown-list-image mr-3">
-                                                <img class="rounded-circle" src="img/p3.png" alt="">
-                                             </div>
-                                             <div class="font-weight-bold">
-                                                <h6 class="font-weight-bold text-dark mb-0">Julia Cox</h6>
-                                                <div class="small text-black-50">Art Designer</div>
-                                             </div>
-                                          </div>
-                                          <div class="d-flex align-items-center p-3 border-top border-bottom network-item-body">
-                                             <div class="overlap-rounded-circle">
-                                                <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top" title="Sophia Lee" src="img/p10.png" alt="">
-                                                <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top" title="John Doe" src="img/p11.png" alt="">
-                                                <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top" title="Julia Cox" src="img/p12.png" alt="">
-                                                <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top" title="Robert Cook" src="img/p13.png" alt="">
-                                             </div>
-                                             <span class="font-weight-bold small text-primary">4 mutual connections</span>
-                                          </div>
-                                          <div class="network-item-footer py-3 d-flex text-center">
-                                             <div class="col-6 pl-3 pr-1">
-                                                <button type="button" class="btn btn-primary btn-sm btn-block"> Connect </button>
-                                             </div>
-                                             <div class="col-6 pr-3 pl-1">
-                                                <button type="button" class="btn btn-outline-primary btn-sm btn-block"> <i class="feather-user-plus"></i> Follow </button>
-                                             </div>
-                                          </div>
-                                       </div>
-                                    </a>
-                                 </div>
+                                    </div>
                               </div>
                            </div>
                         </div>
-                        <div class="tab-pane fade" id="gz" role="tabpanel" aria-labelledby="profile-tab">
-                           <div class="p-3 w-100">
-                              <h6>Soon in next free update</h6>
+                        <div class="tab-pane fade" id="fs" role="tabpanel" aria-labelledby="profile-tab">
+                           <div class="p-3">
+                              <div class="row">
+                                 <div v-for="item in fsvo" class="col-md-4">
+                                    <div :href="context+'profile/'+item.user.id">
+                                       <div class="border network-item rounded mb-3">
+                                          <div class="p-3 d-flex align-items-center network-item-header">
+                                             <div class="dropdown-list-image mr-3">
+                                                <img class="rounded-circle" :src="context+item.user.avatar" alt="">
+                                             </div>
+                                             <div class="font-weight-bold">
+                                                <a style="font-size: 1rem" :href="context+'profile/'+item.user.id" class="font-weight-bold text-dark mb-0">{{item.user.nickName}}</a>
+                                             </div>
+                                          </div>
+                                          <div class="d-flex align-items-center p-3 border-top border-bottom network-item-body">
+                                             <div v-if="item.commonFriend!=0" class="overlap-rounded-circle">
+                                                <div v-for="common in item.commonFriends">
+                                                   <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top" title="Sophia Lee" :src="context+common.avatar" alt="">
+                                                </div>
+                                             </div>
+                                             <span class="font-weight-bold small text-primary">{{item.commonFriend}} 个共同关注</span>
+                                          </div>
+                                          <div class="network-item-footer py-3 d-flex text-center">
+                                             <div v-if="!item.friend" class="col-6 pl-3 pr-1">
+                                                <button :id="'sub'+item.user.id" type="button" @click="sub(item.user.id)" class="btn btn-primary btn-sm btn-block"> 关注 </button>
+                                             </div>
+                                             <div v-if="item.friend" class="col-6 pl-3 pr-1">
+                                                <button :id="'unSub'+item.user.id" type="button" @click="unSub(item.user.id)"  class="btn btn-primary btn-sm btn-block"> 取消关注 </button>
+                                             </div>
+                                             <div v-if="!item.friend" class="col-6 pl-3 pr-1">
+                                                <button :id="'unSub'+item.user.id" type="button" style="display: none" @click="unSub(item.user.id)"  class="btn btn-primary btn-sm btn-block"> 取消关注 </button>
+                                             </div>
+                                             <div v-if="item.friend" class="col-6 pl-3 pr-1">
+                                                <button :id="'sub'+item.user.id" type="button" style="display: none" @click="sub(item.user.id)"  class="btn btn-primary btn-sm btn-block"> 关注 </button>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
                            </div>
                         </div>
                      </div>
@@ -255,68 +199,30 @@
          el: '#app',
          data: {
             context: context,
-            vo: [
+            gzvo: [
                {
-                  post: {
-                     user: {}
-                  },
-                  video: {},
-                  photos: [],
-                  commons: [
-                     {
-                        user: {},
-                        post: {},
-                     }
-                  ]
+                   user:{},
+               },
+            ],
+            fsvo:[
+               {
+                  user:{},
                },
             ],
             userVo: {
                user: {}
             },
-            pageNum: '1',
-            canLoadMore: true,
-            loadVideo:1,
          },
-
          methods: {
-            postCommon: function (id, index) {
-               axios({
-                  url: context + "main/common",
-                  method: 'post',
-                  data: {text: $("#comText" + id).val(), post: {id: id}}
-               }).then(response => {
-                  if (response.data.result.code === 200) {
-                     swal("回复成功", {icon: 'success', buttons: false, timer: 1000}).then(() => {
-                        let newCommon = response.data.result.data;
-                        console.log(newCommon);
-                        this.$set(this.vo[index].commons, this.vo[index].commons.length, newCommon);
-                        // this.vo[index].commons[this.vo[index].commons.length]=newCommon;
-                     });
-                  } else {
-                     swal(response.data.result.msg[0], {icon: 'error'});
-                  }
-               }).catch(response => {
-                  console.log(response);
-               });
-            },
-            showCommons: function (id) {
-               let dom = $("#commons" + id);
-               if (dom.is(':hidden')) {
-                  dom.show();
-               } else {
-                  dom.hide();
-               }
-            },
-            unSub: function (id, event) {
+            unSub: function (id) {
                axios({
                   url: this.context + "main/sub/" + id,
                   method: 'delete',
                }).then(response => {
                   if (response.data.result.code === 200) {
                      swal(response.data.result.msg[0], {icon: 'success', buttons: false, timer: 1000});
-                     const dom = $(event.target);
-                     dom.hide();
-                     dom.parent("li").prev("li").children("a").show();
+                     $("#unSub"+id).hide();
+                     $("#sub"+id).show();
                   } else {
                      swal(response.data.result.msg[0], {icon: 'error'});
                   }
@@ -324,7 +230,7 @@
                   console.log(response);
                });
             },
-            sub: function (id, event) {
+            sub: function (id) {
                if (id === this.userVo.user.id) {
                   swal("不能关注自己", {icon: "error", buttons: false, timer: 1000});
                } else {
@@ -334,9 +240,8 @@
                   }).then(response => {
                      if (response.data.result.code === 200) {
                         swal(response.data.result.msg[0], {icon: 'success', buttons: false, timer: 1000});
-                        const dom = $(event.target);
-                        dom.hide();
-                        dom.parent("li").next("li").children("a").show();
+                        $("#sub"+id).hide();
+                        $("#unSub"+id).show();
                      } else {
                         swal(response.data.result.msg[0], {icon: 'error'});
                      }
@@ -345,151 +250,10 @@
                   });
                }
             },
-            cancelGood(id, index, event) {
-               axios({
-                  url: this.context + "main/good/" + id,
-                  method: 'delete',
-               }).then(response => {
-                  if (response.data.result.code === 200) {
-                     swal("取消赞成功", {icon: "success", buttons: false, timer: 1000});
-                     let dom = $(event.target);
-                     if (dom.is("span")) {
-                        dom = dom.parent("a");
-                     }
-                     this.vo[index].post.good--;
-                     dom.hide();
-                     dom.next("a").show();
-                  } else {
-                     swal(response.data.result.msg[0], {icon: 'error'});
-                  }
-               }).catch(response => {
-                  console.log(response);
-               });
-            },
-            good: function (id, index, event) {
-               axios({
-                  url: this.context + "main/good/" + id,
-                  method: 'put',
-               }).then(response => {
-                  if (response.data.result.code === 200) {
-                     swal("点赞成功", {icon: "success", buttons: false, timer: 1000});
-                     let dom = $(event.target);
-                     if (dom.is("span")) {
-                        dom = dom.parent("a");
-                     }
-                     this.vo[index].post.good++;
-                     dom.hide();
-                     dom.prev("a").show();
-                  }
-               }).catch(response => {
-                  console.log(response);
-               });
-            },
-            postMyPost: function () {
-               let formData = new FormData();
-               if ($("#onlyFriend").prop('checked')) {
-                  formData.append("onlyFriend", "1");
-               }
-               formData.append("video", $("#video")[0].files[0]);
-               $.each($("#photo")[0].files, function (i, file) {
-                  formData.append('photos', file);
-               });
-               formData.append("text", $("#text").val());
-               $.ajax({
-                  url: context + "main/post",
-                  type: 'post',
-                  processData: false,
-                  contentType: false,
-                  data: formData,
-                  success: result => {
-                     if (result.result.code === 200) {
-                        swal("发表动态成功!", {icon: "success"}).then(function () {
-                           window.location.reload();
-                        });
-                     } else {
-                        swal(result.result.msg[0], {icon: "error"});
-                     }
-                  },
-                  error: result => {
-                     console.log(result);
-                  }
-               });
-            },
-            changePhotoSize: function (event) {
-               const photo = $(event.target);//DOM对象转JQuery对象
-               if (photo.hasClass("img-mini")) {
-                  photo.removeClass("img-mini");
-               } else {
-                  photo.addClass("img-mini");
-               }
-            },
-            deleteMyPost: function (id) {
-               swal({
-                  title: "是否确定删除动态？",
-                  text: "删除无法恢复您的动态信息，是否继续？",
-                  icon: "warning",
-                  dangerMode: true,
-                  buttons: ['取消', '删除'],
-               }).then(result => {
-                  if (result) {
-                     axios({
-                        url: context + "main/post",
-                        method: 'delete',
-                        params: {
-                           id: id
-                        }
-                     }).then(response => {
-                        if (response.data.result.code === 200) {
-                           swal("删除动态成功！", {icon: 'success'}).then(function () {
-                              window.location.reload();
-                           });
-                        } else {
-                           swal(response.data.result.msg[0], {icon: 'error'});
-                        }
-                     }).catch(response => {
-                        console.log(response);
-                     });
-
-                  }
-               })
-            },
-            getPost: function () {
-               const self = this;
-               axios({
-                  url: context + "main/post",
-                  method: 'get',
-                  params: {pageNum: this.pageNum++},
-               }).then(function (response)  {
-                  if (response.data.result.code === 200) {
-                     console.log(response.data.result);
-                     $.each(response.data.result.data, function (i, vo) {
-                        if (self.vo.length === 1) {
-                           self.$set(self.vo, i, vo);
-                        } else {
-                           self.$set(self.vo, self.vo.length, vo);
-                        }
-                        if(vo.video!=null){
-                           self.$nextTick(function () {
-                              let player = new Player({
-                                 id: 'dse'+vo.post.id,
-                                 url: $("#videoUrl"+vo.post.id).val(),
-                                 fluid:true,
-                              });
-                           });
-                        }
-                     });
-                  } else {
-                     self.pageNum--;
-                  }
-               }).catch(function (response) {
-                  console.log(response);
-               });
-            }
          },
          mounted: function () {
             // swal('vue is online!',{icon:'success'});
             const self = this;
-            this.getPost();
             axios({
                url: context + "main/api/LoginUser",
                method: 'get',
@@ -502,19 +266,32 @@
             }).catch(response => {
                console.log(response);
             });
-            window.addEventListener('scroll', function () {
-               const scr = document.documentElement.scrollTop || document.body.scrollTop; // 向上滚动的那一部分高度
-               const clientHeight = document.documentElement.clientHeight; // 屏幕高度也就是当前设备静态下你所看到的视觉高度
-               const scrHeight = document.documentElement.scrollHeight || document.body.scrollHeight; // 整个网页的实际高度，兼容Pc端
-               if (scr + clientHeight >= scrHeight) {
-                  if (self.canLoadMore) { //this.isMoreLoad控制滚动是否加载更多
-                     self.getPost();
-                  } else {
-                     return;
-                  }
+            axios({
+               url:context+"main/api/gzConnection",
+               method:'get',
+            }).then(response=>{
+               if(response.data.result.code===200){
+                  self.gzvo=response.data.result.data;
+                  console.log(self.gzvo);
+               }else{
+                  swal(response.data.result.msg[0],{icon:"error"});
                }
+            }).catch(response=>{
+               console.log(response);
             });
-
+            axios({
+               url:context+"main/api/fsConnection",
+               method:'get',
+            }).then(response=>{
+               if(response.data.result.code===200){
+                  self.fsvo=response.data.result.data;
+                  console.log(self.fsvo);
+               }else{
+                  swal(response.data.result.msg[0],{icon:"error"});
+               }
+            }).catch(response=>{
+               console.log(response);
+            });
          }
       });
    </script>

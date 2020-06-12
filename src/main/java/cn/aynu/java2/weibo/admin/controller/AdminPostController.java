@@ -1,8 +1,7 @@
 package cn.aynu.java2.weibo.admin.controller;
 
 import cn.aynu.java2.weibo.admin.service.IAdminPostService;
-import cn.aynu.java2.weibo.entity.Post;
-import cn.aynu.java2.weibo.entity.User;
+import cn.aynu.java2.weibo.entity.*;
 import cn.aynu.java2.weibo.service.PostService;
 import cn.aynu.java2.weibo.service.SubService;
 import com.alibaba.fastjson.JSONObject;
@@ -53,23 +52,35 @@ public class AdminPostController {
 
     //动态查询by动态id
     @RequestMapping("/findPostById")
-    @ResponseBody
-    public JSONObject findPostById(String id){
+    public String findPostById(String id,Model model){
         System.out.println(id);
-        JSONObject json = new JSONObject();
-        try{
-            Post post = postService.selectPostById(id);
+        Post post = postService.selectPostById(id);
+        if(post!=null) {
             System.out.println(post);
-            if(post!=null){
-                json.put("result",successResult("查询成功",post));
-            }else{
-                json.put("result",failResult("查询失败"));
+            model.addAttribute("post", post);
+            //图片
+            List<Integer> pid = postService.selectPhotoIdsByPost(post);
+            for(Integer p:pid){
+                System.out.println("p的值是：---" + p + ",当前方法=AdminPostController.findPostById()");
             }
-        }catch (Exception e){
-            e.printStackTrace();
-            json.put("result",exceptionResult(e.getMessage()));
+            if(pid.size()>0){
+                System.out.println("---");
+                List<Photo> photos = postService.selectPhotosByIds(pid);
+                model.addAttribute("photos",photos);
+            }
+            //视频
+            Integer vid = postService.selectVideoIdByPost(post);
+            System.out.println("vid的值是：---" + vid + ",当前方法=AdminPostController.findPostById()");
+            if(vid!=null){
+                System.out.println("---");
+                Video video = postService.selectVideoById(vid);
+                model.addAttribute("video",video);
+            }
+            //评论
+            List<Common> commons = postService.selectCommonsByPostId(post.getId().toString());
+            model.addAttribute("commons",commons);
         }
-        return json;
+        return "system/post_info";
     }
 
     // 用户动态删除
@@ -79,6 +90,7 @@ public class AdminPostController {
         System.out.println(id);
         JSONObject json = new JSONObject();
         try{
+            postService.deleteCommonByPostId(id);
             Post targetPost=postService.selectPostById(id);
             if(targetPost!=null){
                 if(postService.deletePost(targetPost)){
