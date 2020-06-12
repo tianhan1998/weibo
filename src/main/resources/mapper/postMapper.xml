@@ -53,6 +53,9 @@
     <delete id="deletePostGoodByPostId">
         delete from post_good where post_id=#{id}
     </delete>
+    <delete id="deleteGoodByUserId">
+        delete from post_good where user_id=#{id}
+    </delete>
     <select id="selectUserById" resultType="cn.aynu.java2.weibo.entity.User">
         select id, avatar, nick_name, sex
         from user where id=#{id}

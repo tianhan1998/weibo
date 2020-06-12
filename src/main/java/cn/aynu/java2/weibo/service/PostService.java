@@ -164,4 +164,7 @@ public interface PostService {
 
     /*根据post_id删除动态评论*/
     int deleteCommonByPostId(String id);
+
+    /*根据用户id删除对应所有赞--删除用户*/
+    int deleteGoodByUserId(String id);
 }

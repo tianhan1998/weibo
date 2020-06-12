@@ -51,25 +51,27 @@ public class AdminUserServiceImpl implements IAdminUserService {
         return iAdminUserMapper.insertUser(user);
     }
 
-    /**1.用户所用评论删除
-     * 2.用户动态删除（评论，赞，photo，video）
-     * 3.用户关注，粉丝删除
-     * 4.用户信息删除
-     * */
     @Transactional
     @Override
     public int cancelUser(String id) {
-        //1
-        commonMapper.deleteCommonByUserId(id);
-        //2
-        List<Post> posts = postMapper.selectAllPostByUserId(id);
+        //1用户关注，粉丝删除
         List<String> msg = new ArrayList<>();
+        boolean one = subService.deleteAllSubByUserId(id,msg);
+        if(!one)return -1;
+        //2用户所用评论删除
+        int commonRow = commonMapper.deleteCommonByUserId(id);
+        int two = commonMapper.selectCommonNumByUserId(id);
+        System.out.println("commonRow的值是：---" + commonRow);
+        System.out.println("two的值是：---" + two);
+        if(two!=commonRow)return -1;
+        postMapper.deleteGoodByUserId(id);
+        //3用户动态删除（评论，赞，photo，video）
+        List<Post> posts = postMapper.selectAllPostByUserId(id);
         for(Post p:posts){
-            commonMapper.deleteCommonByPostId(id);
-            //3
-            subService.deleteAllSubByUserId(id,msg);
+            commonMapper.deleteCommonByPostId(p.getId().toString());
             postMapper.deletePost(p.getId().toString());
         }
+        //4用户信息删除
         return iAdminUserMapper.deleteUserById(id);
     }
 

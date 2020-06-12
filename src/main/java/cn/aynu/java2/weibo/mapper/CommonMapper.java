@@ -37,7 +37,7 @@ public interface CommonMapper {
 
     int deleteCommonByPostId(String id);
 
-    int selectCommonNumByUserId();
+    int selectCommonNumByUserId(String id);
 
     int selectCommonNumByPostId(String id);
 }
