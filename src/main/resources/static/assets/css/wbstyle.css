@@ -374,6 +374,11 @@ Version: 1.0
  .form-control, .btn {
      font-size: 14px;
 }
+.btn-xs {
+    font-size: 12px;
+    padding: 2px 8px;
+    line-height: 18px
+}
  .text-dark {
      color: #1d2f38 !important;
 }
