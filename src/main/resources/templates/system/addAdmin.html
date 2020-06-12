@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>动态信息</title>
+
+    <link th:href="@{/bootstrap/css/bootstrap2.min.css}" rel="stylesheet">
+    <link th:href="@{/font-awesome/css/font-awesome.css}" rel="stylesheet">
+
+    <link th:href="@{/assets/css/animate.css}" rel="stylesheet">
+    <link th:href="@{/bootstrap/css/style.min.css}" rel="stylesheet">
+</head>
+
+<body class="gray-bg">
+
+<div class="middle-box text-center loginscreen animated fadeInDown">
+    <div class="col-sm-12 col-lg-12">
+        <div class="card">
+            <div class="card-header bg-cyan">
+                <h4>添加管理员</h4>
+            </div>
+            <div class="card-body">
+                <form id="memForm" class="m-t" role="form">
+                    <input type="hidden" name="type" value="0">
+                    <div class="form-group">
+                        <input id="mem-email" name="email" type="text" class="form-control" placeholder="邮箱" required="">
+                        <div id="mem-email-log" class="badge label label-danger" style="display: none">该邮箱已被注册</div>
+                    </div>
+                    <div class="form-group">
+                        <input id="mem-nickname" name="nickName" type="text"  class="form-control" placeholder="昵称" required="">
+                        <div id="mem-nickname-log" class="badge badge-primary" style="display: none">昵称</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="radio-inline">
+                            <input type="radio" name="sex" id="inlineRadio2" value="1"> 男
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="sex" id="inlineRadio1" value="0"> 女
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <input id="birthday" name="birthday" type="date" class="form-control" placeholder="密码" required="">
+                    </div>
+                    <div class="form-group">
+                        <input id="pwd1" name="password" type="password" class="form-control" placeholder="密码" required="">
+                        <div id="pwd1-log" class="badge label label-danger" style="display: none">密码最少3位</div>
+                    </div>
+                    <div class="form-group">
+                        <input id="pwd2" type="password" class="form-control" placeholder="二次密码" required="">
+                        <div id="pwd-log" class="badge label label-danger" style="display: none">两次密码不一致</div>
+                    </div>
+                    <button id="memSubmit" type="button" class="btn btn-primary block full-width m-b">添加账户</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-1 col-lg-1" style="float: right">
+        <div class="card">
+            <div class="card-header bg-cyan">
+                <span onclick="javaScript:addAdmin()">返回</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Mainly scripts -->
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+<!--		引入加密-->
+<script src="https://cdn.bootcss.com/jsencrypt/3.0.0-beta.1/jsencrypt.js"></script>
+<script th:src="@{/js/sweetalert.min.js}"></script>
+<script>
+    // var publicKey;
+    // var encrypt = new JSEncrypt();//RSA加密对象
+    var context="[[@{/}]]";
+    $(document).ready(function() {
+
+        var flagMedPwd=0;
+        var flagEmailPhone=0;
+        // var flagyzm=0;
+
+        // //个人验证码校验
+        // $("#code").blur(function () {
+        // 	var reg=/^\d{4}$/;
+        //
+        // 	var code=$("#code").val();
+        //
+        // 	if(reg.test(code)){
+        // 		flagyzm=1;
+        // 	}else{
+        // 		swal("验证码不合法");
+        // 		flagyzm=0;
+        // 	}
+        // });
+
+        //个人注册邮箱验证
+        $("#mem-email").blur(function () {
+            var email=$("#mem-email").val();
+            var reg = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
+            if(reg.test(email)){
+                $("#mem-email-log").hide();
+                flagEmailPhone=1;
+                $.ajax({
+                    url:context+"user/emailCheck?email="+email,
+                    type:"GET",
+                    success:function(Object){
+                        if(Object.result.code==200) {
+                            var log = $("#mem-email-log").show().removeClass().addClass("badge badge-primary");
+                            log.empty().append("通过验证,该邮箱可以注册");
+                            flagEmailPhone=1;
+                        }else{
+                            var log=$("#mem-email-log").show().removeClass().addClass("badge label label-danger");
+                            log.empty().append("该邮箱已被注册");
+                            flagEmailPhone=0;
+                        }
+                    },
+                    error:function(Object){
+                        console.log(Object);
+                    }
+                });
+            }else if(email.length!==0){
+                var log=$("#mem-email-log").show().removeClass().addClass("badge label-danger");
+                log.empty().append("邮箱要合法");
+                flagEmailPhone=0;
+            }
+            else{
+                $("#mem-email-log").hide();
+                flagEmailPhone=0;
+            }
+        });
+        //个人注册
+        $("#memSubmit").click(function () {
+            var pwd1 = $("#pwd1").val();
+            var pwd2 = $("#pwd2").val();
+            if (pwd1 !== pwd2) {
+                $("#pwd-log").show().empty().append("两次密码不一致");
+                flagMedPwd = 0;
+            }
+            if(flagMedPwd===1&&flagEmailPhone===1){
+
+                var password=$('#pwd1').val();
+                var item=password;
+
+                // console.log("加密前"+password);
+                // password=encrypt.encrypt(password);
+                // $('#pwd1').val(password);
+                // console.log("加密后"+password);
+
+                $.ajax({
+                    type:"post",
+                    url:context+"user/register",
+                    data:$("#memForm").serialize(),
+                    success:function (result) {
+                        console.log(result);
+                        if(result.result.code===200){//注册成功需要重新登录
+                            swal("注册成功").then(function () {
+                                window.location.href="login";
+                            });
+                        }else {//失败
+                            $('#pwd1').val(item);//失败密码替换掉
+                            swal(result.result.msg).then(function () {
+                                window.location.reload();
+                            });
+                        }
+                    },
+                    error:function (result) {
+                        $('#pwd1').val(item);//失败密码替换掉
+                        console.log(result);
+                    }
+                })
+            }else{
+                swal("请完善您的信息");
+                console.log(flagEmailPhone+" "+flagMedPwd+"+flagyzm");
+            }
+        });
+
+        //校验两次密码要一样
+        $("#pwd1").blur(function () {
+            var pwd1 = $("#pwd1").val();
+            if (pwd1.length > 3) {
+                $("#pwd1-log").hide();
+            } else if(pwd1.length!==0) {
+                $("#pwd1-log").show().empty().append("密码最少要3位");
+            } else{
+                $("#pwd1-log").hide();
+            }
+        });
+
+        //校验两次密码要一样
+        $("#pwd2").on("input propertychange",function(){
+            var pwd1 = $("#pwd1").val();
+            var pwd2 = $("#pwd2").val();
+            if (pwd1 != pwd2) {
+                $("#pwd-log").show().empty().append("两次密码不一致");
+                flagMedPwd = 0;
+            } else {
+                $("#pwd-log").hide();
+                flagMedPwd = 1;
+            }
+        });
+    });
+</script>
+</body>
+</html>

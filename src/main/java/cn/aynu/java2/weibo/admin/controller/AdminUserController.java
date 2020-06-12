@@ -89,7 +89,7 @@ public class AdminUserController {
     //用户注销-管理端
     @RequestMapping("/cancelUser")
     @ResponseBody
-    public JSONObject cancelUser(Integer id){
+    public JSONObject cancelUser(String id){
         JSONObject json=new JSONObject();
         try{
             int row = iAdminUserService.cancelUser(id);
@@ -105,7 +105,7 @@ public class AdminUserController {
         return json;
     }
 
-    @RequestMapping("/addUser")
+    @RequestMapping("/addAdmin")
     @ResponseBody
     public JSONObject addUser(User user){
         System.out.println(user);

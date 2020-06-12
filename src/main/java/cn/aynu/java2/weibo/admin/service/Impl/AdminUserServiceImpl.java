@@ -4,8 +4,10 @@ import cn.aynu.java2.weibo.admin.mapper.IAdminUserMapper;
 import cn.aynu.java2.weibo.admin.service.IAdminUserService;
 import cn.aynu.java2.weibo.entity.Post;
 import cn.aynu.java2.weibo.entity.User;
+import cn.aynu.java2.weibo.mapper.CommonMapper;
 import cn.aynu.java2.weibo.mapper.PostMapper;
 import cn.aynu.java2.weibo.service.Impl.SubServiceImpl;
+import cn.aynu.java2.weibo.service.SubService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +21,9 @@ public class AdminUserServiceImpl implements IAdminUserService {
     @Resource
     private PostMapper postMapper;
     @Resource
-    private SubServiceImpl subService;
+    private SubService subService;
+    @Resource
+    private CommonMapper commonMapper;
 
     @Override
     public User findUserByInfo(User user) {
@@ -47,13 +51,23 @@ public class AdminUserServiceImpl implements IAdminUserService {
         return iAdminUserMapper.insertUser(user);
     }
 
+    /**1.用户所用评论删除
+     * 2.用户动态删除（评论，赞，photo，video）
+     * 3.用户关注，粉丝删除
+     * 4.用户信息删除
+     * */
     @Transactional
     @Override
-    public int cancelUser(Integer id) {
-        List<Post> posts = postMapper.selectAllPostByUserId(id.toString());
+    public int cancelUser(String id) {
+        //1
+        commonMapper.deleteCommonByUserId(id);
+        //2
+        List<Post> posts = postMapper.selectAllPostByUserId(id);
         List<String> msg = new ArrayList<>();
         for(Post p:posts){
-            subService.deleteAllSubByUserId(id.toString(),msg);
+            commonMapper.deleteCommonByPostId(id);
+            //3
+            subService.deleteAllSubByUserId(id,msg);
             postMapper.deletePost(p.getId().toString());
         }
         return iAdminUserMapper.deleteUserById(id);
