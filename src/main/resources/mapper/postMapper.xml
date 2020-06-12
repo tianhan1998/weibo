@@ -90,4 +90,7 @@
     <select id="selectIsGoodByUserIdAndPostId" resultType="java.lang.Integer">
         select count(*) from post_good where user_id=#{userId} and post_id=#{postId}
     </select>
+    <select id="selectPostGoodByUserId" resultType="cn.aynu.java2.weibo.entity.PostGood">
+        select id, user_id, post_id from post_good where user_id=#{id}
+    </select>
 </mapper>

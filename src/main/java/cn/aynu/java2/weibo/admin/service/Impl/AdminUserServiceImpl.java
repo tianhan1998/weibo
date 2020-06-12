@@ -4,10 +4,10 @@ import cn.aynu.java2.weibo.admin.mapper.IAdminUserMapper;
 import cn.aynu.java2.weibo.admin.service.IAdminUserService;
 import cn.aynu.java2.weibo.entity.Post;
 import cn.aynu.java2.weibo.entity.User;
-import cn.aynu.java2.weibo.mapper.CommonMapper;
-import cn.aynu.java2.weibo.mapper.PostMapper;
-import cn.aynu.java2.weibo.service.Impl.SubServiceImpl;
+import cn.aynu.java2.weibo.exception.DaoAssociationFailException;
+import cn.aynu.java2.weibo.service.PostService;
 import cn.aynu.java2.weibo.service.SubService;
+import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,11 +19,9 @@ public class AdminUserServiceImpl implements IAdminUserService {
     @Resource
     private IAdminUserMapper iAdminUserMapper;
     @Resource
-    private PostMapper postMapper;
+    private PostService postService;
     @Resource
     private SubService subService;
-    @Resource
-    private CommonMapper commonMapper;
 
     @Override
     public User findUserByInfo(User user) {
@@ -51,28 +49,27 @@ public class AdminUserServiceImpl implements IAdminUserService {
         return iAdminUserMapper.insertUser(user);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = DaoAssociationFailException.class)
     @Override
-    public int cancelUser(String id) {
+    public int cancelUser(String id) throws DaoAssociationFailException {
         //1用户关注，粉丝删除
         List<String> msg = new ArrayList<>();
-        boolean one = subService.deleteAllSubByUserId(id,msg);
-        if(!one)return -1;
+        subService.deleteAllSubByUserId(id,msg);
         //2用户所用评论删除
-        int commonRow = commonMapper.deleteCommonByUserId(id);
-        int two = commonMapper.selectCommonNumByUserId(id);
-        System.out.println("commonRow的值是：---" + commonRow);
-        System.out.println("two的值是：---" + two);
-        if(two!=commonRow)return -1;
-        postMapper.deleteGoodByUserId(id);
+        postService.deleteCommonByUserId(id);
+        postService.deleteGoodByUserId(id);
         //3用户动态删除（评论，赞，photo，video）
-        List<Post> posts = postMapper.selectAllPostByUserId(id);
-        for(Post p:posts){
-            commonMapper.deleteCommonByPostId(p.getId().toString());
-            postMapper.deletePost(p.getId().toString());
+        PageInfo<Post> posts = postService.selectAllPostByUserId(id,"1");
+        for(Post p:posts.getList()){
+            postService.deleteCommonByPostId(p.getId().toString());
+            postService.deletePost(p);
         }
         //4用户信息删除
-        return iAdminUserMapper.deleteUserById(id);
+        int delete= iAdminUserMapper.deleteUserById(id);
+        if(delete==0){
+            throw new DaoAssociationFailException("删除失败");
+        }
+        return delete;
     }
 
     @Override
