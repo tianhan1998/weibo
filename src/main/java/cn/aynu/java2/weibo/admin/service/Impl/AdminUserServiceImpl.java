@@ -4,6 +4,7 @@ import cn.aynu.java2.weibo.admin.mapper.IAdminUserMapper;
 import cn.aynu.java2.weibo.admin.service.IAdminUserService;
 import cn.aynu.java2.weibo.entity.Post;
 import cn.aynu.java2.weibo.entity.User;
+import cn.aynu.java2.weibo.exception.DaoAssociationFailException;
 import cn.aynu.java2.weibo.service.PostService;
 import cn.aynu.java2.weibo.service.SubService;
 import com.github.pagehelper.PageInfo;
@@ -48,19 +49,14 @@ public class AdminUserServiceImpl implements IAdminUserService {
         return iAdminUserMapper.insertUser(user);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = DaoAssociationFailException.class)
     @Override
-    public int cancelUser(String id) {
+    public int cancelUser(String id) throws DaoAssociationFailException {
         //1用户关注，粉丝删除
         List<String> msg = new ArrayList<>();
-        boolean one = subService.deleteAllSubByUserId(id,msg);
-        if(!one)return -1;
+        subService.deleteAllSubByUserId(id,msg);
         //2用户所用评论删除
-        int commonRow = postService.deleteCommonByUserId(id);
-        int two = postService.selectCommonNumByUserId(id);
-        System.out.println("commonRow的值是：---" + commonRow);
-        System.out.println("two的值是：---" + two);
-        if(two!=commonRow)return -1;
+        postService.deleteCommonByUserId(id);
         postService.deleteGoodByUserId(id);
         //3用户动态删除（评论，赞，photo，video）
         PageInfo<Post> posts = postService.selectAllPostByUserId(id,"1");
@@ -69,7 +65,11 @@ public class AdminUserServiceImpl implements IAdminUserService {
             postService.deletePost(p);
         }
         //4用户信息删除
-        return iAdminUserMapper.deleteUserById(id);
+        int delete= iAdminUserMapper.deleteUserById(id);
+        if(delete==0){
+            throw new DaoAssociationFailException("删除失败");
+        }
+        return delete;
     }
 
     @Override

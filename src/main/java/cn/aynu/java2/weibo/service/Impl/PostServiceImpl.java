@@ -291,6 +291,12 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public int deleteGoodByUserId(String id) {
+        List<PostGood> postGoodList=postMapper.selectPostGoodByUserId(id);
+        if(postGoodList!=null&&postGoodList.size()>0){
+            for(PostGood temp:postGoodList){
+                postMapper.decrGoodById(temp.getPostId());
+            }
+        }
         return postMapper.deleteGoodByUserId(id);
     }
 

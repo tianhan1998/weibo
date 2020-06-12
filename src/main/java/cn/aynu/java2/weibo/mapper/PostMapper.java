@@ -17,6 +17,12 @@ public interface PostMapper {
 
 
     /**
+     * 根据用户id取得所有点赞关联表
+     * @param id 用户id
+     * @return 关联实体类
+     */
+    List<PostGood> selectPostGoodByUserId(String id);
+    /**
      * 根据动态删除所有点赞信息
      * @param id 动态id
      * @return 行数
