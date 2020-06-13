@@ -1,5 +1,6 @@
 package cn.aynu.java2.weibo.config;
 
+import cn.aynu.java2.weibo.entity.Result;
 import cn.aynu.java2.weibo.entity.User;
 import com.alibaba.fastjson.support.spring.FastJsonRedisSerializer;
 import org.springframework.context.annotation.Bean;
@@ -32,5 +33,13 @@ public class RedisConfig {
         template.setValueSerializer(fastJsonRedisSerializer);
         template.setHashValueSerializer(fastJsonRedisSerializer);
         return template;
+    }
+    @Bean
+    public RedisTemplate<String, Result<Object>> resultRedisTemplate(RedisConnectionFactory redisConnectionFactory){
+        RedisTemplate<String,Result<Object>> resultRedisTemplate=new RedisTemplate<>();
+        resultRedisTemplate.setConnectionFactory(redisConnectionFactory);
+        resultRedisTemplate.setValueSerializer(new FastJsonRedisSerializer<>(Result.class));
+        resultRedisTemplate.setKeySerializer(new StringRedisSerializer());
+        return resultRedisTemplate;
     }
 }

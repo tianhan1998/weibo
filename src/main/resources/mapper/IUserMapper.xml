@@ -23,4 +23,7 @@
     <update id="activeUser">
         update user set state=1  where activeCode=#{activeCode};
     </update>
+    <update id="updateAvatarByUserId">
+        update user set avatar=#{avatar} where id=#{id}
+    </update>
 </mapper>
