@@ -26,7 +26,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             }
         }
         else{//如果是前端页面
-            if(url.endsWith("/login")||url.endsWith("/logout")){
+            if(url.endsWith("/login")||url.endsWith("/logout")||url.endsWith("/register")||url.endsWith("/emailCheck")||url.endsWith("/activeUser")){
                 return true;
             }
             User login_user= (User) request.getSession().getAttribute("login_user");
