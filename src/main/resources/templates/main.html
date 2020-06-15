@@ -204,7 +204,7 @@
                                             </div>
                                         </div>
                                         <span class="ml-auto small">{{common.commonTime}}</span>
-                                        <button @click="deleteCommon(common.id,index,commonIndex)" class="btn btn-danger btn-xs" type="button">删除</button>
+                                        <button v-if="common.user.nickName==userVo.user.nickName" @click="deleteCommon(common.id,index,commonIndex)" class="btn btn-danger btn-xs" type="button">删除</button>
                                     </div>
                                 </div>
                                 <div class="p-3">
